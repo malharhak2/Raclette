@@ -33,7 +33,7 @@ define(["CONFIG", "sockets", "mongo/base", "Gameloop", "EventsManager"], functio
 		this.server.listen(port, function () {
 			console.log('listening' + port);
 		});
-		this.app.use(this.express.static(dirname + '/game/client'));
+		this.app.use(this.express.static(dirname + '../../game/client'));
 		this.app.set('views', dirname + '/views');
 		this.app.use(this.express.cookieParser());
 		this.app.use(this.express.bodyParser());

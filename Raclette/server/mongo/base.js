@@ -4,15 +4,17 @@ define (['CONFIG', 'mongoose', 'mongo/User/User', 'mongo/Feedback', 'mongo/Event
 	var mongoUtils = {};
 
 	mongoUtils.init = function (env) {
-		var p = CONFIG.mongo[env];
-		mongoose.connect('mongodb://' + p.user + ":" + p.pass + "@" + p.host + ":" + p.port + "/" + p.db, function (err) {
+		if (CONFIG.mongo) {
+			var p = CONFIG.mongo;
+			mongoose.connect('mongodb://' + p.user + ":" + p.pass + "@" + p.host + ":" + p.port + "/" + p.db, function (err) {
 
-			if (err) {
-				throw err;
-			}
+				if (err) {
+					throw err;
+				}
 
 
-		});
+			});
+		}
 	};
 	mongoUtils.addUser = function(fid, callback) {
 		var kevin = new User.User({
