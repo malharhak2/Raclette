@@ -3,7 +3,5 @@ define([], function(){
 		this.gamepads = [];
 		this.keyboard = false;
 	}
-
-
 	return VirtualController;
-})
+});

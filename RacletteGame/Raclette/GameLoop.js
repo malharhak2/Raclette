@@ -1,12 +1,9 @@
 define(["Raclette/Game"], function(game) {
-	console.log(game);
-	function run() // the run is made this way so the requestAnimFrame can access it.
-	{
+	function run() {
 		if (!window.FULLSTOP) requestAnimFrame(run);
 		game.logic();
 		game.render();
 	}
-
 	function init () {
 
 	}

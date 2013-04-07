@@ -1,8 +1,5 @@
-// See my super games on http://lajili.com
-define(["Raclette/Loader"], function(loader) { // Anthony Pigeot's Image Manager.
-
+define(["Raclette/Loader"], function(loader) {
     var ImageManager = function(baseFolder) {
-        
     	this.baseFolder = baseFolder;
     	this.images = {};
     	this.imagesToLoad = 0;
@@ -10,14 +7,14 @@ define(["Raclette/Loader"], function(loader) { // Anthony Pigeot's Image Manager
     };
 
     ImageManager.prototype.isLoaded = function () {
-    	if (this.imagesToLoad == this.imagesLoaded)
+    	if (this.imagesToLoad == this.imagesLoaded) {
     		return true;
-    	else
+    	} else {
     		return false;
-    }
+        }
+    };
 
     ImageManager.prototype.loadImage = function(i) {
-
     	var img = this.images[i].img;
     	var _this = this;
     	img.addEventListener('load', function (event) {

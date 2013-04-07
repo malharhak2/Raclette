@@ -12,8 +12,6 @@ define(["game/config"], function (userConfig) {
 		this.showCredit = userConfig.showCredit || true;
 		this.showCustomFooter = userConfig.showCustomFooter || true;
 		this.customFooter = userConfig.customFooter || "Raclette engine inside";
-
 	};
-
 	return new CONFIG();
 })
