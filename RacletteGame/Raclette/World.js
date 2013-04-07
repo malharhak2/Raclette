@@ -112,6 +112,7 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 	World.prototype.removeCase = function (layer, x, y) {
 		this.physics.removeObject(this.layers[layer][y][x].physics.body);
 		this.layers[layer][y][x] = false;
+		
 	}
 
 	World.prototype.update = function() { 
