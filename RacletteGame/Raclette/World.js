@@ -6,6 +6,7 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 		this.callStack = [];
 		this.gravity = {x: 0, y:0}
 		this.layers = {};
+		this.objects = {};
 	}
 	World.prototype.init = function(gravity, map) {
 		this.physics.initWorld(gravity);
@@ -14,10 +15,10 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 			this.mapHeight = map.height;
 			for (var k = 0; k < map[0][0].length; k++) {
 				this.layers[k] = [];
-				for (var i = 0; i < map.height; i++) {
-					this.layers[k][i] = [];
-					for (var j = 0; j < map.width; j++) {
-						this.layers[k][i][j] = false;
+				for (var j = 0; j < map.height; j++) {
+					this.layers[k][j] = [];
+					for (var i = 0; i < map.width; i++) {
+						this.layers[k][j][i] = false;
 					};
 				};
 			};
@@ -56,7 +57,7 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 	};
 
 	World.prototype.instanceBlock = function (args) {
-		this.instancePhysicalObject({
+		return this.instancePhysicalObject({
 			typeId : args.id,
 			fixe : true,
 			x : args.x,
@@ -66,14 +67,16 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 		});
 	};
 
-	World.prototype.instanceObject = function (args) {
+	World.prototype.instanceMapObject = function (args) {
 		this.layers[args.layer][args.y][args.x] = {
 			type : args.type,
+			x : args.x,
+			y : args.y,
 			layer : args.layer,
 			image : args.image || false
 		};
 		if (this.objectTypes[args.type].physicsType == "block") {
-			this.instanceBlock({
+			this.layers[args.layers][args.y][args.x].physics = this.instanceBlock({
 				id : args.type,
 				x : args.x,
 				y : args.y,
@@ -81,8 +84,16 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 				tags : args.tags
 			});
 		} else if (this.objectTypes[args.type].physicsType == "physical") {
-			this.instancePhysicalObject(args.physicStuff);
+			this.layers[args.layers][args.y][args.x].physics = this.instancePhysicalObject(args.physics);
 		}
+	};
+
+	World.prototype.instanceObject = function (args) {
+		this.objects[args.id] = {
+			type : args.type,
+			layer : args.layer,
+			physics : this.instancePhysicalObject(args.physics)
+		};
 	};
 
 	World.prototype.createDistanceJoint = function(body1,body2,anchor1,anchor2) {	
@@ -90,14 +101,18 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 	};
 
 	World.prototype.instancePhysicalObject = function (args) {
-		physics.instancePhysicalObject(args.typeId, args.fixe, args.x, args.y, args.userData, args.tags);
+		return physics.instancePhysicalObject(args.typeId, args.fixe, args.x, args.y, args.userData, args.tags);
 	};
 
-	World.prototype.removeObject = function(cible) {
-		this.callStack.push({
-			object: cible.body
-		});
+	World.prototype.removeObject = function(id) {
+		this.physics.removeObject(this.objects[id].physics.body);
+		delete this.objects[id];
 	};
+
+	World.prototype.removeCase = function (layer, x, y) {
+		this.physics.removeObject(this.layers[layer][y][x].physics.body);
+		this.layers[layer][y][x] = false;
+	}
 
 	World.prototype.update = function() { 
 		this.physics.update();
