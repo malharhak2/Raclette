@@ -112,7 +112,7 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 	World.prototype.removeCase = function (layer, x, y) {
 		this.physics.removeObject(this.layers[layer][y][x].physics.body);
 		this.layers[layer][y][x] = false;
-		
+
 	}
 
 	World.prototype.update = function() { 
@@ -123,6 +123,12 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 	}
 	World.prototype.getObject = function(id) {
 		return this.objects[id];
+	}
+	World.prototype.getAllCases = function () {
+		return this.layers;
+	}
+	World.prototype.getCase = function (layer, x, y) {
+		return this.layers[layer][y][x];
 	}
 	return new World();
 });
