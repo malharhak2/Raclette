@@ -2,6 +2,10 @@ define(["game/config"], function (userConfig) {
 	var CONFIG = function () {
 		this.userConfig = userConfig
 
+		this.unitSize = userConfig.unitSize || {
+			x : 64, 
+			y : 64
+		};
 		this.gameTitle = userConfig.gameTitle || "UNTITLED";
 		this.divName = userConfig.gameContainer || "lincoln";
 		this.backgroundColor = userConfig.backgroundColor || "#A099A0";

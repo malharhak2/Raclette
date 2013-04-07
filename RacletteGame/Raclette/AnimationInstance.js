@@ -1,7 +1,11 @@
 define([], function(){
+	/**
+		An animation
+		@constructor
+		@param {Object} args - The animation parameters
+	*/
 var AnimationInstance = function (args) {
 	this.animName = args.animName || null;
-	if (this.animName == null) console.error("AnimationInstance with no AnimName")
 	this.dir = args.dir || null;
 	this.state = args.state || null;
 	this.step = 0;

@@ -1,5 +1,10 @@
-define(["game/images","game/animsData", "Raclette/imageManager", "Raclette/AnimationInstance"], function(images, externalData, ImageManager, AnimationInstance) {
+define(["Raclette/Debug", "game/images","game/animsData", "Raclette/imageManager", "Raclette/AnimationInstance"], function(debug, images, externalData, ImageManager, AnimationInstance) {
 
+	/** The animation manager
+		@class AnimationManager
+		@classdesc The main class managing all the animations
+		@constructor
+	*/
 	var AnimationManager = function() {
 		this.init();
 	};
@@ -84,24 +89,24 @@ define(["game/images","game/animsData", "Raclette/imageManager", "Raclette/Anima
 				if (object.renderer.onEnd != undefined) {
 					animInstance.onEnd = object.renderer.onEnd;
 				}
-			}
-			if (!animModel.noanim && Date.now() - animInstance.lastStep > (animModel.states[animInstance.state].options.pace)) {
-				window.FULLSTOP;
-				animInstance.lastStep = Date.now();
-				animInstance.step++;
-				if (animInstance.step >= (animModel.states[animInstance.state][animInstance.dir].size || animModel.size)) {
-					animInstance.step = 0;
+				if (Date.now() - animInstance.lastStep > (animModel.states[animInstance.state].options.pace)) {
+					window.FULLSTOP;
+					animInstance.lastStep = Date.now();
+					animInstance.step++;
+					if (animInstance.step >= (animModel.states[animInstance.state][animInstance.dir].size || animModel.size)) {
+						animInstance.step = 0;
 
-					if (typeof animInstance.onEnd == 'function') {
-						animInstance.onEnd();
+						if (typeof animInstance.onEnd == 'function') {
+							animInstance.onEnd();
+						}
 					}
+					animInstance.renderer = {
+						sx : animModel.width * animInstance.step,
+						sy : animModel.height * animModel.states[animInstance.state][animInstance.dir].position,
+						sw : animModel.width,
+						sh : animModel.height
+					};
 				}
-				animInstance.renderer = {
-					sx : animModel.width * animInstance.step,
-					sy : animModel.height * animModel.states[animInstance.state][animInstance.dir].position,
-					sw : animModel.width,
-					sh : animModel.height
-				};
 			}
 		} else {
 			animModel = this.animsDatas[object.renderer.img] = {"noanim" : true};

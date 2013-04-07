@@ -3,7 +3,7 @@ require.config({
 	baseUrl: "../",
     paths: {
         'socket_io' : '/socket.io/socket.io',
-        'jquery'    : '/jQuery'
+        'jquery'    : '/Raclette/jQuery'
     },
     shim: {
         'socket_io' : {
@@ -16,6 +16,9 @@ require.config({
 });
 // Call Game
 require(["Raclette/GameLoop"], function(gameloop) {
+    /**
+     * @requires gameLoop
+     */
     console.log(gameloop);
 	gameloop.init();
 	gameloop.run();

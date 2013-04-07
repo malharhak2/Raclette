@@ -1,6 +1,6 @@
-define(["Raclette/Rendering", "Raclette/World", "Raclette/utils", "Raclette/Gamepad", "game/Main", "Raclette/inputsManager", "Raclette/Loader", "Raclette/InterfaceManager", "Raclette/Camera"], function(rendering, World, utils, gamepad, Main, InputsManager, loader, interfaceManager, Camera) {
+define(["Raclette/Debug", "Raclette/TilesManager", "Raclette/MapLoader", "Raclette/Rendering", "Raclette/World", "Raclette/utils", "Raclette/Gamepad", "game/Main", "Raclette/inputsManager", "Raclette/Loader", "Raclette/InterfaceManager", "Raclette/Camera"], function(debug, tilesManager, mapLoader, rendering, World, utils, gamepad, Main, InputsManager, loader, interfaceManager, Camera) {
 	function Game() {
-		this.world = new World;
+		this.world = World;
 		gamepad.init();
 		this.gamepads = gamepad.gamepads;
 		this.pageManager = rendering.pageManager;
@@ -11,6 +11,11 @@ define(["Raclette/Rendering", "Raclette/World", "Raclette/utils", "Raclette/Game
 		this.interfaceManager = interfaceManager; 
 		this.utils = utils;
 		this.loaded = false;
+		mapLoader.loadMap("01", function (map) {
+			debug.log("Game", map);
+		});
+		debug.log("Game", tilesManager);
+
 	}
 	Game.prototype.render = function() {
 		if (!this.loaded) {

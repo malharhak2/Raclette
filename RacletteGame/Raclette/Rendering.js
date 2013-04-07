@@ -1,4 +1,4 @@
-define(["Raclette/pageManager", "game/images.js", "Raclette/AnimationManager", "Raclette/Camera"], function(pageManager, images, animationManager, Camera) {
+define(["Raclette/Debug", "Raclette/pageManager", "game/images.js", "Raclette/AnimationManager", "Raclette/Camera"], function(debug, pageManager, images, animationManager, Camera) {
 	var pageManager = pageManager;
 	var animationManager = animationManager;
 	function renderObject(object) {
@@ -21,7 +21,7 @@ define(["Raclette/pageManager", "game/images.js", "Raclette/AnimationManager", "
 			try {
 				pageManager.ctx.drawImage(img,renderer.sx, renderer.sy, renderer.sw, renderer.sh, object.x-object.w/4, object.y-object.h/4, object.w, object.h);
 			} catch(err) {
-				console.log("ERROR with the object:", object, renderer, err)
+				debug.log("Rendering", "Error with : ", object, renderer, err)
 			}
 		}	
 	};
@@ -47,5 +47,5 @@ define(["Raclette/pageManager", "game/images.js", "Raclette/AnimationManager", "
 		renderObject : renderObject,
 		renderSquare: renderSquare,
 		cleanCanvas : cleanCanvas
-	},
+	};
 });
