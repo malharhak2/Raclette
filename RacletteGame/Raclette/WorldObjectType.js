@@ -3,6 +3,7 @@ define (["Raclette/Debug"], function (debug) {
 		debug.log("WorldObjectType", "Creatig world object type", args);
 		this.parent = parent;
 		this.renderType = args.renderType;
+		this.image = args.image || args.id;
 		this.layer = args.layer;
 		this.id = args.id;
 		this.physicsType = args.physicsType;

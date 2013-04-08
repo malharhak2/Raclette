@@ -8,7 +8,6 @@ define(["Raclette/Debug", "Raclette/WorldObjectType", "Raclette/WorldObject", "R
 	World.prototype.init = function(gravity, map) {
 		debug.log("World", "Initializing world...");
 		this.physics.initWorld(gravity);
-		debug.log("World", map);
 		if (map) {
 			this.mapWidth = map.width;
 			this.mapHeight = map.height;
@@ -66,6 +65,9 @@ define(["Raclette/Debug", "Raclette/WorldObjectType", "Raclette/WorldObject", "R
 
 	World.prototype.instanceObject = function (args) {
 		args.renderType = this.objectTypes[args.type].renderType;
+		args.image = this.objectTypes[args.type].image;
+		args.defaultState = this.objectTypes[args.type].defaultState;
+		args.defaultDir = this.objectTypes[args.type].defaultDir;
 		this.objects[args.id] = new WorldObject(args);
 		return this.objects[args.id];
 	};
@@ -97,9 +99,10 @@ define(["Raclette/Debug", "Raclette/WorldObjectType", "Raclette/WorldObject", "R
 	};
 
 	World.prototype.render = function () {
-		for (var i in this.obejcts) {
-			this.objects[i].render ();
+		for (var i in this.objects) {
+			this.objects[i].render();
 		};
+		this.renderCases();
 	};
 
 	World.prototype.renderCases = function () {

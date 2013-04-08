@@ -29,6 +29,7 @@ define(["Raclette/Debug", "Raclette/box2d", "Raclette/PhysicalObjectType", "Racl
 			new this.b2Vec2(0, 0),
 			false
 		);
+		debug.log("Physics", this.world);
 		this.contactListener = new Box2D.Dynamics.b2ContactListener;
 		this.contactListener.BeginContact = function(contact, manifold) {
 			if (contact.m_fixtureA.m_body.m_userData != undefined && contact.m_fixtureA.m_body.m_userData.onCollision != undefined) {
@@ -102,7 +103,7 @@ define(["Raclette/Debug", "Raclette/box2d", "Raclette/PhysicalObjectType", "Racl
 	};
 
 	Physics.prototype.applyGravity = function () {
-		for (var i=0; i<this.objects.length; i++) {
+		for (var i = 0; i < this.objects.length; i++) {
 			if (this.objects[i] == null) continue;
 			if (this.objects[i].noGravity) continue;
 			var objekt = this.objects[i];

@@ -1,5 +1,9 @@
-define (["Raclette/Debug", "Raclette/AnimationManager"], function (debug, animationManager) {
+define (["Raclette/Debug", "Raclette/AnimationManager", "Raclette/imageManager", "Raclette/pageManager"], function (debug, animationManager, imageManager, pageManager) {
 	var Renderer = function (args) {
+		this.unitSize = {
+			x : 64,
+			y : 64
+		};
 		this.type = args.type;
 		this.image = args.image;
 		this.width = args.width;
@@ -7,11 +11,12 @@ define (["Raclette/Debug", "Raclette/AnimationManager"], function (debug, animat
 		this.position = args.position;
 		this.state = args.state;
 		this.dir = args.dir;
+		this.init();
 	};
 
 	Renderer.prototype.update = function (args) {
-		if (this.animation) {
-			animationManager.update(this.animation);
+		if (this.type == "spritesheet") {
+			animationManager.animate(this);
 		}
 		this.position = args.position;
 		this.state = args.state;
@@ -40,6 +45,18 @@ define (["Raclette/Debug", "Raclette/AnimationManager"], function (debug, animat
 			dw : co.dw,
 			dh : co.dh
 		};
+		pageManager.ctx.drawImage(
+			imageManager.get(renderInfos.image), 
+			renderInfos.sx,
+			renderInfos.sy,
+			renderInfos.sw * this.unitSize.x,
+			renderInfos.sh * this.unitSize.y,
+			renderInfos.dx,
+			renderInfos.dy,
+			renderInfos.dw * this.unitSize.x,
+			renderInfos.dh * this.unitSize.y
+		);
+
 	};
 
 	Renderer.prototype.getRenderCoordinates = function () {

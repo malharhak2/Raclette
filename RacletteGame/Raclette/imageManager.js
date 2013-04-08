@@ -1,10 +1,13 @@
-define(["Raclette/Loader"], function(loader) {
-    var ImageManager = function(baseFolder) {
-    	this.baseFolder = baseFolder;
+define(["Raclette/Debug", "Raclette/Loader"], function(debug, loader) {
+    var ImageManager = function() {
     	this.images = {};
     	this.imagesToLoad = 0;
     	this.imagesLoaded = 0;
     };
+
+    ImageManager.prototype.init = function (baseFolder) {
+        this.baseFolder = baseFolder;
+    }
 
     ImageManager.prototype.isLoaded = function () {
     	if (this.imagesToLoad == this.imagesLoaded) {
@@ -21,7 +24,7 @@ define(["Raclette/Loader"], function(loader) {
     		_this.images[i].loaded = true;
     		_this.imagesLoaded++;
             loader.itsOkFor("image"+i, "ressource");
-    		console.log(_this.imagesToLoad, _this.imagesLoaded);
+    		debug.log("Image Manager", _this.imagesLoaded, "/", _this.imagesToLoad);
     	});
     	img.src = this.images[i].url;
     }
@@ -47,10 +50,9 @@ define(["Raclette/Loader"], function(loader) {
     	if (this.images[name])
     		return this.images[name].img;
     	else {
-    		console.warn ("Folks warn : Asked for unknown image : " + name);
     		return false;	
     	}
     }
     
-    return ImageManager;
+    return new ImageManager();
 });

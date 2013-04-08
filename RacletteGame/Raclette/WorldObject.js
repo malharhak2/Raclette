@@ -5,8 +5,8 @@ define (["Raclette/Debug", "Raclette/Physics", "Raclette/Renderer"], function (d
 		this.physics = physics.instancePhysicalObject(args.physics);
 		this.image = args.image || args.type;
 		this.renderType = args.renderType;
-		this.state = args.state;
-		this.dir = args.dir;
+		this.state = args.state || args.defaultState;
+		this.dir = args.dir || args.defaultDir;
 		this.attachRenderer();
 	};
 
