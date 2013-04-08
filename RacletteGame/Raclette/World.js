@@ -2,8 +2,6 @@ define(["Raclette/Debug", "Raclette/WorldObjectType", "Raclette/WorldObject", "R
 	function World () {
 		this.physics = physics;
 		this.objectTypes = {}; 
-		this.callStack = [];
-		this.gravity = {x: 0, y:0}
 		this.layers = {};
 		this.objects = {};
 	}
@@ -74,16 +72,16 @@ define(["Raclette/Debug", "Raclette/WorldObjectType", "Raclette/WorldObject", "R
 	};
 
 	World.prototype.instancePhysicalObject = function (args) {
-		return physics.instancePhysicalObject(args);
+		return this.physics.instancePhysicalObject(args);
 	};
 
 	World.prototype.removeObject = function(id) {
-		this.physics.removeObject(this.objects[id].physics.body);
+		this.physics.removeObject(this.objects[id].physics);
 		delete this.objects[id];
 	};
 
 	World.prototype.removeCase = function (layer, x, y) {
-		this.physics.removeObject(this.layers[layer][y][x].physics.body);
+		this.physics.removeObject(this.layers[layer][y][x].physics);
 		this.layers[layer][y][x] = false;
 
 	}
