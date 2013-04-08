@@ -1,0 +1,14 @@
+define (["Raclette/Debug"], function (debug) {
+	var WorldObjectType = function (args) {
+		debug.log("WorldObjectType", "Creatig world object type", args);
+		this.parent = parent;
+		this.renderType = args.renderType;
+		this.layer = args.layer;
+		this.id = args.id;
+		this.physicsType = args.physicsType;
+		this.physics = args.physics;
+		debug.log("WorldObjectType", "Created !");
+	};
+
+	return WorldObjectType;
+})

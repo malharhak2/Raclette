@@ -1,4 +1,4 @@
-define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/AnimationManager", "Raclette/Physics"], function(debug, CONFIG, Box2D, animationManager, physics){ 
+define(["Raclette/Debug", "Raclette/WorldObjectType", "Raclette/WorldObject", "Raclette/CONFIG", "Raclette/box2d", "Raclette/AnimationManager", "Raclette/Physics"], function(debug, WorldObjectType, WorldObject, CONFIG, Box2D, animationManager, physics){ 
 	function World () {
 		this.physics = physics;
 		this.objectTypes = {}; 
@@ -28,13 +28,7 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 	};
 
 	World.prototype.createObjectType = function (args) {
-		debug.log("World", "Creatig world class", args);
-		this.objectTypes[args.id] = {
-			renderType : args.renderType, //tileset ou image
-			layer : args.layer,
-			id : args.id,
-			physicsType : args.physicsType
-		};
+		this.objectTypes[args.id] = new WorldObjectType(args);
 		if (args.physics) {
 			this.createPhysicalObjectType(args.physics);
 		} else if (args.physicsType == "block") {
@@ -63,43 +57,16 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 	};
 
 	World.prototype.instanceBlock = function (args) {
-		return this.instancePhysicalObject({
-			typeId : args.id,
-			fixe : true,
-			x : args.x,
-			y : args.y,
-			userData : args.userData,
-			tags : args.tags
-		});
+		return this.physics.instanceBlock (args);
 	};
 
 	World.prototype.instanceMapObject = function (args) {
-		this.layers[args.layer][args.y][args.x] = {
-			type : args.type,
-			x : args.x,
-			y : args.y,
-			layer : args.layer,
-			image : args.image || false
-		};
-		if (this.objectTypes[args.type].physicsType == "block") {
-			this.layers[args.layer][args.y][args.x].physics = this.instanceBlock({
-				id : args.type,
-				x : args.x,
-				y : args.y,
-				userData : args.userData,
-				tags : args.tags
-			});
-		} else if (this.objectTypes[args.type].physicsType == "physical") {
-			this.layers[args.layer][args.y][args.x].physics = this.instancePhysicalObject(args.physics);
-		}
+		args.physicsType = this.objectTypes[args.type].physicsType;
+		this.layers[args.layer][args.y][args.x] = new WorldMapObject(args);
 	};
 
 	World.prototype.instanceObject = function (args) {
-		this.objects[args.id] = {
-			type : args.type,
-			layer : args.layer,
-			physics : this.instancePhysicalObject(args.physics)
-		};
+		this.objects[args.id] = new WorldObject(args);
 	};
 
 	World.prototype.createDistanceJoint = function(body1,body2,anchor1,anchor2) {	
@@ -107,7 +74,7 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 	};
 
 	World.prototype.instancePhysicalObject = function (args) {
-		return physics.instancePhysicalObject(args.typeId, args.fixe, args.x, args.y, args.userData, args.tags);
+		return physics.instancePhysicalObject(args);
 	};
 
 	World.prototype.removeObject = function(id) {

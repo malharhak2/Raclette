@@ -94,38 +94,41 @@ define(["Raclette/Debug", "Raclette/box2d"], function (debug, Box2D) {
 		return jointDef;		
 	};
 
-	Physics.prototype.instancePhysicalObject = function (typeId, fixe, x, y, userData, tags) {
+	Physics.prototype.instancePhysicalObject = function (args) {
 		var bodyDef = new this.b2BodyDef;
-		if (fixe) {
+		if (args.fixe) {
 			bodyDef.type = this.b2Body.b2_staticBody;
 		} else {
 			bodyDef.type = this.b2Body.b2_dynamicBody;
 		}
-		bodyDef.position.x = x
-		bodyDef.position.y = y
-		bodyDef.userData = userData || {};
-		bodyDef.userData.id = indexObject;
-		debug.log(this.objectTypes, typeId);
-		bodyDef.fixedRotation = this.objectTypes[typeId].fixedRotation;
+		bodyDef.position.x = args.x
+		bodyDef.position.y = args.y
+		bodyDef.args.userData = args.userData || {};
+		bodyDef.args.userData.id = indexObject;
+		if (!args.typeId) {
+			debug.error("Physics", this.objectTypes, args.typeId);
+		}
+		bodyDef.args.fixedRotation = this.objectTypes[args.typeId].args.fixedRotation;
 		var thisAnim = null;
-		if (this.objectTypes[typeId].animated) {
-			thisAnim = animationManager.pushAnim({animName: this.objectTypes[typeId].image});
+		if (this.objectTypes[args.typeId].animated) {
+			thisAnim = animationManager.pushAnim({animName: 
+				this.objectTypes[args.typeId].image});
 		}
 		this.objects.push({
 			id: indexObject,
-			typeId : typeId,
-			body: this.world.CreateBody(bodyDef).CreateFixture(this.objectTypes[typeId]).GetBody(),
-			width : this.objectTypes[typeId].width,
-			height : this.objectTypes[typeId].height,
-			imageWidth : this.objectTypes[typeId].imageWidth,
-			imageHeight : this.objectTypes[typeId].imageHeight,
-			imageOffset : this.objectTypes[typeId].imageOffset,
-			noGravity : this.objectTypes[typeId].noGravity,
-			image: this.objectTypes[typeId].image,
-			trigger: this.objectTypes[typeId].trigger,
-			tags: tags,
+			args.typeId : args.typeId,
+			body: this.world.CreateBody(bodyDef).CreateFixture(this.objectTypes[args.typeId]).GetBody(),
+			width : this.objectTypes[args.typeId].width,
+			height : this.objectTypes[args.typeId].height,
+			imageWidth : this.objectTypes[args.typeId].imageWidth,
+			imageHeight : this.objectTypes[args.typeId].imageHeight,
+			imageOffset : this.objectTypes[args.typeId].imageOffset,
+			noGravity : this.objectTypes[args.typeId].noGravity,
+			image: this.objectTypes[args.typeId].image,
+			trigger: this.objectTypes[args.typeId].trigger,
+			args.tags: args.tags,
 			renderer:{ // For the animation engine
-				img: this.objectTypes[typeId].image,
+				img: this.objectTypes[args.typeId].image,
 				state: "",
 				dir: "",
 				anim: thisAnim
@@ -144,6 +147,17 @@ define(["Raclette/Debug", "Raclette/box2d"], function (debug, Box2D) {
 			10
 		);
 		this.world.ClearForces();
+	};
+
+	Physics.prototype.instanceBlock = function (args) {
+		return this.instancePhysicalObject({
+			typeId : args.id,
+			fixe : true,
+			x : args.x,
+			y : args.y,
+			userData : args.userData,
+			tags : args.tags
+		});		
 	};
 
 	Physics.prototype.applyGravity = function () {
