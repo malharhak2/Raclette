@@ -1,4 +1,5 @@
-define(["Raclette/Debug", "Raclette/TilesManager", "Raclette/MapLoader", "Raclette/Rendering", "Raclette/World", "Raclette/utils", "Raclette/Gamepad", "game/Main", "Raclette/inputsManager", "Raclette/Loader", "Raclette/InterfaceManager", "Raclette/Camera"], function(debug, tilesManager, mapLoader, rendering, World, utils, gamepad, Main, InputsManager, loader, interfaceManager, Camera) {
+define(["Raclette/Debug", "Raclette/TilesManager", "Raclette/MapLoader", "Raclette/Rendering", "Raclette/World", "Raclette/utils", "Raclette/Gamepad", "game/Main", "Raclette/inputsManager", "Raclette/Loader", "Raclette/InterfaceManager", "Raclette/Camera"], 
+	function(debug, tilesManager, mapLoader, rendering, World, utils, gamepad, Main, InputsManager, loader, interfaceManager, Camera) {
 	function Game() {
 		debug.log("Game", "Creating game...");
 		this.world = World;

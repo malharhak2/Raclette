@@ -1,6 +1,6 @@
 define(["Raclette/Debug", "Raclette/box2d", "Raclette/PhysicalObjectType", "Raclette/PhysicalObject"], function (debug, Box2D, PhysicalObjectType, PhysicalObject) {
-	var indexObject = 0; 
 	var Physics = function () {
+		this.indexObject = 0; 
 		this.objects = [];
 		this.callStack = [];
 		this.objectTypes = {};
@@ -65,17 +65,17 @@ define(["Raclette/Debug", "Raclette/box2d", "Raclette/PhysicalObjectType", "Racl
 	};
 
 	Physics.prototype.instancePhysicalObject = function (args) {
-		
-		var fixtureDef = this.objectTypes[args.type].fixtureDef;
+		var fixtureDef = this.objectTypes[args.typeId].fixtureDef;
 		args.fixedRotation = fixtureDef.fixedRotation;
 		args.fixtureDef = fixtureDef;
 		args.width = fixtureDef.width;
 		args.height = fixtureDef.height;
 		args.noGravity = fixtureDef.noGravity;
 		args.trigger = fixtureDef.trigger;
+		args.indexObject = this.indexObject;
 
 		this.objects.push(new PhysicalObject (args, this.world));
-		indexObject++;
+		this.indexObject++;
 		return (this.objects[this.objects.length - 1])
 	}
 
@@ -102,12 +102,15 @@ define(["Raclette/Debug", "Raclette/box2d", "Raclette/PhysicalObjectType", "Racl
 	};
 
 	Physics.prototype.applyGravity = function () {
-		for (var i=0; i<this.physics.objects.length; i++) {
-			if (this.physics.objects[i] == null) continue;
+		for (var i=0; i<this.objects.length; i++) {
+			if (this.objects[i] == null) continue;
 			if (this.objects[i].noGravity) continue;
-			var objet = this.objects[i];
-			var gravite = new this.b2Vec2(this.gravity.x*objet.GetMass(), this.gravity.y*objet.GetMass())
-			objet.ApplyForce(gravite, objet.GetWorldCenter())
+			var objekt = this.objects[i];
+			var gravite = new this.b2Vec2(
+				this.gravity.x*objekt.GetMass(), 
+				this.gravity.y*objekt.GetMass()
+			);
+			objekt.ApplyForce(gravite, objekt.GetWorldCenter())
 		};
 	}
 

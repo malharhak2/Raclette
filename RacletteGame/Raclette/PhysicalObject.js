@@ -9,14 +9,14 @@ define (["Raclette/Debug", "Raclette/box2d"], function (debug, b2d) {
 		this.bodyDef.position.x = args.x
 		this.bodyDef.position.y = args.y
 		this.bodyDef.userData = args.userData || {};
-		this.bodyDef.userData.id = indexObject;
+		this.bodyDef.userData.id = args.indexObject;
 		if (!args.typeId) {
 			debug.error("Physics", args.typeId);
 		}
 		this.bodyDef.fixedRotation = args.fixedRotation;
 		
 		this.id = args.index;
-		this.typeId : args.typeId;
+		this.typeId = args.typeId;
 		this.body = b2world.CreateBody(this.bodyDef).CreateFixture(args.fixtureDef).GetBody();
 		this.width = args.width;
 		this.height = args.height;
@@ -25,7 +25,7 @@ define (["Raclette/Debug", "Raclette/box2d"], function (debug, b2d) {
 		this.tags = args.tags;
 	};
 
-	PhysicalObject.prototype.applyForce = function (force, point) {
+	PhysicalObject.prototype.ApplyForce = function (force, point) {
 		this.body.ApplyForce(force, point);
 	}
 

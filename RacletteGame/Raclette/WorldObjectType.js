@@ -7,6 +7,8 @@ define (["Raclette/Debug"], function (debug) {
 		this.id = args.id;
 		this.physicsType = args.physicsType;
 		this.physics = args.physics;
+		this.defaultState = args.defaultState || "idle";
+		this.defaultDir = args.defaultDir || "none";
 		debug.log("WorldObjectType", "Created !");
 	};
 

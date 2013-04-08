@@ -45,7 +45,7 @@ define(["Raclette/Debug", "game/images","game/animsData", "Raclette/imageManager
 		};
 	};
 
-	AnimationManager.prototype.pushAnim = function(instance) {
+	AnimationManager.prototype.createAnim = function(instance) {
 		var myAnim = new AnimationInstance(instance);
 		if (instance.dir == undefined) {
 			myAnim.dir = this.animsDatas[instance.animName].defaultDir || "none";
@@ -54,11 +54,11 @@ define(["Raclette/Debug", "game/images","game/animsData", "Raclette/imageManager
 			myAnim.state = this.animsDatas[instance.animName].defaultState || "idle";
 		}
 		this.anims.push(myAnim);
-		return(this.anims.length - 1);
+		return myAnim;
 	};
 
 	AnimationManager.prototype.animate = function (object) {
-		var animInstance = this.anims[object.renderer.anim];
+		var animInstance = object.renderer.animation;
 		var animModel = this.animsDatas[object.renderer.img]
 		var objectDir;
 		var objectState; 
@@ -68,7 +68,7 @@ define(["Raclette/Debug", "game/images","game/animsData", "Raclette/imageManager
 				animModel.width = animModel.img.width;
 				animModel.height = animModel.img.height;
 				animInstance = new AnimationInstance({animName: object.renderer.img})
-				animInstance.renderer = {
+				animInstance.coordinates = {
 					sx : 0,
 					sy : 0,
 					sw : animModel.width,
@@ -100,7 +100,7 @@ define(["Raclette/Debug", "game/images","game/animsData", "Raclette/imageManager
 							animInstance.onEnd();
 						}
 					}
-					animInstance.renderer = {
+					animInstance.coordinates = {
 						sx : animModel.width * animInstance.step,
 						sy : animModel.height * animModel.states[animInstance.state][animInstance.dir].position,
 						sw : animModel.width,

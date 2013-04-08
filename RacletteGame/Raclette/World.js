@@ -1,4 +1,4 @@
-define(["Raclette/Debug", "Raclette/WorldObjectType", "Raclette/WorldObject", "Raclette/CONFIG", "Raclette/box2d", "Raclette/AnimationManager", "Raclette/Physics"], function(debug, WorldObjectType, WorldObject, CONFIG, Box2D, animationManager, physics){ 
+define(["Raclette/Debug", "Raclette/WorldObjectType", "Raclette/WorldObject", "Raclette/WorldMapObject", "Raclette/CONFIG", "Raclette/box2d", "Raclette/AnimationManager", "Raclette/Physics"], function(debug, WorldObjectType, WorldObject, WorldMapObject, CONFIG, Box2D, animationManager, physics){ 
 	function World () {
 		this.physics = physics;
 		this.objectTypes = {}; 
@@ -61,10 +61,13 @@ define(["Raclette/Debug", "Raclette/WorldObjectType", "Raclette/WorldObject", "R
 	World.prototype.instanceMapObject = function (args) {
 		args.physicsType = this.objectTypes[args.type].physicsType;
 		this.layers[args.layer][args.y][args.x] = new WorldMapObject(args);
+		return this.layers[args.layer][args.y][args.x];
 	};
 
 	World.prototype.instanceObject = function (args) {
+		args.renderType = this.objectTypes[args.type].renderType;
 		this.objects[args.id] = new WorldObject(args);
+		return this.objects[args.id];
 	};
 
 	World.prototype.createDistanceJoint = function(body1,body2,anchor1,anchor2) {	
@@ -88,7 +91,27 @@ define(["Raclette/Debug", "Raclette/WorldObjectType", "Raclette/WorldObject", "R
 
 	World.prototype.update = function() { 
 		this.physics.update();
+		for (var i in this.objects) {
+			this.objects[i].update();
+		};
 	};
+
+	World.prototype.render = function () {
+		for (var i in this.obejcts) {
+			this.objects[i].render ();
+		};
+	};
+
+	World.prototype.renderCases = function () {
+		for (var i = 0; i < this.layers.length; i++) {
+			for (var j = 0; j < this.layers[i].length; j++) {
+				for (var k = 0; k < this.layers[i][j].length; k++) {
+					this.layers[i][j][k].render();
+				};
+			};
+		};
+	};
+
 	World.prototype.getAllObjects = function() {
 		return this.objects;
 	}
