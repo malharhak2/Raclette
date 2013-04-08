@@ -1,10 +1,13 @@
-define(["Raclette/box2d"], function (Box2D) {
+define(["Raclette/Debug", "Raclette/box2d"], function (debug, Box2D) {
+	var indexObject = 0; 
 	var Physics = function () {
+		this.objects = [];
 		this.objectTypes = {};
 		this.gravity = {x : 0, y : 0};
 	};
 
 	Physics.prototype.initWorld = function (gravity) {
+		debug.log("Physics", "Initializing physical world...");
 		if (gravity !== undefined) {
 			this.gravity = gravity;
 		} else {
@@ -42,10 +45,12 @@ define(["Raclette/box2d"], function (Box2D) {
 				contact.m_fixtureB.m_body.m_userData.onPreSolve(contact.m_fixtureA.m_body, contact);
 			}
 		};
-		this.world.SetContactListener(this.contactListener);		
+		this.world.SetContactListener(this.contactListener);
+		debug.log("Physics", "Physical world initialized");		
 	};
 
 	Physics.prototype.createPhysicalObjectType = function (args) {
+		debug.log("Physics", "Creating physical class...", args);
 		this.objectTypes[args.id] = new this.b2FixtureDef;
 		this.objectTypes[args.id].density = args.density;
 		this.objectTypes[args.id].friction = args.friction;
@@ -76,6 +81,7 @@ define(["Raclette/box2d"], function (Box2D) {
 		if (args.shape == "round") {
 			this.objectTypes[args.id].shape =  new this.b2CircleShape(args.width);
 		}
+		debug.log("Physics", "Physical class created");
 	};
 
 	Physics.prototype.createDistanceJoint = function (body1, body2, anchor1, anchor2) {
@@ -99,6 +105,7 @@ define(["Raclette/box2d"], function (Box2D) {
 		bodyDef.position.y = y
 		bodyDef.userData = userData || {};
 		bodyDef.userData.id = indexObject;
+		debug.log(this.objectTypes, typeId);
 		bodyDef.fixedRotation = this.objectTypes[typeId].fixedRotation;
 		var thisAnim = null;
 		if (this.objectTypes[typeId].animated) {
@@ -138,7 +145,7 @@ define(["Raclette/box2d"], function (Box2D) {
 		);
 		this.world.ClearForces();
 	};
-	
+
 	Physics.prototype.applyGravity = function () {
 		for (var i=0; i<this.physics.objects.length; i++) {
 			if (this.physics.objects[i] == null) continue;

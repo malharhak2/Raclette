@@ -1,13 +1,16 @@
 define (["Raclette/Debug", "Raclette/MapCase", "Raclette/TilesManager"], function (debug, MapCase, tilesManager) {
 	var Map = function (data) {
+		debug.log("Map", "Creation...");
 		this.data = data;
 		this.height = data.height;
 		this.width = data.width;
-		this.arrangeLayers();
 		this.props = {};
+		this.arrangeLayers();
+		debug.log("Map", "Created !");
 	};
 
 	Map.prototype.arrangeLayers = function () {
+		debug.log("Map", "Treating data...");
 		this.level = [];
 		this.objects = {};
 		for (var i = 0; i < this.height; i++) {
@@ -46,6 +49,7 @@ define (["Raclette/Debug", "Raclette/MapCase", "Raclette/TilesManager"], functio
 				};
 			}
 		}
+		debug.log("Map", "Data treated !");
 	};
 
 	return Map;

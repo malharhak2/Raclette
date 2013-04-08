@@ -1,6 +1,6 @@
 define (["Raclette/Debug", "Raclette/Tile"], function (debug, Tile) {
 	var Tileset = function (data) {
-		debug.log("Tileset", data);
+		debug.log("Tileset", "Creating new tileset...", data);
 		this.width = data.width;
 		this.height = data.height;
 		this.caseWidth = data.caseWidth;
@@ -8,6 +8,7 @@ define (["Raclette/Debug", "Raclette/Tile"], function (debug, Tile) {
 		this.image = data.image;
 		this.tiles = [];
 		this.parseTilesList(data.tiles);
+		debug.log("Tileset", "Tileset created !");
 	};
 
 	Tileset.prototype.parseTilesList = function (tiles) {
@@ -19,7 +20,8 @@ define (["Raclette/Debug", "Raclette/Tile"], function (debug, Tile) {
 				x : t.x,
 				y : t.y,
 				nb : pos,
-				name : t.name
+				name : t.name,
+				type : t.type
 			});
 			this.tileNames[t.name] = pos;
 		}

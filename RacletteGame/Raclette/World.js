@@ -1,5 +1,4 @@
 define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/AnimationManager", "Raclette/Physics"], function(debug, CONFIG, Box2D, animationManager, physics){ 
-	var indexObject = 0; 
 	function World () {
 		this.physics = physics;
 		this.objectTypes = {}; 
@@ -9,11 +8,13 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 		this.objects = {};
 	}
 	World.prototype.init = function(gravity, map) {
+		debug.log("World", "Initializing world...");
 		this.physics.initWorld(gravity);
+		debug.log("World", map);
 		if (map) {
 			this.mapWidth = map.width;
 			this.mapHeight = map.height;
-			for (var k = 0; k < map[0][0].length; k++) {
+			for (var k in map.level[0][0]) {
 				this.layers[k] = [];
 				for (var j = 0; j < map.height; j++) {
 					this.layers[k][j] = [];
@@ -23,9 +24,11 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 				};
 			};
 		}
+		debug.log("World", "World initialized !");
 	};
 
 	World.prototype.createObjectType = function (args) {
+		debug.log("World", "Creatig world class", args);
 		this.objectTypes[args.id] = {
 			renderType : args.renderType, //tileset ou image
 			layer : args.layer,
@@ -34,17 +37,19 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 		};
 		if (args.physics) {
 			this.createPhysicalObjectType(args.physics);
-		} else if (args.staticBlock) {
+		} else if (args.physicsType == "block") {
 			this.createBlockType({
 				id : args.id
 			});
 		}
+		debug.log("World", "World class created !");
 	};
 	World.prototype.createPhysicalObjectType = function(args) {
 		this.physics.createPhysicalObjectType(args);
 	};
 
 	World.prototype.createBlockType = function (args) {
+		debug.log("World", "creating block type...");
 		this.physics.createPhysicalObjectType({
 			id : args.id,
 			shape : "square",
@@ -54,6 +59,7 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 			friction : 1,
 			restitution : 0
 		});
+		debug.log("World", "Block type created !");
 	};
 
 	World.prototype.instanceBlock = function (args) {
@@ -76,7 +82,7 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 			image : args.image || false
 		};
 		if (this.objectTypes[args.type].physicsType == "block") {
-			this.layers[args.layers][args.y][args.x].physics = this.instanceBlock({
+			this.layers[args.layer][args.y][args.x].physics = this.instanceBlock({
 				id : args.type,
 				x : args.x,
 				y : args.y,
@@ -84,7 +90,7 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/box2d", "Raclette/Animati
 				tags : args.tags
 			});
 		} else if (this.objectTypes[args.type].physicsType == "physical") {
-			this.layers[args.layers][args.y][args.x].physics = this.instancePhysicalObject(args.physics);
+			this.layers[args.layer][args.y][args.x].physics = this.instancePhysicalObject(args.physics);
 		}
 	};
 

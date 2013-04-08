@@ -1,4 +1,3 @@
-// Config require.js for external libs
 require.config({
 	baseUrl: "../",
     paths: {
@@ -14,12 +13,7 @@ require.config({
         }
     }
 });
-// Call Game
 require(["Raclette/GameLoop"], function(gameloop) {
-    /**
-     * @requires gameLoop
-     */
-    console.log(gameloop);
 	gameloop.init();
 	gameloop.run();
 });
