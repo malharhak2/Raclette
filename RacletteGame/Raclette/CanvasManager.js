@@ -23,6 +23,7 @@ define(["Raclette/Debug", "Raclette/CONFIG", "jquery"], function (debug, config,
 
 	CanvasManager.prototype.init = function()
 	{
+
 		this.canvas = $('<canvas />');
 		this.ctx = this.canvas[0].getContext('2d');
 		debug.log("Canvas Manager", this.ctx);

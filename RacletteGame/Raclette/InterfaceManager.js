@@ -1,6 +1,6 @@
 //Made by Los
 // See my website http://www.laisney.org
-define(["Raclette/Debug", "Raclette/pageManager", "game/images.js", "Raclette/AnimationManager"], function(Debug, pageManager, images, animationManager)
+define(["Raclette/Debug", "Raclette/CanvasManager", "game/images.js", "Raclette/AnimationManager"], function(Debug, canvasManager, images, animationManager)
 {	
 	function InterfaceManager()
 	{
@@ -116,22 +116,22 @@ define(["Raclette/Debug", "Raclette/pageManager", "game/images.js", "Raclette/An
 			};
 			var img = this.animationManager.getAnim(object.img).image;
 			if (object.alpha == undefined) object.alpha = 1;
-			pageManager.ctx.globalAlpha = object.alpha;
-			pageManager.ctx.drawImage(img, renderer.sx, renderer.sy, renderer.sw, renderer.sh, object.posX, object.posY, object.width, object.height);
-			pageManager.ctx.globalAlpha = 1;
+			canvasManager.ctx.globalAlpha = object.alpha;
+			canvasManager.ctx.drawImage(img, renderer.sx, renderer.sy, renderer.sw, renderer.sh, object.posX, object.posY, object.width, object.height);
+			canvasManager.ctx.globalAlpha = 1;
 		}
 		//Text function
 		this.displayTxt = function (object)
 		{
-			pageManager.ctx.font = object.size + " " + object.font;
-			pageManager.ctx.fillStyle = object.color;
-			pageManager.ctx.fillText(object.txt, object.posX, object.posY);
+			canvasManager.ctx.font = object.size + " " + object.font;
+			canvasManager.ctx.fillStyle = object.color;
+			canvasManager.ctx.fillText(object.txt, object.posX, object.posY);
 		}
 		//Rect function
 		this.displayRect = function (object)
 		{
-			pageManager.ctx.fillStyle = object.color;
-			pageManager.ctx.fillRect(object.posX, object.posY, object.width, object.height);
+			canvasManager.ctx.fillStyle = object.color;
+			canvasManager.ctx.fillRect(object.posX, object.posY, object.width, object.height);
 		}
 		/**************** ACTIVE ****************
 		Set active true

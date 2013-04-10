@@ -1,5 +1,5 @@
-define(["Raclette/Debug", "Raclette/AnimationManager", "Raclette/TilesManager", "Raclette/MapLoader", "Raclette/World", "Raclette/utils", "Raclette/Gamepad", "game/Main", "Raclette/inputsManager", "Raclette/Loader", "Raclette/Camera", "Raclette/CanvasManager"], 
-	function(debug, animationManager, tilesManager, mapLoader, World, utils, gamepad, Main, InputsManager, loader, Camera, canvasManager) {
+define(["Raclette/Debug", "Raclette/AnimationManager", "Raclette/TilesManager", "Raclette/MapLoader", "Raclette/World", "Raclette/utils", "Raclette/Gamepad", "game/Main", "Raclette/inputsManager", "Raclette/Loader", "Raclette/Camera", "Raclette/CanvasManager", "Raclette/InterfaceManager"], 
+	function(debug, animationManager, tilesManager, mapLoader, World, utils, gamepad, Main, InputsManager, loader, Camera, canvasManager, interfaceManager) {
 	function Game() {
 		debug.log("Game", "Creating game...");
 		this.world = World;
@@ -9,6 +9,7 @@ define(["Raclette/Debug", "Raclette/AnimationManager", "Raclette/TilesManager", 
 		this.height = canvasManager.canvasHeight;
 		this.camera = new Camera;
 		this.inputsManager = new InputsManager;
+		this.interfaceManager = interfaceManager; 
 		this.utils = utils;
 		this.loaded = false;
 		mapLoader.loadMap("01", function (map) {
@@ -21,6 +22,8 @@ define(["Raclette/Debug", "Raclette/AnimationManager", "Raclette/TilesManager", 
 			loader.render(canvasManager.ctx);
 		} else {
 			canvasManager.cleanCanvas();
+			this.interfaceManager.renderBegin();
+			this.interfaceManager.renderEnd();
 		}
 	};
 
