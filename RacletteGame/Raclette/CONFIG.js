@@ -7,7 +7,8 @@ define(["game/config"], function (userConfig) {
 			y : 64
 		};
 		this.gameTitle = userConfig.gameTitle || "UNTITLED";
-		this.containerID = userConfig.gameContainer || "racletteGame";
+		this.containerID = userConfig.gameContainer || "#racletteGame";
+		this.guiID = userConfig.guiID || "#racletteGui";
 		this.backgroundColor = userConfig.backgroundColor || "#A099A0";
 		this.screen = userConfig.screen || {
 			mode : userConfig.screen.mode || "ratio_css",
@@ -16,7 +17,7 @@ define(["game/config"], function (userConfig) {
 			height : userConfig.screen.height || 1000
 		};
 		this.floor = 62;
-		this.canvasBakgroundColor = userConfig.canvasBakgroundColor || "#4E3D61";
+		this.canvasBackgroundColor = userConfig.canvasBakgroundColor || "#4E3D61";
 		this.showCredit = userConfig.showCredit || true;
 		this.showCustomFooter = userConfig.showCustomFooter || true;
 		this.customFooter = userConfig.customFooter || "Raclette engine inside";

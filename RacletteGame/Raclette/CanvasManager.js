@@ -1,4 +1,4 @@
-define(["Raclette/Debug", "CONFIG", "jquery"], function (debug, config, $) {
+define(["Raclette/Debug", "Raclette/CONFIG", "jquery"], function (debug, config, $) {
 	
 	var CanvasManager = function() {
 
@@ -13,12 +13,19 @@ define(["Raclette/Debug", "CONFIG", "jquery"], function (debug, config, $) {
 		this.cssHeight = this.canvasHeight;
 		this.container = $(config.containerID);
 		this.gui = $(config.guiID);
+		this.init();
 
 	};
+
+	CanvasManager.prototype.cleanCanvas = function () {
+		this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+	}
 
 	CanvasManager.prototype.init = function()
 	{
 		this.canvas = $('<canvas />');
+		this.ctx = this.canvas[0].getContext('2d');
+		debug.log("Canvas Manager", this.ctx);
 		this.canvas.css({
 			'position' : "relative",
 			'width' : this.cssWidth + 'px',
@@ -29,6 +36,7 @@ define(["Raclette/Debug", "CONFIG", "jquery"], function (debug, config, $) {
 			'height' : this.canvasHeight
 		});
 		var that = this;
+		debug.log("Canvas manager", this.container, this.container.width());
 		this.container.resize(function (event) {
 			var size = {
 				x : that.container.width(),
@@ -51,7 +59,6 @@ define(["Raclette/Debug", "CONFIG", "jquery"], function (debug, config, $) {
 		var width = size.x;
 		var height = size.y;
 		if (sizeRatio > this.aspectRatio) {
-
 			width = Math.floor(this.aspectRatio * height);
 			this.cssWidth = width;
 			this.cssHeight = height;
@@ -61,15 +68,18 @@ define(["Raclette/Debug", "CONFIG", "jquery"], function (debug, config, $) {
 			this.cssWidth = width;
 			this.cssHeight = height;
 		}
+		debug.log("canvas manager", config.canvasBackgroundColor);
 		this.canvas.css ({
 			'width' : this.cssWidth + 'px',
-			'height' : this.cssHeight + 'px'
+			'height' : this.cssHeight + 'px',
+			'backgroundColor' : config.canvasBackgroundColor,
+			'position' : 'relative'
 		});
 		this.gui.css ({
 			'width' : this.cssWidth + 'px',
 			'height' : this.cssHeight + 'px',
 			'left' : Math.floor (this.cssWidth / 2) + 'px',
-			'top' : Math.floor (this.cssHeight / 2) + 'px'
+			'top' : Math.floor (this.cssHeight / 2) + 'px',
 			'marginLeft' : "-" + (Math.floor(this.cssWidth / 2) - Math.floor ((size.x - this.cssWidth) / 2)) + "px",
 			'marginTop' : "-" + (Math.floor(this.cssHeight / 2) - Math.floor((size.y - this.cssHeight) / 2)) + "px"
 		});

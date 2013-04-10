@@ -20,7 +20,7 @@ define(["Raclette/Debug", "Raclette/AnimationManager", "Raclette/TilesManager", 
 		if (!this.loaded) {
 			loader.render(canvasManager.ctx);
 		} else {
-			rendering.cleanCanvas();
+			canvasManager.cleanCanvas();
 		}
 	};
 
