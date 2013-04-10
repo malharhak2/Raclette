@@ -7,10 +7,14 @@ define(["game/config"], function (userConfig) {
 			y : 64
 		};
 		this.gameTitle = userConfig.gameTitle || "UNTITLED";
-		this.divName = userConfig.gameContainer || "lincoln";
+		this.containerID = userConfig.gameContainer || "racletteGame";
 		this.backgroundColor = userConfig.backgroundColor || "#A099A0";
-		this.width = userConfig.width || 1300;
-		this.height = userConfig.height || 600;
+		this.screen = userConfig.screen || {
+			mode : userConfig.screen.mode || "ratio_css",
+			ratio : userConfig.screen.ratio || 14/10,
+			width : userConfig.screen.width || 1400,
+			height : userConfig.screen.height || 1000
+		};
 		this.floor = 62;
 		this.canvasBakgroundColor = userConfig.canvasBakgroundColor || "#4E3D61";
 		this.showCredit = userConfig.showCredit || true;

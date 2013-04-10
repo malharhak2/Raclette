@@ -1,4 +1,4 @@
-define (["Raclette/Debug", "Raclette/AnimationManager", "Raclette/imageManager", "Raclette/pageManager"], function (debug, animationManager, imageManager, pageManager) {
+define (["Raclette/Debug", "Raclette/AnimationManager", "Raclette/imageManager", "Raclette/CanvasManager"], function (debug, animationManager, imageManager, canvasManager) {
 	var Renderer = function (args) {
 		this.unitSize = {
 			x : 64,
@@ -45,7 +45,7 @@ define (["Raclette/Debug", "Raclette/AnimationManager", "Raclette/imageManager",
 			dw : co.dw,
 			dh : co.dh
 		};
-		pageManager.ctx.drawImage(
+		canvasManager.ctx.drawImage(
 			imageManager.get(renderInfos.image), 
 			renderInfos.sx,
 			renderInfos.sy,
