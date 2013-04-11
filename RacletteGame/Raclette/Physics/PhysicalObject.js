@@ -1,4 +1,4 @@
-define (["rDebug", "rbox2d"], function (debug, b2d) {
+define (["rDebug", "rbox2d", "rutils", "rCONFIG"], function (debug, b2d, utils, config) {
 	var PhysicalObject = function (args, b2world) {
 		this.bodyDef = new b2d.Dynamics.b2BodyDef;
 		if (args.fixe) {

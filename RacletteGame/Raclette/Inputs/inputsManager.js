@@ -1,5 +1,5 @@
-define(["jquery", "rDebug", "rutils", "rCONFIG", "rGamepad", "rController"], 
-function ($, debug, utils, config, gamepad, Controller) {
+define(["jquery", "rDebug", "rutils", "rCONFIG", "rGamepad", "rController", "rCanvasManager"], 
+function ($, debug, utils, config, gamepad, Controller, canvasManager) {
 
 	var InputsManager = function(){
 		this.controllers = [];
@@ -13,11 +13,12 @@ function ($, debug, utils, config, gamepad, Controller) {
 			this.controllers.push(new Controller(c));
 		};
 		var that = this;
+		debug.log (canvasManager.canvas);
 		$('body').keydown( function (event) {
 			debug.log("Inputs manager", "keydown", event.keyCode);
 			that.keydown(event.keyCode);
 		});
-		$(config.containerID).keyup(function (event) {
+		$('body').keyup (function (event) {
 			that.keyup(event.keyCode);
 		});
 	};

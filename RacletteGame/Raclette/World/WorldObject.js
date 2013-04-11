@@ -70,6 +70,9 @@ define (["rDebug", "rCONFIG", "rutils", "rPhysics", "rRenderer"],
 		}
 		this.physics.body.SetLinearVelocity(velocity);
 	}
+	WorldObject.prototype.ApplyForce = function (force, point) {
+		this.physics.body.ApplyForce(force, point);
+	};
 
 	WorldObject.prototype.attachRenderer = function () {
 		this.renderer = new Renderer ({

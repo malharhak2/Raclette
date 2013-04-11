@@ -113,7 +113,10 @@ define(["rDebug", "rCONFIG", "rutils", "rCanvasManager", "rbox2d", "rPhysicalObj
 				this.gravity.x * objekt.GetMass(), 
 				this.gravity.y * objekt.GetMass()
 			);
-			objekt.ApplyForce(gravite, objekt.GetWorldCenter())
+			if (utils.chances (500)) {
+				debug.log("Physics", gravite);
+			}
+			objekt.ApplyForce(gravite, objekt.GetWorldCenter());
 		};
 	}
 
