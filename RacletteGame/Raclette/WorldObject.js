@@ -45,8 +45,8 @@ define (["Raclette/Debug", "Raclette/CONFIG", "Raclette/utils", "Raclette/Physic
 	WorldObject.prototype.GetPosition = function () {
 		var pos = this.physics.body.GetPosition();
 		var result = {
-			x : pos.x,
-			y : pos.y
+			x : pos.x - this.physics.width / 2,
+			y : pos.y - this.physics.height / 2
 		};
 		return result;
 	};

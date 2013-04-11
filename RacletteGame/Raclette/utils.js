@@ -11,7 +11,7 @@ define(["Raclette/CONFIG"], function(config) {
 		}
 	};
 	Utils.prototype.metters = function (pixels) {
-		return pixels / config.unitSize; // Convert pixel in metters
+		return pixels / (config.unitSize); // Convert pixel in metters
 	}
 
 	Utils.prototype.pixels = function (metters) {

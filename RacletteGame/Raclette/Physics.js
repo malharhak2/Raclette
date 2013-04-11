@@ -110,24 +110,26 @@ define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/utils", "Raclette/CanvasM
 			if (this.objects[i].noGravity) continue;
 			var objekt = this.objects[i];
 			var gravite = new this.b2Vec2(
-				this.gravity.x*objekt.GetMass(), 
-				this.gravity.y*objekt.GetMass()
+				this.gravity.x * objekt.GetMass(), 
+				this.gravity.y * objekt.GetMass()
 			);
 			objekt.ApplyForce(gravite, objekt.GetWorldCenter())
 		};
 	}
 
 	Physics.prototype.DrawDebugData = function () {
-		for (var i = 0; i < this.objects.length; i++) {
-			var pos = this.objects[i].body.GetPosition();
-			var width = this.objects[i].width;
-			var height = this.objects[i].height;
-			canvas.ctx.fillStyle = "rgba(0, 250, 0, 0.3)";
-			canvas.ctx.strokeStyle = "green";
-			canvas.ctx.strokeWidth = 3;
-			canvas.ctx.fillRect(pos.x * config.unitSize, pos.y * config.unitSize, config.unitSize * width, config.unitSize * height);
-			canvas.ctx.strokeRect(pos.x * config.unitSize, pos.y * config.unitSize, config.unitSize * width, config.unitSize * height);
-		};
+		if (config.drawDebug) {
+			for (var i = 0; i < this.objects.length; i++) {
+				var pos = this.objects[i].body.GetPosition();
+				var width = this.objects[i].width;
+				var height = this.objects[i].height;
+				canvas.ctx.fillStyle = "rgba(0, 250, 0, 0.3)";
+				canvas.ctx.strokeStyle = "green";
+				canvas.ctx.strokeWidth = 3;
+				canvas.ctx.fillRect((pos.x - width / 2) * config.unitSize, (pos.y - height / 2) * config.unitSize - height / 2, config.unitSize * width, config.unitSize * height);
+				canvas.ctx.strokeRect((pos.x - width / 2) * config.unitSize, (pos.y - height / 2) * config.unitSize - height / 2, config.unitSize * width, config.unitSize * height);
+			};
+		}
 	};
 
 	Physics.prototype.checkStack = function () {

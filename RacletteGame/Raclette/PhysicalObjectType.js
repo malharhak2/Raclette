@@ -1,4 +1,4 @@
-define (["Raclette/Debug", "Raclette/box2d"], function (debug, B2D) {
+define (["Raclette/Debug", "Raclette/box2d", "Raclette/utils"], function (debug, B2D, utils) {
 	var PhysicalObjectType = function (args) {
 		debug.log("PhysicalObjectType", "Physical class Creation...");
 		this.fixtureDef = new B2D.Dynamics.b2FixtureDef();
@@ -21,10 +21,10 @@ define (["Raclette/Debug", "Raclette/box2d"], function (debug, B2D) {
 		}
 		if (args.shape == "square") {
 			this.fixtureDef.shape = new B2D.Collision.Shapes.b2PolygonShape;
-			this.fixtureDef.shape.SetAsBox(args.width, args.height);
+			this.fixtureDef.shape.SetAsBox(args.width / 2, args.height / 2);
 		}
 		if (args.shape == "round") {
-			this.fixtureDef.shape =  new B2D.Collision.Shapes.b2CircleShape(args.width);
+			this.fixtureDef.shape =  new B2D.Collision.Shapes.b2CircleShape(args.width / 2);
 		}
 		debug.log("PhysicalObjectType", "Physical class created");
 	};

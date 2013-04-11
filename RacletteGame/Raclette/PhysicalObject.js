@@ -6,8 +6,8 @@ define (["Raclette/Debug", "Raclette/box2d"], function (debug, b2d) {
 		} else {
 			this.bodyDef.type = b2d.Dynamics.b2Body.b2_dynamicBody;
 		}
-		this.bodyDef.position.x = args.x
-		this.bodyDef.position.y = args.y
+		this.bodyDef.position.x = args.x;
+		this.bodyDef.position.y = args.y;
 		this.bodyDef.userData = args.userData || {};
 		this.bodyDef.userData.id = args.indexObject;
 		if (!args.typeId) {
