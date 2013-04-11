@@ -1,13 +1,21 @@
-define([], function() {
-	function metters(pixels) {
-		return pixels/100; // Convert pixel in metters
+define(["Raclette/CONFIG"], function(config) {
+	var Utils = function () {
+
+	};
+	
+	Utils.prototype.chances = function (nb) {
+		if (Math.floor (Math.random () * nb) == 2) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+	Utils.prototype.metters = function (pixels) {
+		return pixels / config.unitSize; // Convert pixel in metters
 	}
 
-	function pixels(metters) {
-		return metters*100; // Convert metters in pixels
+	Utils.prototype.pixels = function (metters) {
+		return metters * config.unitSize; // Convert metters in pixels
 	}
-	return {
-		metters : metters,
-		pixels : pixels
-	}
+	return new Utils();
 });

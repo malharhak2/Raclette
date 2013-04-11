@@ -22,8 +22,10 @@ define(["Raclette/Debug", "Raclette/AnimationManager", "Raclette/TilesManager", 
 			loader.render(canvasManager.ctx);
 		} else {
 			canvasManager.cleanCanvas();
+			World.render();
 			this.interfaceManager.renderBegin();
 			this.interfaceManager.renderEnd();
+
 		}
 	};
 

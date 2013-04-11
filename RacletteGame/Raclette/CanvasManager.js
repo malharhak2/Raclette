@@ -26,7 +26,6 @@ define(["Raclette/Debug", "Raclette/CONFIG", "jquery"], function (debug, config,
 
 		this.canvas = $('<canvas />');
 		this.ctx = this.canvas[0].getContext('2d');
-		debug.log("Canvas Manager", this.ctx);
 		this.canvas.css({
 			'position' : "relative",
 			'width' : this.cssWidth + 'px',
@@ -37,7 +36,6 @@ define(["Raclette/Debug", "Raclette/CONFIG", "jquery"], function (debug, config,
 			'height' : this.canvasHeight
 		});
 		var that = this;
-		debug.log("Canvas manager", this.container, this.container.width());
 		this.container.resize(function (event) {
 			var size = {
 				x : that.container.width(),

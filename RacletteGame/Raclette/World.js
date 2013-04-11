@@ -1,26 +1,19 @@
-define(["Raclette/Debug", "Raclette/WorldObjectType", "Raclette/WorldObject", "Raclette/WorldMapObject", "Raclette/CONFIG", "Raclette/box2d", "Raclette/AnimationManager", "Raclette/Physics"], function(debug, WorldObjectType, WorldObject, WorldMapObject, CONFIG, Box2D, animationManager, physics){ 
+define(["Raclette/Debug", "Raclette/WorldLayer", "Raclette/WorldObjectType", "Raclette/WorldObject", "Raclette/WorldMapObject", "Raclette/CONFIG", "Raclette/box2d", "Raclette/AnimationManager", "Raclette/Physics"], 
+	function(debug, WorldLayer, WorldObjectType, WorldObject, WorldMapObject, CONFIG, Box2D, animationManager, physics){ 
 	function World () {
 		this.physics = physics;
 		this.objectTypes = {}; 
-		this.layers = {};
+		this.layers = {
+			"Background" : new WorldLayer("Background"),
+			"Midground" : new WorldLayer("Midground"),
+			"Foreground" : new WorldLayer("Foreground"),
+			"Objects" : new WorldLayer("Objects")
+		};
 		this.objects = {};
 	}
 	World.prototype.init = function(gravity, map) {
 		debug.log("World", "Initializing world...");
 		this.physics.initWorld(gravity);
-		if (map) {
-			this.mapWidth = map.width;
-			this.mapHeight = map.height;
-			for (var k in map.level[0][0]) {
-				this.layers[k] = [];
-				for (var j = 0; j < map.height; j++) {
-					this.layers[k][j] = [];
-					for (var i = 0; i < map.width; i++) {
-						this.layers[k][j][i] = false;
-					};
-				};
-			};
-		}
 		debug.log("World", "World initialized !");
 	};
 
@@ -53,23 +46,16 @@ define(["Raclette/Debug", "Raclette/WorldObjectType", "Raclette/WorldObject", "R
 		debug.log("World", "Block type created !");
 	};
 
-	World.prototype.instanceBlock = function (args) {
-		return this.physics.instanceBlock (args);
-	};
-
-	World.prototype.instanceMapObject = function (args) {
-		args.physicsType = this.objectTypes[args.type].physicsType;
-		this.layers[args.layer][args.y][args.x] = new WorldMapObject(args);
-		return this.layers[args.layer][args.y][args.x];
-	};
-
 	World.prototype.instanceObject = function (args) {
-		args.renderType = this.objectTypes[args.type].renderType;
-		args.image = this.objectTypes[args.type].image;
-		args.defaultState = this.objectTypes[args.type].defaultState;
-		args.defaultDir = this.objectTypes[args.type].defaultDir;
-		this.objects[args.id] = new WorldObject(args);
-		return this.objects[args.id];
+		var klass = this.objectTypes[args.type];
+		args.renderType = klass.renderType;
+		args.image = klass.image;
+		args.defaultState = klass.defaultState;
+		args.defaultDir = klass.defaultDir;
+		args.physicsType = klass.physicsType;
+		debug.log("Instancing objet", args);
+		this.layers[args.layer].objects[args.id] = new WorldObject(args);
+		return this.layers[args.layer].objects[args.id];
 	};
 
 	World.prototype.createDistanceJoint = function(body1,body2,anchor1,anchor2) {	
@@ -80,52 +66,34 @@ define(["Raclette/Debug", "Raclette/WorldObjectType", "Raclette/WorldObject", "R
 		return this.physics.instancePhysicalObject(args);
 	};
 
-	World.prototype.removeObject = function(id) {
-		this.physics.removeObject(this.objects[id].physics);
-		delete this.objects[id];
+	World.prototype.removeObject = function(layer, id) {
+		this.physics.removeObject(this.layers[layer].objects[id].physics);
+		delete this.layers[layer].objects[id];
 	};
-
-	World.prototype.removeCase = function (layer, x, y) {
-		this.physics.removeObject(this.layers[layer][y][x].physics);
-		this.layers[layer][y][x] = false;
-
-	}
 
 	World.prototype.update = function() { 
 		this.physics.update();
-		for (var i in this.objects) {
-			this.objects[i].update();
+		for (var i in this.layers) {
+			for (var j in this.layers[i].objects) {
+				this.layers[i].objects[j].update();
+			}
 		};
 	};
 
 	World.prototype.render = function () {
-		for (var i in this.objects) {
-			this.objects[i].render();
-		};
-		this.renderCases();
-	};
-
-	World.prototype.renderCases = function () {
-		for (var i = 0; i < this.layers.length; i++) {
-			for (var j = 0; j < this.layers[i].length; j++) {
-				for (var k = 0; k < this.layers[i][j].length; k++) {
-					this.layers[i][j][k].render();
-				};
-			};
+		this.physics.update();
+		for (var i in this.layers) {
+			for (var j in this.layers[i].objects) {
+				this.layers[i].objects[j].render();
+			}
 		};
 	};
 
 	World.prototype.getAllObjects = function() {
-		return this.objects;
-	}
-	World.prototype.getObject = function(id) {
-		return this.objects[id];
-	}
-	World.prototype.getAllCases = function () {
 		return this.layers;
 	}
-	World.prototype.getCase = function (layer, x, y) {
-		return this.layers[layer][y][x];
+	World.prototype.getObject = function(layer, id) {
+		return this.layers[layer].objects[id];
 	}
 	return new World();
 });

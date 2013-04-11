@@ -2,10 +2,7 @@ define(["game/config"], function (userConfig) {
 	var CONFIG = function () {
 		this.userConfig = userConfig
 
-		this.unitSize = userConfig.unitSize || {
-			x : 64, 
-			y : 64
-		};
+		this.unitSize = userConfig.unitSize || 64;
 		this.gameTitle = userConfig.gameTitle || "UNTITLED";
 		this.containerID = userConfig.gameContainer || "#racletteGame";
 		this.guiID = userConfig.guiID || "#racletteGui";
