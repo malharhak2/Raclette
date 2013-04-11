@@ -1,4 +1,4 @@
-define(["Raclette/Debug", "game/images","game/animsData", "Raclette/imageManager", "Raclette/AnimationInstance"], function(debug, images, externalData, imageManager, AnimationInstance) {
+define(["rDebug", "game/images","game/animsData", "rimageManager", "rAnimationInstance"], function(debug, images, externalData, imageManager, AnimationInstance) {
 
 	var AnimationManager = function() {
 		this.externalData = externalData;

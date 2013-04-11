@@ -1,4 +1,4 @@
-define(["Raclette/Debug", "game/tilesets", "Raclette/Tileset"], function (debug, tilesets, Tileset) {
+define(["rDebug", "game/tilesets", "rTileset"], function (debug, tilesets, Tileset) {
 	var TilesManager = function () {
 		this.tilesets = {};
 		this.parseTilesets();

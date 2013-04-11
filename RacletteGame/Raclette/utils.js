@@ -1,4 +1,4 @@
-define(["Raclette/CONFIG"], function(config) {
+define(["rCONFIG"], function(config) {
 	var Utils = function () {
 
 	};

@@ -1,4 +1,4 @@
-define (["Raclette/Debug"], function (debug) {
+define (["rDebug"], function (debug) {
 	var WorldObjectType = function (args) {
 		debug.log("WorldObjectType", "Creatig world object type", args);
 		this.parent = parent;

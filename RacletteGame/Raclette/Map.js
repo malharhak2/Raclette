@@ -1,4 +1,4 @@
-define (["Raclette/utils", "Raclette/Debug", "Raclette/MapCase", "Raclette/TilesManager"], function (utils, debug, MapCase, tilesManager) {
+define (["rutils", "rDebug", "rMapCase", "rTilesManager"], function (utils, debug, MapCase, tilesManager) {
 	var Map = function (data) {
 		debug.log("Map", "Creation...");
 		this.data = data;

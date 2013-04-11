@@ -1,4 +1,4 @@
-define(["Raclette/CONFIG", "Raclette/Debug", "Raclette/utils"], function(config, debug, utils) {
+define(["rCONFIG", "rDebug", "rutils"], function(config, debug, utils) {
 	function Camera() {
 		this.x = 0;
 		this.y = 0;

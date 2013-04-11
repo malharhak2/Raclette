@@ -1,4 +1,4 @@
-define (["Raclette/Debug", "Raclette/CONFIG", "Raclette/utils", "Raclette/Physics", "Raclette/Renderer"], 
+define (["rDebug", "rCONFIG", "rutils", "rPhysics", "rRenderer"], 
 	function (debug, config, utils, physics, Renderer) {
 	var WorldObject = function (args) {
 		this.type = args.type;
@@ -29,6 +29,12 @@ define (["Raclette/Debug", "Raclette/CONFIG", "Raclette/utils", "Raclette/Physic
 							x : that.physics.x, 
 							y : that.physics.y
 						}
+					},
+					GetLinearVelocity : function () {
+						return {
+							x : 0,
+							y : 0
+						}
 					}
 				}
 			};
@@ -50,6 +56,20 @@ define (["Raclette/Debug", "Raclette/CONFIG", "Raclette/utils", "Raclette/Physic
 		};
 		return result;
 	};
+
+	WorldObject.prototype.GetLinearVelocity = function () {
+		return this.physics.body.GetLinearVelocity();
+	}
+
+	WorldObject.prototype.SetLinearVelocity = function (velocity) {
+		if (velocity.x === undefined) {
+			velocity.x = this.physics.body.GetLinearVelocity().x;
+		}
+		if (velocity.y === undefined) {
+			velocity.y = this.physics.body.GetLinearVelocity().y;
+		}
+		this.physics.body.SetLinearVelocity(velocity);
+	}
 
 	WorldObject.prototype.attachRenderer = function () {
 		this.renderer = new Renderer ({

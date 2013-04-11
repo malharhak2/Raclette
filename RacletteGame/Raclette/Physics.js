@@ -1,4 +1,4 @@
-define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/utils", "Raclette/CanvasManager", "Raclette/box2d", "Raclette/PhysicalObjectType", "Raclette/PhysicalObject"], 
+define(["rDebug", "rCONFIG", "rutils", "rCanvasManager", "rbox2d", "rPhysicalObjectType", "rPhysicalObject"], 
 	function (debug, config, utils, canvas, Box2D, PhysicalObjectType, PhysicalObject) {
 	var Physics = function () {
 		this.indexObject = 0; 

@@ -1,4 +1,4 @@
-define (["Raclette/Debug"], function (debug) {
+define (["rDebug"], function (debug) {
 	var WorldLayer = function (name) {
 		this.objects = {};
 		this.name = name;

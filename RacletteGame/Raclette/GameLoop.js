@@ -1,4 +1,4 @@
-define(["Raclette/Game"], function(game) {
+define(["rGame"], function(game) {
 	function run() {
 		if (!window.FULLSTOP) requestAnimFrame(run);
 		game.logic();

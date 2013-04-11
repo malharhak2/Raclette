@@ -1,4 +1,4 @@
-define (["Raclette/Physics"], function (physics) {
+define (["rPhysics"], function (physics) {
 	var WorldMapObject = function (args) {
 		this.type = args.type;
 		this.x = args.x;

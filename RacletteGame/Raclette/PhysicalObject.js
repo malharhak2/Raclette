@@ -1,4 +1,4 @@
-define (["Raclette/Debug", "Raclette/box2d"], function (debug, b2d) {
+define (["rDebug", "rbox2d"], function (debug, b2d) {
 	var PhysicalObject = function (args, b2world) {
 		this.bodyDef = new b2d.Dynamics.b2BodyDef;
 		if (args.fixe) {

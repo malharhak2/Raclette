@@ -1,4 +1,4 @@
-define (["Raclette/Debug", "Raclette/Tile", "Raclette/utils"], 
+define (["rDebug", "rTile", "rutils"], 
 function (debug, Tile, utils) {
 	var Tileset = function (data) {
 		debug.log("Tileset", "Creating new tileset...");

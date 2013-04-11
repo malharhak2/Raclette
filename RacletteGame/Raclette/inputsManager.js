@@ -1,71 +1,50 @@
-define(["Raclette/keyboardManager", "Raclette/Gamepad", "Raclette/VirtualController"], function(keyboardManager, gamepad, VirtualController) {
+define(["jquery", "rDebug", "rutils", "rCONFIG", "rGamepad", "rController"], 
+function ($, debug, utils, config, gamepad, Controller) {
 
 	var InputsManager = function(){
-		this.virtualControllers = [];
-		this.correspondances = [];
-		this.keyboardManager = keyboardManager;
-		keyboardManager.init();
+		this.controllers = [];
+		this.keysTable = config.keysTable;
+		this.init();
 	};
 
 	InputsManager.prototype.init = function(correspondances){
-		this.correspondances = correspondances;
-	};
-
-	InputsManager.prototype.addVirtualController = function(tableau) {
-		var controller = new VirtualController;
-		for (var i=0; i<tableau.length; i++) {
-			if (tableau[i] == "keyboard") {
-				controller.keyboard = true;
-			} else if (tableau[i] == "allGamepads"){
-				controller.gamepads = true;
-			} else {
-				controller.gamepads.push(tableau[i]);
-			}
+		for (var i = 0; i < config.controllers.length; i++) {
+			var c = config.controllers[i];
+			this.controllers.push(new Controller(c));
 		};
-		this.virtualControllers.push(controller)
-		return this.virtualControllers.length-1;
+		var that = this;
+		$('body').keydown( function (event) {
+			debug.log("Inputs manager", "keydown", event.keyCode);
+			that.keydown(event.keyCode);
+		});
+		$(config.containerID).keyup(function (event) {
+			that.keyup(event.keyCode);
+		});
 	};
 
-	InputsManager.prototype.isButtonPressed = function(id, button){
-		var virtualController = this.virtualControllers[id];
-		if (virtualController.keyboard == true) {
-			if (keyboardManager.touches[button] == true) {
-				var correspondant = this.correspondances[button.toString()];
-				if (correspondant.type == "axe" && correspondant.direction == "minus") return -1;
-				if (button == 13) console.log("ENTREE")
-				return true;
-			}
-		}
-		if (virtualController.gamepads == true) {
-			for (var i=0; i<gamepad.gamepads.length; i++) {
-				if (this.checkGamePad(i, virtualController, button)) return this.checkGamePad(i, virtualController, button);
-			};
-		}
-		if (virtualController.gamepads!= undefined && virtualController.gamepads.length >= 1) {
-			for (var i=0; i<virtualController.gamepads.length; i++) {
-				if (this.checkGamePad(virtualController.gamepads[i], virtualController, button)) return this.checkGamePad(virtualController.gamepads[i], virtualController, button);
-			};
-		}
+	InputsManager.prototype.keydown = function (keycode) {
+		for (var i = 0; i < this.controllers.length; i++) {
+			this.controllers[i].keydown(keycode);
+		};
+	};
+	InputsManager.prototype.keyup = function (keycode) {
+		for (var i = 0; i < this.controllers.length; i++) {
+			this.controllers[i].keyup (keycode);
+		};
 	};
 
-	InputsManager.prototype.checkGamePad = function(i, virtualController, button) {
-		var correspondant = this.correspondances[button.toString()];
-		if (correspondant == undefined) {console.error("Button not defined in the InputsManager Init")};
-		if (correspondant.type == "button") {
-			if (gamepad.gamepads[i].buttons[correspondant.button]) return true;
+	InputsManager.prototype.getKey = function(id, button){
+		var controller = this.controllers[id];
+		var touch = button;
+		if (arguments.length == 1) {
+			controller = this.controllers[0];
+			touch = [id];
 		}
-		if (correspondant.type == "axe") {
-			if (correspondant.direction == "plus") {
-				if (gamepad.gamepads[i].axes[correspondant.axe] >= 0.4) {
-					return gamepad.gamepads[i].axes[correspondant.axe];
-				}
-			}
-			if (correspondant.direction == "minus") {
-				if (gamepad.gamepads[i].axes[correspondant.axe] <= -0.4) {
-					return gamepad.gamepads[i].axes[correspondant.axe];
-				}
-			}
+		if (controller.getKey(touch)) {
+			return true;
 		}
+		return false;
 	};
-	return InputsManager;
+
+	return new InputsManager();
 });

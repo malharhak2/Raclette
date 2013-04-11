@@ -1,4 +1,4 @@
-define (["Raclette/Debug", "jquery", "Raclette/Map"], function (debug, $, Map) {
+define (["rDebug", "jquery", "rMap"], function (debug, $, Map) {
 	
 	var MapLoader = function () {
 

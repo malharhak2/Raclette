@@ -1,4 +1,4 @@
-define (["Raclette/Debug", "Raclette/utils", "Raclette/CONFIG", "Raclette/TilesManager", "Raclette/AnimationManager", "Raclette/imageManager", "Raclette/CanvasManager", "Raclette/Camera"], 
+define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "rimageManager", "rCanvasManager", "rCamera"], 
 	function (debug, utils, config, tilesManager, animationManager, imageManager, canvasManager, camera) {
 	var Renderer = function (args) {
 		this.type = args.type;
@@ -10,9 +10,6 @@ define (["Raclette/Debug", "Raclette/utils", "Raclette/CONFIG", "Raclette/TilesM
 		this.state = args.state;
 		this.dir = args.dir;
 		this.init();
-		if (utils.chances (50)) {
-			debug.log("Renderer", this.position, this.width, this.height);
-		}
 	};
 
 	Renderer.prototype.update = function (args) {
@@ -33,7 +30,6 @@ define (["Raclette/Debug", "Raclette/utils", "Raclette/CONFIG", "Raclette/TilesM
 			animationManager.animate(this);
 		} else if (this.type == "tileset") {
 			this.tileset = tilesManager.getTile(this.name);
-
 		}
 	};
 
@@ -93,9 +89,6 @@ define (["Raclette/Debug", "Raclette/utils", "Raclette/CONFIG", "Raclette/TilesM
 				dw : this.width,
 				dh : this.height
 			}
-		}
-		if (this.type == "spritesheet" && utils.chances(10)) {
-			debug.log("Renderer", "spritesheet", this);
 		}
 		var cameraInfos = camera.isObjectVisible ({
 			x : coordinates.dx,

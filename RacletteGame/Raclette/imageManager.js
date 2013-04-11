@@ -1,4 +1,4 @@
-define(["Raclette/Debug", "Raclette/Loader"], function(debug, loader) {
+define(["rDebug", "rLoader"], function(debug, loader) {
     var ImageManager = function() {
     	this.images = {};
     	this.imagesToLoad = 0;

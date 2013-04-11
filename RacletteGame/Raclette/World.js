@@ -1,4 +1,4 @@
-define(["Raclette/Debug", "Raclette/utils", "Raclette/WorldLayer", "Raclette/WorldObjectType", "Raclette/WorldObject", "Raclette/WorldMapObject", "Raclette/CONFIG", "Raclette/box2d", "Raclette/AnimationManager", "Raclette/Physics"], 
+define(["rDebug", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "rWorldMapObject", "rCONFIG", "rbox2d", "rAnimationManager", "rPhysics"], 
 	function(debug, utils, WorldLayer, WorldObjectType, WorldObject, WorldMapObject, CONFIG, Box2D, animationManager, physics){ 
 	function World () {
 		this.physics = physics;

@@ -1,4 +1,4 @@
-define(["Raclette/Debug", "Raclette/CONFIG", "jquery"], function (debug, config, $) {
+define(["rDebug", "rCONFIG", "jquery"], function (debug, config, $) {
 	
 	var CanvasManager = function() {
 

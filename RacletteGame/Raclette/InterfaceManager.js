@@ -1,6 +1,6 @@
 //Made by Los
 // See my website http://www.laisney.org
-define(["Raclette/Debug", "Raclette/CanvasManager", "game/images.js", "Raclette/AnimationManager"], function(Debug, canvasManager, images, animationManager)
+define(["rDebug", "rCanvasManager", "game/images.js", "rAnimationManager"], function(Debug, canvasManager, images, animationManager)
 {	
 	function InterfaceManager()
 	{

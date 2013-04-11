@@ -1,7 +1,9 @@
 define(["game/config"], function (userConfig) {
 	var CONFIG = function () {
 		this.userConfig = userConfig
+		this.controllers = userConfig.controllers;
 		this.drawDebug = userConfig.drawDebug || false;
+		this.keysTable = userConfig.keysTable;
 		this.unitSize = userConfig.unitSize || 64;
 		this.gameTitle = userConfig.gameTitle || "UNTITLED";
 		this.containerID = userConfig.gameContainer || "#racletteGame";

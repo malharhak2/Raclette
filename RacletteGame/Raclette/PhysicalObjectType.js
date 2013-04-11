@@ -1,4 +1,4 @@
-define (["Raclette/Debug", "Raclette/box2d", "Raclette/utils"], function (debug, B2D, utils) {
+define (["rDebug", "rbox2d", "rutils"], function (debug, B2D, utils) {
 	var PhysicalObjectType = function (args) {
 		debug.log("PhysicalObjectType", "Physical class Creation...");
 		this.fixtureDef = new B2D.Dynamics.b2FixtureDef();

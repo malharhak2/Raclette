@@ -1,4 +1,4 @@
-define(["Raclette/Debug", "Raclette/AnimationManager", "Raclette/TilesManager", "Raclette/MapLoader", "Raclette/World", "Raclette/utils", "Raclette/Gamepad", "game/Main", "Raclette/inputsManager", "Raclette/Loader", "Raclette/Camera", "Raclette/CanvasManager", "Raclette/InterfaceManager"], 
+define(["rDebug", "rAnimationManager", "rTilesManager", "rMapLoader", "rWorld", "rutils", "rGamepad", "game/Main", "rinputsManager", "rLoader", "rCamera", "rCanvasManager", "rInterfaceManager"], 
 	function(debug, animationManager, tilesManager, mapLoader, World, utils, gamepad, Main, InputsManager, loader, Camera, canvasManager, interfaceManager) {
 	function Game() {
 		debug.log("Game", "Creating game...");
@@ -8,7 +8,7 @@ define(["Raclette/Debug", "Raclette/AnimationManager", "Raclette/TilesManager", 
 		this.width = canvasManager.canvasWidth;
 		this.height = canvasManager.canvasHeight;
 		this.camera = Camera;
-		this.inputsManager = new InputsManager;
+		this.inputsManager = InputsManager;
 		this.interfaceManager = interfaceManager; 
 		this.utils = utils;
 		this.loaded = false;
@@ -30,7 +30,6 @@ define(["Raclette/Debug", "Raclette/AnimationManager", "Raclette/TilesManager", 
 	};
 
 	Game.prototype.logic = function() {
-		this.gamepads = gamepad.gamepads; 
 		if (!this.loaded) {
 			if (loader.update() == "loaded") {
 				var that = this;
