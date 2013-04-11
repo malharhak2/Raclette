@@ -1,4 +1,5 @@
-define(["Raclette/Debug", "Raclette/box2d", "Raclette/PhysicalObjectType", "Raclette/PhysicalObject"], function (debug, Box2D, PhysicalObjectType, PhysicalObject) {
+define(["Raclette/Debug", "Raclette/CONFIG", "Raclette/utils", "Raclette/CanvasManager", "Raclette/box2d", "Raclette/PhysicalObjectType", "Raclette/PhysicalObject"], 
+	function (debug, config, utils, canvas, Box2D, PhysicalObjectType, PhysicalObject) {
 	var Physics = function () {
 		this.indexObject = 0; 
 		this.objects = [];
@@ -81,6 +82,7 @@ define(["Raclette/Debug", "Raclette/box2d", "Raclette/PhysicalObjectType", "Racl
 	}
 
 	Physics.prototype.update = function () {
+		this.DrawDebugData();
 		this.applyGravity();
 		this.checkStack();
 		this.world.Step(
@@ -114,6 +116,19 @@ define(["Raclette/Debug", "Raclette/box2d", "Raclette/PhysicalObjectType", "Racl
 			objekt.ApplyForce(gravite, objekt.GetWorldCenter())
 		};
 	}
+
+	Physics.prototype.DrawDebugData = function () {
+		for (var i = 0; i < this.objects.length; i++) {
+			var pos = this.objects[i].body.GetPosition();
+			var width = this.objects[i].width;
+			var height = this.objects[i].height;
+			canvas.ctx.fillStyle = "rgba(0, 250, 0, 0.3)";
+			canvas.ctx.strokeStyle = "green";
+			canvas.ctx.strokeWidth = 3;
+			canvas.ctx.fillRect(pos.x * config.unitSize, pos.y * config.unitSize, config.unitSize * width, config.unitSize * height);
+			canvas.ctx.strokeRect(pos.x * config.unitSize, pos.y * config.unitSize, config.unitSize * width, config.unitSize * height);
+		};
+	};
 
 	Physics.prototype.checkStack = function () {
 		while (this.callStack.length > 0) {

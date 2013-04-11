@@ -7,7 +7,7 @@ define(["Raclette/Debug", "Raclette/AnimationManager", "Raclette/TilesManager", 
 		this.gamepads = gamepad.gamepads;
 		this.width = canvasManager.canvasWidth;
 		this.height = canvasManager.canvasHeight;
-		this.camera = new Camera;
+		this.camera = Camera;
 		this.inputsManager = new InputsManager;
 		this.interfaceManager = interfaceManager; 
 		this.utils = utils;

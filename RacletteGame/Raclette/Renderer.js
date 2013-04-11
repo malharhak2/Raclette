@@ -1,5 +1,5 @@
-define (["Raclette/Debug", "Raclette/utils", "Raclette/CONFIG", "Raclette/TilesManager", "Raclette/AnimationManager", "Raclette/imageManager", "Raclette/CanvasManager"], 
-	function (debug, utils, config, tilesManager, animationManager, imageManager, canvasManager) {
+define (["Raclette/Debug", "Raclette/utils", "Raclette/CONFIG", "Raclette/TilesManager", "Raclette/AnimationManager", "Raclette/imageManager", "Raclette/CanvasManager", "Raclette/Camera"], 
+	function (debug, utils, config, tilesManager, animationManager, imageManager, canvasManager, camera) {
 	var Renderer = function (args) {
 		this.type = args.type;
 		this.image = args.image;
@@ -10,6 +10,9 @@ define (["Raclette/Debug", "Raclette/utils", "Raclette/CONFIG", "Raclette/TilesM
 		this.state = args.state;
 		this.dir = args.dir;
 		this.init();
+		if (utils.chances (50)) {
+			debug.log("Renderer", this.position, this.width, this.height);
+		}
 	};
 
 	Renderer.prototype.update = function (args) {
@@ -36,31 +39,32 @@ define (["Raclette/Debug", "Raclette/utils", "Raclette/CONFIG", "Raclette/TilesM
 
 	Renderer.prototype.render = function () {
 		var co = this.getRenderCoordinates ();
-		var renderInfos = {
-			image : this.image,
-			sx : co.sx,
-			sy : co.sy,
-			sw : co.sw,
-			sh : co.sh,
-			dx : co.dx,
-			dy : co.dy,
-			dw : co.dw * config.unitSize,
-			dh : co.dh * config.unitSize
-		};
-		if (utils.chances (50)) {
-			debug.log ("Renderer", renderInfos);
+		if (co) {
+			var renderInfos = {
+				image : this.image,
+				sx : co.sx,
+				sy : co.sy,
+				sw : co.sw,
+				sh : co.sh,
+				dx : co.dx * config.unitSize,
+				dy : co.dy * config.unitSize,
+				dw : co.dw * config.unitSize,
+				dh : co.dh * config.unitSize
+			};
+			canvasManager.ctx.drawImage(
+				imageManager.get(renderInfos.image), 
+				renderInfos.sx,
+				renderInfos.sy,
+				renderInfos.sw,
+				renderInfos.sh,
+				renderInfos.dx,
+				renderInfos.dy,
+				renderInfos.dw,
+				renderInfos.dh
+			);
+		} else {
+			return;
 		}
-		canvasManager.ctx.drawImage(
-			imageManager.get(renderInfos.image), 
-			renderInfos.sx,
-			renderInfos.sy,
-			renderInfos.sw,
-			renderInfos.sh,
-			renderInfos.dx,
-			renderInfos.dy,
-			renderInfos.dw,
-			renderInfos.dh
-		);
 
 	};
 
@@ -79,9 +83,6 @@ define (["Raclette/Debug", "Raclette/utils", "Raclette/CONFIG", "Raclette/TilesM
 				dh : this.height
 			};
 		} else if (this.type == "tileset") {
-			if (utils.chances (300) ) {
-				debug.log("Renderer", this.type, this.tileset, this.position);
-			}
 			coordinates = {
 				sx : this.tileset.pos.x,
 				sy : this.tileset.pos.y,
@@ -93,7 +94,24 @@ define (["Raclette/Debug", "Raclette/utils", "Raclette/CONFIG", "Raclette/TilesM
 				dh : this.height
 			}
 		}
-		return coordinates;
+		if (this.type == "spritesheet" && utils.chances(10)) {
+			debug.log("Renderer", "spritesheet", this);
+		}
+		var cameraInfos = camera.isObjectVisible ({
+			x : coordinates.dx,
+			y : coordinates.dy,
+			w : coordinates.dw,
+			h : coordinates.dh
+		});
+		if (cameraInfos) {
+			coordinates.dx = cameraInfos.x;
+			coordinates.dy = cameraInfos.y;
+			coordinates.dw = cameraInfos.w;
+			coordinates.dh = cameraInfos.h;
+			return coordinates;
+		} else {
+			return false;
+		}
 	};
 
 	return Renderer;

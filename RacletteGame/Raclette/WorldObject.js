@@ -17,9 +17,20 @@ define (["Raclette/Debug", "Raclette/CONFIG", "Raclette/utils", "Raclette/Physic
 		} else if (args.physicsType == "physical") {		
 			this.physics = physics.instancePhysicalObject(args.physics);
 		} else if (args.physicsType == "none") {
+			var that = this;
 			this.physics = {
 				x : args.position.x,
-				y : args.position.y
+				y : args.position.y,
+				width : args.width,
+				height : args.height,
+				body : {
+					GetPosition : function () {
+						return {
+							x : that.physics.x, 
+							y : that.physics.y
+						}
+					}
+				}
 			};
 		}
 
@@ -34,14 +45,13 @@ define (["Raclette/Debug", "Raclette/CONFIG", "Raclette/utils", "Raclette/Physic
 	WorldObject.prototype.GetPosition = function () {
 		var pos = this.physics.body.GetPosition();
 		var result = {
-			x : pos.x * config.unitSize,
-			y : pos.y * config.unitSize
+			x : pos.x,
+			y : pos.y
 		};
 		return result;
 	};
 
 	WorldObject.prototype.attachRenderer = function () {
-		debug.log("Attach renderer", this.physicsType);
 		this.renderer = new Renderer ({
 			type : this.renderType,
 			name : this.name,

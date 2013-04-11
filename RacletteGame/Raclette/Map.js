@@ -71,7 +71,6 @@ define (["Raclette/utils", "Raclette/Debug", "Raclette/MapCase", "Raclette/Tiles
 					for (var k in layer[j]) {
 						var kase = layer[j][k];
 						if (kase == 0) {
-							this.objectsList[kaseID] = false;
 							continue;
 						}
 						var kaseID = this.calculateCaseId (i, j, k);
@@ -80,8 +79,8 @@ define (["Raclette/utils", "Raclette/Debug", "Raclette/MapCase", "Raclette/Tiles
 							id : kaseID,
 							layer : i,
 							position : {
-								x : k,
-								y : j
+								x : parseInt(k, 10),
+								y : parseInt(j, 10)
 							}
 						});
 					};
@@ -95,7 +94,8 @@ define (["Raclette/utils", "Raclette/Debug", "Raclette/MapCase", "Raclette/Tiles
 	};
 
 	Map.prototype.calculateCaseId = function (layer, x, y) {
-		var id = "mapcase_" + layer + "_" + x + "_" + y;
+		var id = "mapcase_" + layer + "_" + x + "_" + y;	
+		return id;
 	};
 
 	Map.prototype.TransformObject = function (args) {
@@ -103,6 +103,9 @@ define (["Raclette/utils", "Raclette/Debug", "Raclette/MapCase", "Raclette/Tiles
 		var objekt = {
 			type : tile.type,
 			name : tile.name,
+			width : 1,
+			height : 1,
+			id : args.id,
 			physicsType : "block",
 			layer : args.layer,
 			position : args.position

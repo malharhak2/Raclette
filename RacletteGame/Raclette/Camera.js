@@ -1,9 +1,9 @@
-define(["Raclette/CONFIG"], function(config) {
+define(["Raclette/CONFIG", "Raclette/Debug", "Raclette/utils"], function(config, debug, utils) {
 	function Camera() {
 		this.x = 0;
 		this.y = 0;
-		this.width = config.width;
-		this.height = config.height;
+		this.width = config.screen.width / config.unitSize;
+		this.height = config.screen.height / config.unitSize;
 	};
 	Camera.prototype.setPosition= function(args) {
 		this.x = args.x;
@@ -41,14 +41,14 @@ define(["Raclette/CONFIG"], function(config) {
 		args.x < this.x + this.w &&
 		args.y + args.h > this.y &&
 		args.y < this.y + this.h) {
-			newArgs.x -= this.x * this.w / config.width;
-			newArgs.y -= this.y * this.h / config.height;
-			newArgs.w = newArgs.w * this.w / config.width;
-			newArgs.h = newArgs.h * this.h / config.height;
+			newArgs.x = args.x - this.x;
+			newArgs.y = args.y - this.y;
+			newArgs.w = args.w;
+			newArgs.h = args.h;
 			return newArgs;
 		} else {
-			return "hidden"
+			return false
 		}
 	};
-	return Camera;
+	return new Camera();
 });

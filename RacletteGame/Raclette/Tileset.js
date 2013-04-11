@@ -21,9 +21,11 @@ function (debug, Tile, utils) {
 				x : t.x,
 				y : t.y,
 				pos : {
-					x : t.x * this.caseWidth,
-					y : t.y  * this.caseHeight
+					x : (t.x - 1) * this.caseWidth,
+					y : (t.y - 1)  * this.caseHeight
 				},
+				caseWidth : this.caseWidth,
+				caseHeight : this.caseHeight,
 				nb : pos,
 				name : t.name,
 				type : t.type
@@ -33,10 +35,10 @@ function (debug, Tile, utils) {
 	}
 
 	Tileset.prototype.hasTile = function (nb) {
-		if (utils.chances (50)) {
-		}
 		if (this.tiles[nb]) {
 			return this.tiles[nb];
+		} else if (this.tileNames[nb]) {
+			return this.tiles[this.tileNames[nb]];
 		} else {
 			return false;
 		}

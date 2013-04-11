@@ -1,5 +1,5 @@
-define(["Raclette/Debug", "Raclette/WorldLayer", "Raclette/WorldObjectType", "Raclette/WorldObject", "Raclette/WorldMapObject", "Raclette/CONFIG", "Raclette/box2d", "Raclette/AnimationManager", "Raclette/Physics"], 
-	function(debug, WorldLayer, WorldObjectType, WorldObject, WorldMapObject, CONFIG, Box2D, animationManager, physics){ 
+define(["Raclette/Debug", "Raclette/utils", "Raclette/WorldLayer", "Raclette/WorldObjectType", "Raclette/WorldObject", "Raclette/WorldMapObject", "Raclette/CONFIG", "Raclette/box2d", "Raclette/AnimationManager", "Raclette/Physics"], 
+	function(debug, utils, WorldLayer, WorldObjectType, WorldObject, WorldMapObject, CONFIG, Box2D, animationManager, physics){ 
 	function World () {
 		this.physics = physics;
 		this.objectTypes = {}; 
@@ -53,7 +53,6 @@ define(["Raclette/Debug", "Raclette/WorldLayer", "Raclette/WorldObjectType", "Ra
 		args.defaultState = klass.defaultState;
 		args.defaultDir = klass.defaultDir;
 		args.physicsType = klass.physicsType;
-		debug.log("Instancing objet", args);
 		this.layers[args.layer].objects[args.id] = new WorldObject(args);
 		return this.layers[args.layer].objects[args.id];
 	};
@@ -81,12 +80,12 @@ define(["Raclette/Debug", "Raclette/WorldLayer", "Raclette/WorldObjectType", "Ra
 	};
 
 	World.prototype.render = function () {
-		this.physics.update();
 		for (var i in this.layers) {
 			for (var j in this.layers[i].objects) {
 				this.layers[i].objects[j].render();
 			}
 		};
+		this.physics.DrawDebugData();
 	};
 
 	World.prototype.getAllObjects = function() {
