@@ -7,6 +7,23 @@ define (["rDebug", "rutils", "rCONFIG", "rCanvasManager"], function (debug, util
 		this.width = args.width;
 		this.height = args.height;
 		this.static = args.static || true;
+
+		this.velocity = {
+			x : 0,
+			y : 0
+		};
+	};
+
+	Collider.prototype.SetVelocity = function (velocity) {
+		var vel = {
+			x : velocity.x || this.velocity.x,
+			y : velocity.y || this.velocity.y
+		};
+		this.velocity = vel;
+	};
+
+	Collider.prototype.GetVelocity = function () {
+		return this.velocity;
 	};
 
 	Collider.prototype.GetPosition = function () {
@@ -15,7 +32,7 @@ define (["rDebug", "rutils", "rCONFIG", "rCanvasManager"], function (debug, util
 
 	Collider.prototype.render = function () {
 		this.DrawDebug (canvasManager.ctx);
-	}
+	};
 
 	Collider.prototype.DrawDebug = function (cétéhixe) {
 		cétéhixe.fillStyle = "rgba(0, 250, 0, 0.3)";
