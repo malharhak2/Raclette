@@ -16,11 +16,13 @@ function (debug, utils, config, canvasManager, time) {
 	};
 
 	Collider.prototype.SetVelocity = function (velocity) {
-		var vel = {
-			x : velocity.x || this.velocity.x,
-			y : velocity.y || this.velocity.y
-		};
-		this.velocity = vel;
+		if (velocity.x === undefined) {
+			velocity.x = this.velocity.x;
+		}
+		if (velocity.y === undefined) {
+			velocity.y = this.velocity.y;
+		}
+		this.velocity = velocity;
 	};
 
 	Collider.prototype.GetVelocity = function () {
