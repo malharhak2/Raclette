@@ -1,4 +1,5 @@
-define (["rDebug", "rutils", "rCONFIG", "rCanvasManager"], function (debug, utils, config, canvasManager) {
+define (["rDebug", "rutils", "rCONFIG", "rCanvasManager", "rTime"], 
+function (debug, utils, config, canvasManager, time) {
 	var Collider = function (args) {
 		this.position = {
 			x : args.position.x,
@@ -32,6 +33,11 @@ define (["rDebug", "rutils", "rCONFIG", "rCanvasManager"], function (debug, util
 
 	Collider.prototype.render = function () {
 		this.DrawDebug (canvasManager.ctx);
+	};
+
+	Collider.prototype.update = function () {
+		this.position.x += this.velocity.x * time.deltaTime;
+		this.position.y += this.velocity.y * time.deltaTime;
 	};
 
 	Collider.prototype.DrawDebug = function (cétéhixe) {

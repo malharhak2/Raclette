@@ -62,6 +62,7 @@ require.config({
         'rLoader'             : paths.engine + 'Loader',
         'rmain'               : paths.engine + 'main',
         'rutils'              : paths.engine + 'utils',
+        'rTime'               : paths.engine + 'Time'
     },
     shim: {
         'socket_io' : {

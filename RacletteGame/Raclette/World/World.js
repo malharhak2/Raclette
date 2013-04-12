@@ -12,6 +12,9 @@ define(["rDebug", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "
 	}
 	World.prototype.init = function(gravity, map) {
 		debug.log("World", "Initializing world...");
+		for (var i in this.layers) {
+			this.layers[i].GenerateStatics(map);
+		}
 		debug.log("World", "World initialized !");
 	};
 
@@ -20,16 +23,27 @@ define(["rDebug", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "
 		debug.log("World", "World class created !");
 	};
 
-	World.prototype.instanceObject = function (args) {
+	World.prototype.CreateObject = function (args) {
 		var klass = this.objectTypes[args.type];
 		args.render = klass.render;
 		args.defaultState = klass.defaultState;
 		args.defaultDir = klass.defaultDir;
 		args.physics = klass.physics;
-		args.physics.position = args.position;
-		this.layers[args.layer].objects[args.id] = new WorldObject(args);
+		args.physics.position = args.position;	
+
+		return args;	
+	}
+	World.prototype.instanceObject = function (args) {
+		var obj = this.CreateObject (args);
+		this.layers[args.layer].objects[args.id] = new WorldObject(obj);
 		return this.layers[args.layer].objects[args.id];
 	};
+
+	World.prototype.instanceStatic = function (args) {
+		var obj = this.CreateObject (args);
+		this.layers[args.layer].statics[args.position.y][args.position.x] = new WorldObject(obj);
+		return this.layers[args.layer].statics[args.position.y][args.position.x];
+	}
 
 	World.prototype.removeObject = function(layer, id) {
 		delete this.layers[layer].objects[id];
@@ -45,10 +59,21 @@ define(["rDebug", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "
 
 	World.prototype.render = function () {
 		for (var i in this.layers) {
+			this.renderStatics(this.layers[i].statics);
 			for (var j in this.layers[i].objects) {
 				this.layers[i].objects[j].render();
 			}
 		};
+	};
+
+	World.prototype.renderStatics = function (statics) {
+		for (var i = 0; i < statics.length; i++) {
+			for (var j = 0; j < statics[i].length; j++) {
+				if (statics[i][j].render) {
+					statics[i][j].render();
+				}
+			}
+		}
 	};
 
 	World.prototype.getAllObjects = function() {
