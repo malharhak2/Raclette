@@ -20,12 +20,20 @@ define (["rDebug", "rbox2d", "rutils", "rCONFIG"], function (debug, b2d, utils, 
 		this.body = b2world.CreateBody(this.bodyDef).CreateFixture(args.fixtureDef).GetBody();
 		this.width = args.width;
 		this.height = args.height;
+		this.weight = args.weight || 1;
 		this.noGravity = args.noGravity;
 		this.trigger = args.trigger;
 		this.tags = args.tags;
 	};
 
-	PhysicalObject.prototype.ApplyForce = function (force, point) {
+	PhysicalObject.prototype.ApplyForce = function (force, point) {	
+		if (utils.chances (50) && this.typeId == "player") {
+			debug.log("Apply Force", this.weight);
+		}
+		force = {
+			x : force.x * this.weight * this.width,
+			y : force.y * this.weight * this.height
+		};
 		this.body.ApplyForce(force, point);
 	}
 

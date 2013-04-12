@@ -103,10 +103,7 @@ define (["rutils", "rDebug", "rMapCase", "rTilesManager"], function (utils, debu
 		var objekt = {
 			type : tile.type,
 			name : tile.name,
-			width : 1,
-			height : 1,
 			id : args.id,
-			physicsType : "block",
 			layer : args.layer,
 			position : args.position
 		};

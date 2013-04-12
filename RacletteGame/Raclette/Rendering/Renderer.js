@@ -6,6 +6,7 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 		this.name = args.name;
 		this.width = args.width;
 		this.height = args.height;
+		this.offset = args.offset;
 		this.position = args.position;
 		this.state = args.state;
 		this.dir = args.dir;
@@ -27,6 +28,12 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 			this.animation = animationManager.createAnim ({
 				animName : this.image
 			});
+			this.animation.coordinates = {
+				sx : 0,
+				sy : 0,
+				dw : 0,
+				dh : 0
+			};
 			animationManager.animate(this);
 		} else if (this.type == "tileset") {
 			this.tileset = tilesManager.getTile(this.name);
@@ -42,8 +49,8 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 				sy : co.sy,
 				sw : co.sw,
 				sh : co.sh,
-				dx : co.dx * config.unitSize,
-				dy : co.dy * config.unitSize,
+				dx : (co.dx - this.offset.x) * config.unitSize,
+				dy : (co.dy - this.offset.y) * config.unitSize,
 				dw : co.dw * config.unitSize,
 				dh : co.dh * config.unitSize
 			};
@@ -65,19 +72,19 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 	};
 
 	Renderer.prototype.getRenderCoordinates = function () {
-		
 		var coordinates = {};
 		if (this.type == "spritesheet") {
-			coordinates = {
-				sx : this.animation.coordinates.sx,
-				sy : this.animation.coordinates.sy,
-				sw : this.animation.coordinates.sw,
-				sh : this.animation.coordinates.sh,
-				dx : this.position.x,
-				dy : this.position.y,
-				dw : this.width,
-				dh : this.height
-			};
+			
+				coordinates = {
+					sx : this.animation.coordinates.sx,
+					sy : this.animation.coordinates.sy,
+					sw : this.animation.coordinates.sw,
+					sh : this.animation.coordinates.sh,
+					dx : this.position.x,
+					dy : this.position.y,
+					dw : this.width,
+					dh : this.height
+				};
 		} else if (this.type == "tileset") {
 			coordinates = {
 				sx : this.tileset.pos.x,

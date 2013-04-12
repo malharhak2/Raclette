@@ -30,7 +30,6 @@ define(["rDebug", "rCONFIG", "rutils", "rCanvasManager", "rbox2d", "rPhysicalObj
 			new this.b2Vec2(0, 0),
 			false
 		);
-		debug.log("Physics", this.world);
 		this.contactListener = new Box2D.Dynamics.b2ContactListener;
 		this.contactListener.BeginContact = function(contact, manifold) {
 			if (contact.m_fixtureA.m_body.m_userData != undefined && contact.m_fixtureA.m_body.m_userData.onCollision != undefined) {
@@ -75,6 +74,7 @@ define(["rDebug", "rCONFIG", "rutils", "rCanvasManager", "rbox2d", "rPhysicalObj
 		args.noGravity = fixtureDef.noGravity;
 		args.trigger = fixtureDef.trigger;
 		args.indexObject = this.indexObject;
+		args.weight = fixtureDef.weight;
 
 		this.objects.push(new PhysicalObject (args, this.world));
 		this.indexObject++;
@@ -113,10 +113,13 @@ define(["rDebug", "rCONFIG", "rutils", "rCanvasManager", "rbox2d", "rPhysicalObj
 				this.gravity.x * objekt.GetMass(), 
 				this.gravity.y * objekt.GetMass()
 			);
-			if (utils.chances (500)) {
-				debug.log("Physics", gravite);
-			}
-			objekt.ApplyForce(gravite, objekt.GetWorldCenter());
+			var point = new this.b2Vec2(
+				objekt.GetWorldCenter().x,
+				objekt.GetWorldCenter().y
+			);
+			point.x *= objekt.GetMass();
+			point.y *= objekt.GetMass();
+			objekt.ApplyForce(gravite, point);
 		};
 	}
 

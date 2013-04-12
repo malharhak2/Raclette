@@ -1,4 +1,4 @@
-define (["rPhysics"], function (physics) {
+define ([], function () {
 	var WorldMapObject = function (args) {
 		this.type = args.type;
 		this.x = args.x;

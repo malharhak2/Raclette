@@ -32,10 +32,7 @@ require.config({
             'rMapLoader'          : paths.engine + paths.Map + 'MapLoader',
         
         // Physics
-            'rbox2d'              : paths.engine + paths.Physics + 'box2d',
-            'rPhysicalObject'     : paths.engine + paths.Physics + 'PhysicalObject',
-            'rPhysicalObjectType' : paths.engine + paths.Physics + 'PhysicalObjectType',
-            'rPhysics'            : paths.engine + paths.Physics + 'Physics',
+            'rCollider'           : paths.engine + paths.Physics + 'Collider',
 
         // Rendering
             'rCamera'             : paths.engine + paths.Rendering + 'Camera',

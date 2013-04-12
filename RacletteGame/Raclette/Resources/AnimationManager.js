@@ -1,4 +1,4 @@
-define(["rDebug", "game/images","game/animsData", "rimageManager", "rAnimationInstance"], function(debug, images, externalData, imageManager, AnimationInstance) {
+define(["rDebug", "rutils", "game/images","game/animsData", "rimageManager", "rAnimationInstance"], function(debug, utils, images, externalData, imageManager, AnimationInstance) {
 
 	var AnimationManager = function() {
 		this.externalData = externalData;
@@ -44,6 +44,8 @@ define(["rDebug", "game/images","game/animsData", "rimageManager", "rAnimationIn
 
 	AnimationManager.prototype.createAnim = function(instance) {
 		var myAnim = new AnimationInstance(instance);
+			debug.log("Anim Manager", instance);
+		
 		if (instance.dir == undefined) {
 			myAnim.dir = this.animsDatas[instance.animName].defaultDir || "none";
 		}

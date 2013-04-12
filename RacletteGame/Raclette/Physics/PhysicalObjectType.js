@@ -9,6 +9,7 @@ define (["rDebug", "rbox2d", "rutils"], function (debug, B2D, utils) {
 		this.fixtureDef.width = args.width;
 		this.fixtureDef.fixedRotation = args.fixedRotation || false;
 		this.fixtureDef.noGravity = args.noGravity || false;
+		this.fixtureDef.weight = args.weight || 1;
 		if (args.category != null) {
 			this.fixtureDef.filter.categoryBits = args.category;
 		}

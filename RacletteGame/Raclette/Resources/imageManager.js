@@ -24,7 +24,6 @@ define(["rDebug", "rLoader"], function(debug, loader) {
     		_this.images[i].loaded = true;
     		_this.imagesLoaded++;
             loader.itsOkFor("image"+i, "ressource");
-    		debug.log("Image Manager", _this.imagesLoaded, "/", _this.imagesToLoad);
     	});
     	img.src = this.images[i].url;
     }
