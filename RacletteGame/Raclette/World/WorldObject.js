@@ -36,7 +36,6 @@ define (["rDebug", "rCONFIG", "rutils", "rCollider", "rRenderer"],
 			state : this.state,
 			dir : this.dir
 		});
-		this.collider.update ();
 		
 	}
 

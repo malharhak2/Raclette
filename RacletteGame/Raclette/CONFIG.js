@@ -5,6 +5,14 @@ define(["game/config"], function (userConfig) {
 		this.drawDebug = userConfig.drawDebug || false;
 		this.keysTable = userConfig.keysTable;
 		this.unitSize = userConfig.unitSize || 64;
+		this.gravity = userConfig.gravity || {
+			x : 0,
+			y : 0.005
+		};
+		this.maxSpeed = userConfig.maxSpeed || {
+			x : 0.5,
+			y : 0.5
+		};
 		this.gameTitle = userConfig.gameTitle || "UNTITLED";
 		this.containerID = userConfig.gameContainer || "#racletteGame";
 		this.guiID = userConfig.guiID || "#racletteGui";

@@ -30,7 +30,7 @@ define(["rDebug", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "
 		args.defaultDir = klass.defaultDir;
 		args.physics = klass.physics;
 		args.physics.position = args.position;	
-
+		args.physics.onCollision = args.onCollision;
 		return args;	
 	}
 	World.prototype.instanceObject = function (args) {
@@ -52,12 +52,13 @@ define(["rDebug", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "
 	World.prototype.update = function() { 
 		for (var i in this.layers) {
 			for (var j in this.layers[i].objects) {
+				this.layers[i].objects[j].collider.update (this.layers["Foreground"].statics);
 				this.layers[i].objects[j].update();
 			}
 		};
 	};
 
-	World.prototype.render = function () {
+	World.prototype.render = function  () {
 		for (var i in this.layers) {
 			this.renderStatics(this.layers[i].statics);
 			for (var j in this.layers[i].objects) {
