@@ -84,12 +84,35 @@ function (debug, utils, config, canvasManager, time) {
 			y : this.position.y
 		};
 
-		var horizontalCol = this.checkHorizontalCollisions (this.velocity.x, statics);
-		this.newPosition.x = this.position.x + horizontalCol;
+		if (this.velocity.x < 0) {
+			var check = this.checkLeftCollisions(this.newPosition, statics);
+			if (check.collision) {
+				this.newPosition.x = check.distance;
+				this.velocity.x = 0;
+			}
+		} else if (this.velocity.x > 0) {
+			var check = this.checkRightCollisions(this.newPosition, statics);
+			if (check.collision) {
+				this.newPosition.x = check.distance;
+				this.velocity.x = 0;
+			}
+		}
+		this.newPosition.y += this.moveStep.y;
 
-		this.newPosition.y = this.position.y + this.moveStep.y;
-		var verticalCol = this.checkVerticalCollisions (this.velocity.y, statics);
-		this.newPosition.y = this.position.y + verticalCol;
+		if (this.velocity.y < 0) {
+			var check = this.checkTopCollisions (this.newPosition, statics) 
+			if (check.collision ) {
+				this.newPosition.y = check.distance;
+				this.velocity.y = 0;
+			}
+		} else if (this.velocity.y > 0) {
+			var check = this.checkBottomCollisions(this.newPosition, statics);
+			if (check.collision) {
+				this.newPosition.y = check.distance;
+				this.velocity.y = 0;
+				debug.log("Physics", "Down collision")
+			}
+		}
 
 		this.position = this.newPosition;
 
@@ -101,7 +124,7 @@ function (debug, utils, config, canvasManager, time) {
 			if (utils.chances (50)) {
 				debug.log("Collider", "Apply Gravity");
 			}
-			
+
 			this.velocity.x += config.gravity.x * this.mass * time.deltaTime;
 			this.velocity.y += config.gravity.y * this.mass * time.deltaTime;
 		}
@@ -115,90 +138,117 @@ function (debug, utils, config, canvasManager, time) {
 		this.velocity.y += force.y || 0;
 	};
 
-	Collider.prototype.checkHorizontalCollisions = function (velocity, statics) {
+	Collider.prototype.checkLeftCollisions = function (newPos, statics) {
 		var nextCol;
 		var closestObstacle = 1000;
-		if (velocity < 0) {
-			nextCol = Math.floor (this.newPosition.x);
-			for (var i = Math.floor (this.newPosition.y); i < Math.floor (this.newPosition.y + this.height); i++) {
+		nextCol = Math.floor (newPos.x);
+		for (var i = Math.floor (newPos.y); i < Math.floor (newPos.y + this.height); i++) {
+			if (statics[i] != undefined) {
+				if (statics[i][nextCol].collider != undefined) {
+					if (statics[i][nextCol].collider.type == "block") {
+						var distance = nextCol - this.position.x;
+						if (Math.abs(distance) < Math.abs(closestObstacle)) {
+							closestObstacle = distance;
+						}
+					}	
+				}
+			}
+		};
+		if (closestObstacle != 1000) {
+			return {
+				collision : true,
+				distance : closestObstacle
+			};
+		} else {
+			return {
+				collision : false
+			}
+		}
+	};
+
+	Collider.prototype.checkRightCollisions = function (newPos, statics) {
+		var nextCol;
+		var closestObstacle = 1000;
+			nextCol = Math.floor (newPos.x);
+			for (var i = Math.floor (newPos.y); i < Math.floor (newPos.y + this.height); i++) {
 				if (statics[i] != undefined) {
 					if (statics[i][nextCol].collider != undefined) {
 						if (statics[i][nextCol].collider.type == "block") {
-							var distance = nextCol - this.newPosition.x;
+							var distance = nextCol - (this.position.x + this.width);
 							if (Math.abs(distance) < Math.abs(closestObstacle)) {
 								closestObstacle = distance;
-								this.Collision ("left", statics[i][nextCol]);
 							}
 						}	
 					}
 				}
-			}
-		} else if (velocity > 0) {
-			nextCol = Math.floor (this.newPosition.x + this.width);
-			for (var i = Math.floor (this.newPosition.y); i < Math.floor (this.newPosition.y + this.height); i++) {
-				if (statics[i] != undefined) {
-					if (statics[i][nextCol].collider!= undefined) {
-						if (statics[i][nextCol].collider.type == "block") {
-							debug.log("Physics", statics[i][nextCol]);
-							var distance = nextCol - (this.newPosition.x + this.width);
-							if (distance < closestObstacle) {
-								this.Collision ("right", statics[i][nextCol]);
-								closestObstacle = distance;
-							}
-						}
-					}
+			};
+			if (closestObstacle != 1000) {
+				return {
+					collision : true,
+					distance : closestObstacle
+				};
+			} else {
+				return {
+					collision : false
 				}
-			}
-		}
-		if (Math.abs(closestObstacle) < Math.abs(this.moveStep.x)) {
-			return closestObstacle;
-		} else {
-			return this.moveStep.x;
-		}
-
+			}	
 	};
-	Collider.prototype.checkVerticalCollisions = function (velocity, statics) {
+
+	Collider.prototype.checkTopCollisions = function (newPos, statics) {
 		var nextLine;
 		var closestObstacle = 1000;
-		if (velocity < 0) {
-			nextLine = Math.floor (this.newPosition.y);
-			for (var i = Math.floor (this.newPosition.x); i < Math.floor (this.newPosition.x + this.width); i++) {
-				if (statics[nextLine] != undefined) {
-					if (statics[nextLine][i].collider != undefined) {
-						if (statics[nextLine][i].collider.type == "block") {
-							var distance = nextLine  - this.newPosition.y;
-							debug.log("Collider", "test", closestObstacle, velocity, nextLine, statics, distance);
-							if (Math.abs(distance) < Math.abs(closestObstacle)) {
-								closestObstacle = distance;
-								this.Collision ("top", statics[nextLine][i]);
-							}
+		nextLine = Math.floor (newPos.y);
+		for (var i = Math.floor (newPos.x); i < Math.floor (newPos.x + this.width); i++) {
+			if (statics[nextLine] != undefined) {
+				if (statics[nextLine][i].collider != undefined) {
+					if (statics[nextLine][i].collider.type == "block") {
+						var distance = nextLine - this.position.y;
+						if (Math.abs(distance) < Math.abs(closestObstacle)) {
+							closestObstacle = distance;
 						}
-					}
+					}	
 				}
 			}
-		} else if (velocity > 0) {
-			nextLine = Math.floor (this.newPosition.y + this.height);
-			for (var i = Math.floor (this.newPosition.x); i < Math.floor (this.newPosition.x + this.width); i++) {
-				if (statics[nextLine] != undefined) {
-					if (statics[nextLine][i].collider != undefined) {
-						if (statics[nextLine][i]) {
-							var distance = nextLine - (this.newPosition.y + this.height);
-							if (distance < closestObstacle) {
-								closestObstacle = distance;
-								this.Collision ("bottom", statics[nextLine][i]);
-							}
-						}
-					}
-				}
-			}
-		}
-		if (Math.abs(closestObstacle) < Math.abs(this.moveStep.y)) {
-			return closestObstacle;
+		};
+		if (closestObstacle != 1000) {
+			return {
+				collision : true,
+				distance : closestObstacle
+			};
 		} else {
-			return this.moveStep.y;
+			return {
+				collision : false
+			}
 		}
+	};
 
-	}; 
+	Collider.prototype.checkBottomCollisions = function (newPos, statics) {
+		var nextLine;
+		var closestObstacle = 1000;
+		nextLine = Math.floor (newPos.y);
+		for (var i = Math.floor (newPos.x ); i < Math.floor (newPos.x + this.width); i++) {
+			if (statics[nextLine] != undefined) {
+				if (statics[nextLine][i].collider != undefined) {
+					if (statics[nextLine][i].collider.type == "block") {
+						var distance = nextLine - (this.position.y + this.height);
+						if (Math.abs(distance) < Math.abs(closestObstacle)) {
+							closestObstacle = distance;
+						}
+					}
+				}
+			}
+		};
+		if (closestObstacle != 1000) {
+			return {
+				collision : true,
+				distance : closestObstacle
+			};
+		} else {
+			return {
+				collision : false
+			}
+		}
+	};
 
 	Collider.prototype.DrawDebug = function (cétéhixe) {
 		cétéhixe.fillStyle = "rgba(0, 250, 0, 0.3)";
