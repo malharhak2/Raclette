@@ -1,6 +1,6 @@
 define(["rDebug", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "rWorldMapObject", "rCONFIG", "rAnimationManager"], 
-	function(debug, utils, WorldLayer, WorldObjectType, WorldObject, WorldMapObject, CONFIG, animationManager){ 
-	function World () {
+function(debug, utils, WorldLayer, WorldObjectType, WorldObject, WorldMapObject, CONFIG, animationManager){ 
+	var World = function (args) {
 		this.objectTypes = {}; 
 		this.layers = {
 			"Background" : new WorldLayer("Background"),
@@ -9,13 +9,15 @@ define(["rDebug", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "
 			"Objects" : new WorldLayer("Objects")
 		};
 		this.objects = {};
-	}
-	World.prototype.init = function(gravity, map) {
 		debug.log("World", "Initializing world...");
 		for (var i in this.layers) {
-			this.layers[i].GenerateStatics(map);
+			this.layers[i].GenerateStatics(args.map);
 		}
 		debug.log("World", "World initialized !");
+	};
+
+	World.prototype.init = function() {
+		
 	};
 
 	World.prototype.createObjectType = function (args) {
@@ -29,9 +31,9 @@ define(["rDebug", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "
 		args.defaultState = klass.defaultState;
 		args.defaultDir = klass.defaultDir;
 		args.physics = klass.physics;
-		args.physics.position = args.position;	
+		args.physics.position = args.position;
 		args.physics.onCollision = args.onCollision;
-		return args;	
+		return args;
 	}
 	World.prototype.instanceObject = function (args) {
 		var obj = this.CreateObject (args);
@@ -83,5 +85,5 @@ define(["rDebug", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "
 	World.prototype.getObject = function(layer, id) {
 		return this.layers[layer].objects[id];
 	}
-	return new World();
+	return World;
 });

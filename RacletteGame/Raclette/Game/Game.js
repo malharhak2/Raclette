@@ -1,8 +1,7 @@
-define(["rDebug", "rTime", "rAnimationManager", "rTilesManager", "rMapLoader", "rWorld", "rutils", "rGamepad", "game/Main", "rinputsManager", "rLoader", "rCamera", "rCanvasManager", "rInterfaceManager"], 
-	function(debug, time, animationManager, tilesManager, mapLoader, World, utils, gamepad, Main, InputsManager, loader, Camera, canvasManager, interfaceManager) {
+define(["rDebug", "rTime", "rAnimationManager", "rTilesManager", "rMapLoader", "rWorld", "rutils", "rGamepad", "game/Main", "rinputsManager", "rLoader", "rCamera", "rCanvasManager", "rInterfaceManager", "rUser", "rWorldManager"], 
+	function(debug, time, animationManager, tilesManager, mapLoader, World, utils, gamepad, Main, InputsManager, loader, Camera, canvasManager, interfaceManager, user, worldManager) {
 	function Game() {
 		debug.log("Game", "Creating game...");
-		this.world = World;
 		gamepad.init();
 		this.gamepads = gamepad.gamepads;
 		this.width = canvasManager.canvasWidth;
@@ -17,14 +16,21 @@ define(["rDebug", "rTime", "rAnimationManager", "rTilesManager", "rMapLoader", "
 		debug.log("Game", "Game created");
 	};
 	
+	Game.prototype.init = function (callback) {
+		var that = this;
+		debug.log(user);
+		user.init (function () {
+			callback();
+		});
+	};
 	Game.prototype.render = function() {
 		if (!this.loaded) {
 			loader.render(canvasManager.ctx);
 		} else {
 			canvasManager.cleanCanvas();
-			World.render();
 			this.interfaceManager.renderBegin();
 			this.interfaceManager.renderEnd();
+			Main.render();
 
 		}
 	};

@@ -5,7 +5,9 @@ define(["rGame"], function(game) {
 		game.render();
 	}
 	function init () {
-
+		game.init(function () {
+			run();
+		});
 	}
 
 	window.requestAnimFrame = (function(){

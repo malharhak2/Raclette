@@ -54,6 +54,7 @@ require.config({
             'rWorldMapObject'     : paths.engine + paths.World + 'WorldMapObject',
             'rWorldObject'        : paths.engine + paths.World + 'WorldObject',
             'rWorldObjectType'    : paths.engine + paths.World + 'WorldObjectType',
+            'rWorldManager'       : paths.engine + paths.World + 'WorldManager',
             
         'rsocket_io'          : '/socket.io/socket.io',
         'jquery'              : paths.engine + 'jquery',
@@ -62,7 +63,8 @@ require.config({
         'rLoader'             : paths.engine + 'Loader',
         'rmain'               : paths.engine + 'main',
         'rutils'              : paths.engine + 'utils',
-        'rTime'               : paths.engine + 'Time'
+        'rTime'               : paths.engine + 'Time',
+        'rUser'               : paths.engine + "User"
     },
     shim: {
         'socket_io' : {
@@ -75,5 +77,4 @@ require.config({
 });
 require(["rGameLoop"], function(gameloop) {
 	gameloop.init();
-	gameloop.run();
 });

@@ -28,9 +28,9 @@ function (debug, utils, config, canvasManager, time) {
 		this.velocity = velocity;
 	};
 
-	Collider.prototype.Collision = function (axis) {
+	Collider.prototype.Collision = function (axis, target) {
 		if (this.onCollision) {
-			this.onCollision(axis);
+			this.onCollision(axis, target);
 		}
 		if (axis == "horizontal") {
 			this.SetVelocity ({
@@ -116,6 +116,7 @@ function (debug, utils, config, canvasManager, time) {
 							var distance = nextCol - this.newPosition.x;
 							if (Math.abs(distance) < Math.abs(closestObstacle)) {
 								closestObstacle = distance;
+								this.Collision ("left", statics[i][nextCol]);
 							}
 						}	
 					}
@@ -130,6 +131,7 @@ function (debug, utils, config, canvasManager, time) {
 							debug.log("Physics", statics[i][nextCol]);
 							var distance = nextCol - (this.newPosition.x + this.width);
 							if (distance < closestObstacle) {
+								this.Collision ("right", statics[i][nextCol]);
 								closestObstacle = distance;
 							}
 						}
@@ -138,7 +140,6 @@ function (debug, utils, config, canvasManager, time) {
 			}
 		}
 		if (Math.abs(closestObstacle) < Math.abs(this.moveStep.x)) {
-			this.Collision("horizontal");
 			return closestObstacle;
 		} else {
 			return this.moveStep.x;
@@ -158,6 +159,7 @@ function (debug, utils, config, canvasManager, time) {
 							debug.log("Collider", "test", closestObstacle, velocity, nextLine, statics, distance);
 							if (Math.abs(distance) < Math.abs(closestObstacle)) {
 								closestObstacle = distance;
+								this.Collision ("top", statics[nextLine][i]);
 							}
 						}
 					}
@@ -171,7 +173,8 @@ function (debug, utils, config, canvasManager, time) {
 						if (statics[nextLine][i]) {
 							var distance = nextLine - (this.newPosition.y + this.height);
 							if (distance < closestObstacle) {
-								closestObstacle = distance;;
+								closestObstacle = distance;
+								this.Collision ("bottom", statics[nextLine][i]);
 							}
 						}
 					}
@@ -179,7 +182,6 @@ function (debug, utils, config, canvasManager, time) {
 			}
 		}
 		if (Math.abs(closestObstacle) < Math.abs(this.moveStep.y)) {
-			this.Collision("vertical");
 			return closestObstacle;
 		} else {
 			return this.moveStep.y;
