@@ -42,7 +42,7 @@ define(["rDebug", "rTime", "rAnimationManager", "rTilesManager", "rMapLoader", "
 		if (!this.loaded) {
 			if (loader.update() == "loaded") {
 				var that = this;
-				Main.init(game, function () {
+				Main.init(function () {
 					that.loaded = true;
 					animationManager.init();
 					debug.log("Game", "Game loaded");

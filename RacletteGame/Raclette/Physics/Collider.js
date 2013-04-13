@@ -82,14 +82,9 @@ function (debug, utils, config, canvasManager, time, camera) {
 				this.Collision ("top", check.obstacle);
 			}
 		} else if (this.velocity.y > 0) {
-			if (utils.chances (50)) {
-				debug.log("physics", this.velocity);
-			}
 			var check = this.checkBottomCollisions(this.newPosition, statics);
 			if (check.collision) {
 				this.newPosition.y = this.position.y + check.distance;
-				if (utils.chances (50)) {
-				}
 				this.velocity.y = 0;
 				this.Collision ("bottom", check.obstacle);
 			}

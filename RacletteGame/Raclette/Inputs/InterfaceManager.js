@@ -145,5 +145,6 @@ define(["rDebug", "rCanvasManager", "game/images.js", "rAnimationManager"], func
 			self.objects[id].currentfps = self.objects[id].fps;
 		}
 	}
-	return new InterfaceManager;	
+
+	return new InterfaceManager();	
 });

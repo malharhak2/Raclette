@@ -37,7 +37,8 @@ function (debug, config, utils, gamepads) {
 	};
 
 	ControllerKey.prototype.GetValue = function () {
-		return this.analog || this.keyboard;
+		if (this.analog > this.keyboard) return this.analog;
+		else return this.keyboard;
 	};
 
 	ControllerKey.prototype.keyup = function (keycode) {
