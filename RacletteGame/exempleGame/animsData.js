@@ -1,127 +1,80 @@
-define(["Raclette/Animation"], function(Animation) {
-
-var anims = {};
-anims["whitePlateforme"] = new Animation({
-
-	img : "whitePlateforme",
-	size : 5,
-	steps : 5,
-	width : 140,
-	height : 65,
-	defaultState : 'idle',
-	defaultDir : 'none',
-	states : {
-		"idle" : {
-			"none" : {
-				position : 0,
-				size : 0
+define(["rAnimation"], function(Animation) {
+/** Animations list
+ * An animation has a few parameters :
+ * Size - Which is the default length (in keys) of every anim - 0 if not precised
+ * Width and height - The size of an animation case
+ * states : The different animation states (moving and idle for exemple)
+ * For each state : 
+ *	. (optional) options : 
+ *		. pace - The speed of the anim
+ * 	. The directions (left and right for exemple)
+ *	For each direction :
+ *		. A position
+ *	. An optionnal size if it needs to be different than the main animation size
+ */
+var datas = {
+	"whitepPlateforme" : {
+		width : 140,
+		height : 65,
+	},
+	"blackPlateforme" : {
+		width : 139,
+		height : 65,
+	},
+	"handshroomWhite" : {
+		size : 4,
+		width : 128,
+		height : 64,
+		defaultState : 'move',
+		defaultDir : 'right',
+		states : {
+			'idle' : {
+				left : {
+					position : 0
+				},
+				right : {
+					position : 0
+				}
 			},
-			"options" : {
-				"pace" : 100,
-				"onStart" : function () {},
-				"onStop" : function () {}
-			}
-		}			
-	}
-		
-	});
-anims["blackPlateforme"] = new Animation({
-	img: "blackPlateforme",
-	size : 5,
-	steps : 5,
-	width : 139,
-	height : 65,
-	defaultState : 'idle',
-	defaultDir : 'none',
-	states : {
-		"idle" : {
-			"none" : {
-				position : 0,
-				size : 0
+			'move' : {
+				right : {
+					position : 1
+				},
+				left : {
+					position : 2
+				}
 			},
-			"options" : {
-				"pace" : 150,
-				"onStart" : function () {},
-				"onStop" : function () {}
-			}
-		}			
-	}
-});
-anims["handshroomWhite"] = new Animation({
-	img: "handshroomWhite",
-	size : 4,
-	steps : 4,
-	width : 128,
-	height : 64,
-	defaultState : 'move',
-	defaultDir : "right",
-	states : {
-		"idle" : 
-		{
-			"right" : 
-			{
-				position : 0,
-				size : 0
+			'load' : {
+				right : {
+					position : 3
+				},
+				left : {
+					position : 4
+				},
+				options : {
+					pace : 50
+				}
 			},
-			"options" : 
-			{
-				"pace" : 100,
-				"onStart" : function () {},
-				"onStop" : function () {}
-			}
-		},
-		"move" : 
-		{
-			"right" : 
-			{
-				position : 1,
-				size: 0
-			},
-			"left" : 
-			{
-				position: 2,
-				size: 0
-			},
-			"options" : {
-				"pace" : 100,
-				"onStart" : function () {},
-				"onStop" : function () {}
-			}
-		},
-		"load" :
-		{
-			"right" :
-			{
-				position: 3
-			},
-			"left" :
-			{
-				position: 4
-			},
-			"options" : {
-				"pace" : 50,
-				"onStart" : function () {},
-				"onStop" : function() {}
-			}
-		},
-		"attack" :
-		{
-			"right" :
-			{
-				position: 5
-			},
-			"left" :
-			{
-				position: 6
-			},
-			"options" : {
-				"pace" : 50,
-				"onstart" : function () {},
-				"onStop" : function() {}
+			'attack' : {
+				right : {
+					position : 5
+				},
+				left : {
+					position : 6
+				},
+				options : {
+					pace : 50
+				}
 			}
 		}
-				
 	}
-});
+};
+var anims = {};
+function fillAnims () {
+	for (var i in datas) {
+		anims[i] = new Animation(i, datas[i]);
+	};
+}
+fillAnims();
 return anims
 });

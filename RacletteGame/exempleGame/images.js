@@ -25,7 +25,9 @@ define([], function() {
 		player2Gamepad : "menu/player2gamepad.png",
 		chooseControlTitle: "menu/chooseControlTitle.png",
 		chooseControlP2: "menu/chooseYourControlP2.png",
-		pressStartOrange: "menu/pressStartOrange.png"
+		pressStartOrange: "menu/pressStartOrange.png",
+
+		tileset : "tileset.png"
 
 	};
 	return images;
