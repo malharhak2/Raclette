@@ -3,6 +3,7 @@ function (World, debug, config, utils) {
 	
 	var WorldManager = function () {
 		this.worlds = {};
+		this.currentWorld = 0;
 	};
 
 	WorldManager.prototype.deleteWorld = function (id) {
@@ -21,6 +22,10 @@ function (World, debug, config, utils) {
 	WorldManager.prototype.initWorld = function (id, args) {
 		this.worlds[id].init (args);
 	};
+
+	WorldManager.prototype.switchWorld = function (id) {
+		this.currentWorld = this.worlds[id];
+	}
 
 	return new WorldManager();
 });
