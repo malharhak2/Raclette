@@ -101,9 +101,11 @@ function (debug, utils, config, canvasManager, time, camera) {
 			var check = this.checkBottomCollisions(this.newPosition, statics);
 			if (check.collision) {
 				this.newPosition.y = this.position.y + check.distance;
+				if (utils.chances (50)) {
+					debug.log("Physics", "Down collision", this.velocity);
+				}
 				this.velocity.y = 0;
 				this.Collision ("bottom");
-				debug.log("Physics", "Down collision", this.velocity);
 			}
 		}
 		this.position = this.newPosition;
@@ -115,7 +117,10 @@ function (debug, utils, config, canvasManager, time, camera) {
 		if (this.gravity) {
 			this.velocity.x += config.gravity.x * this.mass * time.deltaTime;
 			this.velocity.y += config.gravity.y * this.mass * time.deltaTime;
-		}
+			if (utils.chances (50)) {
+				debug.log("Physics", "gravity");
+			}
+		} 
 	};
 
 	Collider.prototype.SetGravity = function (gravity) {
@@ -132,7 +137,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 		nextCol = Math.floor (newPos.x);
 		for (var i = Math.floor (newPos.y); i < Math.floor (newPos.y + this.height); i++) {
 			if (statics[i] != undefined) {
-				if (statics[i][nextCol] != undefined) {
+				if (statics[i][nextCol] != false) {
 					var obj = statics[i][nextCol];
 					if (obj.collider.type == "block") {
 						var distance = nextCol - this.position.x;
@@ -161,7 +166,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 			nextCol = Math.floor (newPos.x + this.width);
 			for (var i = Math.floor (newPos.y); i < Math.floor (newPos.y + this.height); i++) {
 				if (statics[i] != undefined) {
-					if (statics[i][nextCol] != undefined) {
+					if (statics[i][nextCol] != false) {
 						var obj = statics[i][nextCol];
 						if (obj.collider.type == "block") {
 							var distance = nextCol - (this.position.x + this.width);
@@ -190,7 +195,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 		nextLine = Math.floor (newPos.y);
 		for (var i = Math.floor (newPos.x); i < Math.floor (newPos.x + this.width); i++) {
 			if (statics[nextLine] != undefined) {
-				if (statics[nextLine][i] != undefined) {
+				if (statics[nextLine][i] != false) {
 					var obj = statics[nextLine][i];
 					if (obj.collider.type == "block") {
 						var distance = nextLine - this.position.y;
@@ -251,7 +256,8 @@ function (debug, utils, config, canvasManager, time, camera) {
 			x : this.position.x,
 			y : this.position.y,
 			w : this.width,
-			h : this.height
+			h : this.height,
+			layer : this.layer
 		});
 		if (cameraInfos) {
 			cétéhixe.fillRect (

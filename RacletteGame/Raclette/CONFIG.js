@@ -13,6 +13,14 @@ define(["game/config"], function (userConfig) {
 			x : 0.5,
 			y : 0.5
 		};
+		this.layers = userConfig.layers || {
+			"Background" : {
+				parallax : 0.5
+			},
+			"Foreground" : {
+				parallax : 1
+			}
+		};
 		this.gameTitle = userConfig.gameTitle || "UNTITLED";
 		this.containerID = userConfig.gameContainer || "#racletteGame";
 		this.guiID = userConfig.guiID || "#racletteGui";

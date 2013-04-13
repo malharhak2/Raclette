@@ -36,13 +36,16 @@ define(["rCONFIG", "rDebug", "rutils"], function(config, debug, utils) {
 		this.w = this.width;
 		this.h = this.height;
 		var newArgs = args;
+		var parallax = config.layers[args.layer].parallax;
+		var x = this.x * parallax;
+		var y = this.y * parallax;
 		if (
-		args.x + args.w > this.x &&
+		args.x + args.w > x &&
 		args.x < this.x + this.w &&
-		args.y + args.h > this.y &&
+		args.y + args.h > y &&
 		args.y < this.y + this.h) {
-			newArgs.x = args.x - this.x;
-			newArgs.y = args.y - this.y;
+			newArgs.x = args.x - x;
+			newArgs.y = args.y - y;
 			newArgs.w = args.w;
 			newArgs.h = args.h;
 			return newArgs;

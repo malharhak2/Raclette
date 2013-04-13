@@ -1,7 +1,8 @@
 define (["rDebug"], function (debug) {
-	var WorldLayer = function (name) {
+	var WorldLayer = function (args) {
 		this.objects = {};
-		this.name = name;
+		this.name = args.name;
+		this.parallax = args.parallax;
 	};
 
 	WorldLayer.prototype.GenerateStatics = function (map) {

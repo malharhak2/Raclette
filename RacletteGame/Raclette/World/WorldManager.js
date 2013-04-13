@@ -11,6 +11,7 @@ function (World, debug, config, utils) {
 	};
 
 	WorldManager.prototype.pushWorld = function (args) {
+		debug.log("coucou", World);
 		this.worlds[args.id] = new World(args);
 		return this.worlds[args.id];
 	};

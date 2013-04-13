@@ -10,6 +10,7 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 		this.position = args.position;
 		this.state = args.state;
 		this.dir = args.dir;
+		this.layer = args.layer || "Background";
 		this.init();
 	};
 
@@ -97,11 +98,15 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 				dh : this.height
 			}
 		}
+		if (this.layer == undefined) {
+			debug.log("What");
+		}
 		var cameraInfos = camera.isObjectVisible ({
 			x : coordinates.dx,
 			y : coordinates.dy,
 			w : coordinates.dw,
-			h : coordinates.dh
+			h : coordinates.dh,
+			layer : this.layer
 		});
 		if (cameraInfos) {
 			coordinates.dx = cameraInfos.x;

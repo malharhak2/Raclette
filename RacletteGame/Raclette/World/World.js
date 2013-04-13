@@ -1,13 +1,11 @@
-define(["rDebug", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "rWorldMapObject", "rCONFIG", "rAnimationManager"], 
-function(debug, utils, WorldLayer, WorldObjectType, WorldObject, WorldMapObject, CONFIG, animationManager){ 
+define(["rDebug", "rCONFIG", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "rWorldMapObject", "rCONFIG", "rAnimationManager"], 
+function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMapObject, CONFIG, animationManager){ 
 	var World = function (args) {
 		this.objectTypes = {}; 
-		this.layers = {
-			"Background" : new WorldLayer("Background"),
-			"Midground" : new WorldLayer("Midground"),
-			"Foreground" : new WorldLayer("Foreground"),
-			"Objects" : new WorldLayer("Objects")
-		};
+		this.layers = {};
+		for (var i in config.layers) {
+			this.layers[i] = new WorldLayer (config.layers[i]);
+		}
 		this.objects = {};
 		debug.log("World", "Initializing world...");
 		for (var i in this.layers) {
@@ -28,11 +26,13 @@ function(debug, utils, WorldLayer, WorldObjectType, WorldObject, WorldMapObject,
 	World.prototype.CreateObject = function (args) {
 		var klass = this.objectTypes[args.type];
 		args.render = klass.render;
+		args.render.layer = args.layer;
 		args.defaultState = klass.defaultState;
 		args.defaultDir = klass.defaultDir;
 		args.physics = klass.physics;
 		args.physics.position = args.position;
 		args.physics.onCollision = args.onCollision;
+		args.physics.layer = args.layer;
 		return args;
 	}
 	World.prototype.instanceObject = function (args) {
