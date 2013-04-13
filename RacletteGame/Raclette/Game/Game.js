@@ -1,5 +1,5 @@
 define(["rDebug", "rTime", "rAnimationManager", "rTilesManager", "rMapLoader", "rWorld", "rutils", "rGamepad", "game/Main", "rinputsManager", "rLoader", "rCamera", "rCanvasManager", "rInterfaceManager", "rUser", "rWorldManager"], 
-	function(debug, time, animationManager, tilesManager, mapLoader, World, utils, gamepad, Main, InputsManager, loader, Camera, canvasManager, interfaceManager, user, worldManager) {
+	function(debug, time, animationManager, tilesManager, mapLoader, World, utils, gamepad, Main, inputsManager, loader, Camera, canvasManager, interfaceManager, user, worldManager) {
 	function Game() {
 		debug.log("Game", "Creating game...");
 		gamepad.init();
@@ -7,7 +7,7 @@ define(["rDebug", "rTime", "rAnimationManager", "rTilesManager", "rMapLoader", "
 		this.width = canvasManager.canvasWidth;
 		this.height = canvasManager.canvasHeight;
 		this.camera = Camera;
-		this.inputsManager = InputsManager;
+		this.inputsManager = inputsManager;
 		this.interfaceManager = interfaceManager; 
 		this.utils = utils;
 		this.loaded = false;
@@ -38,6 +38,7 @@ define(["rDebug", "rTime", "rAnimationManager", "rTilesManager", "rMapLoader", "
 	Game.prototype.logic = function() {
 		time.currentFrame = Date.now();
 		time.update();
+		inputsManager.update();
 		if (!this.loaded) {
 			if (loader.update() == "loaded") {
 				var that = this;

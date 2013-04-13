@@ -123,7 +123,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 				if (statics[i][nextCol] != false) {
 					var obj = statics[i][nextCol];
 					if (obj.collider.type == "block") {
-						var distance = nextCol + 1 - (this.position.x );
+						var distance = nextCol + 1.001 - (this.position.x );
 						if (Math.abs(distance) < Math.abs(closestObstacle)) {
 							closestObstacle = distance;
 						}
@@ -152,7 +152,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 					if (statics[i][nextCol] != false) {
 						var obj = statics[i][nextCol];
 						if (obj.collider.type == "block") {
-							var distance = nextCol - (this.position.x + this.width);
+							var distance = nextCol - 0.001 - (this.position.x + this.width);
 							if (Math.abs(distance) < Math.abs(closestObstacle)) {
 								closestObstacle = distance;
 							}
@@ -181,7 +181,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 				if (statics[nextLine][i] != false) {
 					var obj = statics[nextLine][i];
 					if (obj.collider.type == "block") {
-						var distance = nextLine + 1- this.position.y;
+						var distance = nextLine + 1.001 - this.position.y;
 						if (Math.abs(distance) < Math.abs(closestObstacle)) {
 							closestObstacle = distance;
 						}
@@ -212,7 +212,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 				if (statics[nextLine][i] != false && statics[nextLine][i] != undefined) {
 					var obj = statics[nextLine][i];
 					if (obj.collider.type == "block" || obj.collider.type == "platform") {
-						var distance = nextLine - (this.position.y + this.height);
+						var distance = nextLine - 0.001 - (this.position.y + this.height);
 						if (Math.abs(distance) < Math.abs(closestObstacle)) {
 							closestObstacle = distance;
 							return {
