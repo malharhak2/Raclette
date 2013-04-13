@@ -16,6 +16,7 @@ function (debug, utils, config, canvasManager, time) {
 		this.onCollision = args.onCollision;
 		this.mass = args.mass || 1;
 		this.type = args.type;
+		this.gravity = false;
 	};
 
 	Collider.prototype.SetVelocity = function (velocity) {
@@ -96,13 +97,23 @@ function (debug, utils, config, canvasManager, time) {
 	};
 
 	Collider.prototype.applyGravity = function () {
-		this.velocity.x += config.gravity.x * this.mass * time.deltaTime;
-		this.velocity.y += config.gravity.y * this.mass * time.deltaTime;
+		if (this.gravity) {
+			if (utils.chances (50)) {
+				debug.log("Collider", "Apply Gravity");
+			}
+			
+			this.velocity.x += config.gravity.x * this.mass * time.deltaTime;
+			this.velocity.y += config.gravity.y * this.mass * time.deltaTime;
+		}
+	};
+
+	Collider.prototype.SetGravity = function (gravity) {
+		this.gravity = gravity;
 	}
 	Collider.prototype.ApplyForce = function (force) {
 		this.velocity.x += force.x || 0;
 		this.velocity.y += force.y || 0;
-	}
+	};
 
 	Collider.prototype.checkHorizontalCollisions = function (velocity, statics) {
 		var nextCol;
