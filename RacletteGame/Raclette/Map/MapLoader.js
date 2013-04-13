@@ -9,7 +9,7 @@ define (["rDebug", "jquery", "rMap"], function (debug, $, Map) {
 		$.getJSON("game/maps/" + map + ".json", function(json) {
 		    debug.log("MapLoader", "Map loaded !");
 		    var map = new Map(json);
-		    callback(map);
+		    callback(map, json);
 		});
 	}
 	return new MapLoader();

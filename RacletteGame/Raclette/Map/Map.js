@@ -100,6 +100,7 @@ define (["rutils", "rDebug", "rMapCase", "rTilesManager"], function (utils, debu
 
 	Map.prototype.TransformObject = function (args) {
 		var tile = tilesManager.getTile(args.kase);
+		console.log(tile, args.kase)
 		var objekt = {
 			type : tile.type,
 			name : tile.name,

@@ -1,6 +1,10 @@
-define (["rDebug", "rTile", "rutils"], 
-function (debug, Tile, utils) {
+define (["rDebug", "rTile", "rutils", "rJsonStorer"], 
+function (debug, Tile, utils, jsonStorer) {
 	var Tileset = function (data) {
+		
+	};
+
+	Tileset.prototype.init = function (data) {
 		debug.log("Tileset", "Creating new tileset...");
 		this.width = data.width;
 		this.height = data.height;
@@ -8,15 +12,16 @@ function (debug, Tile, utils) {
 		this.caseHeight = data.caseHeight;
 		this.image = data.image;
 		this.tiles = [];
-		this.parseTilesList(data.tiles);
+		this.parseTilesList(data.tiles, data.image);
 		debug.log("Tileset", "Tileset created !");
-	};
+	}
 
-	Tileset.prototype.parseTilesList = function (tiles) {
+	Tileset.prototype.parseTilesList = function (tiles, image) {
 		this.tileNames = {};
 		for (var i in tiles) {
 			var t = tiles[i];
-			var pos = (t.x - 1) + (t.y - 1) * this.width + 1;
+			var firstGid = this.getJsonTileset(image).firstgid;
+			var pos = (t.x - 1) + (t.y - 1) * this.width + firstGid;
 			this.tiles[pos] = new Tile ({
 				x : t.x,
 				y : t.y,
@@ -32,6 +37,15 @@ function (debug, Tile, utils) {
 			});
 			this.tileNames[t.name] = pos;
 		}
+	}
+	Tileset.prototype.getJsonTileset = function (name){
+		var tilesets = jsonStorer.getJson().tilesets;
+		for (var i=0; i<tilesets.length; i++){
+			if (tilesets[i].name == name){
+				return tilesets[i];
+			}
+		}
+		debug.error("tilesets", "Pas de tilesets du nom de", name, "dans le json.")
 	}
 
 	Tileset.prototype.hasTile = function (nb) {

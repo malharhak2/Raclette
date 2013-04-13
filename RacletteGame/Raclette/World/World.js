@@ -1,5 +1,5 @@
-define(["rDebug", "rCONFIG", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "rWorldMapObject", "rCONFIG", "rAnimationManager"], 
-function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMapObject, CONFIG, animationManager){ 
+define(["rDebug", "rCONFIG", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "rWorldMapObject", "rCONFIG", "rAnimationManager", "rJsonStorer"], 
+function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMapObject, CONFIG, animationManager, jsonStorer){ 
 	var World = function (args) {
 		this.objectTypes = {}; 
 		this.layers = {};
@@ -11,6 +11,8 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 		for (var i in this.layers) {
 			this.layers[i].GenerateStatics(args.map);
 		}
+		console.warn("ICI", args.json)
+		jsonStorer.storeJson(args.json);
 		debug.log("World", "World initialized !");
 	};
 
@@ -54,7 +56,7 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 	World.prototype.update = function() { 
 		for (var i in this.layers) {
 			for (var j in this.layers[i].objects) {
-				this.layers[i].objects[j].collider.update (this.layers["Foreground"].statics);
+				this.layers[i].objects[j].collider.update (this.layers["Midground"].statics);
 				this.layers[i].objects[j].update();
 			}
 		};
