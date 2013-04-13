@@ -41,11 +41,27 @@ function ($, debug, utils, config, gamepad, Controller, canvasManager) {
 			controller = this.controllers[0];
 			touch = [id];
 		}
-		if (controller.getKey(touch)) {
+		return controller.getKey(touch);
+	};
+
+	InputsManager.prototype.isPressed = function (id, button) {
+		var controller = this.controllers[id];
+		var touch = button;
+		if (arguments.length == 1) {
+			controller = this.controllers[0];
+			touch = [id];
+		}
+		if (controller.isPressed(touch)) {
 			return true;
 		}
 		return false;
-	};
+	}
+
+	InputsManager.prototype.update = function () {
+		for (var i = 0; i < this.controllers.length; i++) {
+			this.controllers[i].update();
+		}
+	}
 
 	return new InputsManager();
 });

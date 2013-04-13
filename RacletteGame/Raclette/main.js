@@ -22,6 +22,7 @@ require.config({
             'rController'         : paths.engine + paths.Inputs + 'Controller',
             'rControllerKey'      : paths.engine + paths.Inputs + 'ControllerKey',
             'rGamepad'            : paths.engine + paths.Inputs + 'Gamepad',
+            "rGamepads"           : paths.engine + paths.Inputs + 'Gamepads',
             'rinputsManager'      : paths.engine + paths.Inputs + 'inputsManager',
             'rInterfaceManager'   : paths.engine + paths.Inputs + 'InterfaceManager',
             'rkeyboardManager'    : paths.engine + paths.Inputs + 'keyboardManager',
