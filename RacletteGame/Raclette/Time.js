@@ -1,6 +1,6 @@
 define (["rCONFIG", "rDebug", "rutils"], function (config, debug, utils) {
 	var Time = function () {
-		this.timeScale = 0.1;
+		this.timeScale = 1;
 		this.startDate = Date.now();
 		this.lastFrame = Date.now();
 		this.currentFrame = Date.now();

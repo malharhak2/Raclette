@@ -20,19 +20,10 @@ function (debug, utils, config, canvasManager, time, camera) {
 		this.layer = args.layer;
 	};
 
-	Collider.prototype.SetVelocity = function (velocity) {
-		if (velocity.x === undefined) {
-			velocity.x = this.velocity.x;
-		}
-		if (velocity.y === undefined) {
-			velocity.y = this.velocity.y;
-		}
-		this.velocity = velocity;
-	};
 
-	Collider.prototype.Collision = function (axis, target) {
+	Collider.prototype.Collision = function (axis, type) {
 		if (this.onCollision) {
-			this.onCollision(axis, target);
+			this.onCollision(axis, type);
 		}
 	};
 
@@ -51,8 +42,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 	};
 
 	Collider.prototype.update = function (statics) {
-		this.applyGravity();
-
+		this.applyGravity();		
 		this.oldPosition = {
 			x : this.position.x,
 			y : this.position.y
@@ -73,7 +63,6 @@ function (debug, utils, config, canvasManager, time, camera) {
 				this.newPosition.x = this.position.x + check.distance;
 				this.velocity.x = 0;
 				this.Collision ("left");
-				debug.log("Physics", "Left collision")
 			}
 		} else if (this.velocity.x > 0) {
 			var check = this.checkRightCollisions(this.newPosition, statics);
@@ -81,7 +70,6 @@ function (debug, utils, config, canvasManager, time, camera) {
 				this.newPosition.x = this.position.x + check.distance;
 				this.velocity.x = 0;
 				this.Collision ("right");
-				debug.log("Physics", "Right collision")
 			}
 		}
 		this.newPosition.y += this.moveStep.y;
@@ -91,8 +79,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 			if (check.collision ) {
 				this.newPosition.y = this.position.y + check.distance;
 				this.velocity.y = 0;
-				this.Collision ("top");
-				debug.log("Physics", "Up collision")
+				this.Collision ("top", check.obstacle);
 			}
 		} else if (this.velocity.y > 0) {
 			if (utils.chances (50)) {
@@ -102,10 +89,9 @@ function (debug, utils, config, canvasManager, time, camera) {
 			if (check.collision) {
 				this.newPosition.y = this.position.y + check.distance;
 				if (utils.chances (50)) {
-					debug.log("Physics", "Down collision", this.velocity);
 				}
 				this.velocity.y = 0;
-				this.Collision ("bottom");
+				this.Collision ("bottom", check.obstacle);
 			}
 		}
 		this.position = this.newPosition;
@@ -115,11 +101,8 @@ function (debug, utils, config, canvasManager, time, camera) {
 
 	Collider.prototype.applyGravity = function () {
 		if (this.gravity) {
-			this.velocity.x += config.gravity.x * this.mass * time.deltaTime;
-			this.velocity.y += config.gravity.y * this.mass * time.deltaTime;
-			if (utils.chances (50)) {
-				debug.log("Physics", "gravity");
-			}
+			this.velocity.x = this.velocity.x + config.gravity.x * this.mass * time.deltaTime;
+			this.velocity.y = this.velocity.y + config.gravity.y * this.mass * time.deltaTime;
 		} 
 	};
 
@@ -135,12 +118,12 @@ function (debug, utils, config, canvasManager, time, camera) {
 		var nextCol;
 		var closestObstacle = 1000;
 		nextCol = Math.floor (newPos.x);
-		for (var i = Math.floor (newPos.y); i < Math.floor (newPos.y + this.height); i++) {
+		for (var i = Math.floor (newPos.y); i < Math.floor (newPos.y + this.height ); i++) {
 			if (statics[i] != undefined) {
 				if (statics[i][nextCol] != false) {
 					var obj = statics[i][nextCol];
 					if (obj.collider.type == "block") {
-						var distance = nextCol - this.position.x;
+						var distance = nextCol + 1 - (this.position.x );
 						if (Math.abs(distance) < Math.abs(closestObstacle)) {
 							closestObstacle = distance;
 						}
@@ -198,7 +181,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 				if (statics[nextLine][i] != false) {
 					var obj = statics[nextLine][i];
 					if (obj.collider.type == "block") {
-						var distance = nextLine - this.position.y;
+						var distance = nextLine + 1- this.position.y;
 						if (Math.abs(distance) < Math.abs(closestObstacle)) {
 							closestObstacle = distance;
 						}
@@ -221,29 +204,29 @@ function (debug, utils, config, canvasManager, time, camera) {
 	Collider.prototype.checkBottomCollisions = function (newPos, statics) {
 		var nextLine;
 		var closestObstacle = 1000;
+		var checkEnd = Math.floor (newPos.x + this.width + 1);
+		var checkStart = Math.floor (newPos.x);
 		nextLine = Math.floor (newPos.y + this.height);
-		for (var i = Math.floor (newPos.x ); i < Math.floor (newPos.x + this.width); i++) {
+		for (var i = checkStart; i < checkEnd; i++) {
 			if (statics[nextLine] != undefined) {
-				if (statics[nextLine][i] != false) {
+				if (statics[nextLine][i] != false && statics[nextLine][i] != undefined) {
 					var obj = statics[nextLine][i];
-					if (obj.collider.type == "block") {
+					if (obj.collider.type == "block" || obj.collider.type == "platform") {
 						var distance = nextLine - (this.position.y + this.height);
 						if (Math.abs(distance) < Math.abs(closestObstacle)) {
 							closestObstacle = distance;
+							return {
+								collision : true,
+								distance : closestObstacle,
+								obstacle : obj.collider.type
+							};
 						}
 					}
 				}
 			}
 		};
-		if (closestObstacle != 1000) {
-			return {
-				collision : true,
-				distance : closestObstacle
-			};
-		} else {
-			return {
-				collision : false
-			}
+		return {
+			collision : false
 		}
 	};
 

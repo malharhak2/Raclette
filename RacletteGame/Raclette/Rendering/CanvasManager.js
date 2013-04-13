@@ -36,7 +36,7 @@ define(["rDebug", "rCONFIG", "jquery"], function (debug, config, $) {
 			'height' : this.canvasHeight
 		});
 		var that = this;
-		this.container.resize(function (event) {
+		$(window).resize(function (event) {
 			var size = {
 				x : that.container.width(),
 				y : that.container.height()
