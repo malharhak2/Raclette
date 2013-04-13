@@ -1,13 +1,18 @@
 define(["rDebug", "game/tilesets", "rTileset"], function (debug, tilesets, Tileset) {
 	var TilesManager = function () {
+		
+	};
+	TilesManager.prototype.init = function () {
 		this.tilesets = {};
 		this.parseTilesets();
-	};
+		console.warn("TILES MANAGER INIT")
+	}
 
 	TilesManager.prototype.parseTilesets = function () {
 		debug.log("TilesManager", "Parsing tilesets List...");
 		for (var i in tilesets) {
-			this.tilesets[i] = new Tileset (tilesets[i]);
+			this.tilesets[i] = new Tileset ();
+			this.tilesets[i].init(tilesets[i])
 		};
 		debug.log("TilesManager", "Tilesets parsed !");
 	};
@@ -18,8 +23,16 @@ define(["rDebug", "game/tilesets", "rTileset"], function (debug, tilesets, Tiles
 				return this.tilesets[i].hasTile(nb);
 			}
 		};
+		debug.error("getTile", nb, this.tilesets)
 		return false;
-	} 
+	}
+	TilesManager.prototype.getTilesetNameFromTile = function (tileName) {
+		for (var i in this.tilesets) {
+			if (this.tilesets[i].hasTile(tileName)) {
+				return i;
+			}
+		} 
+	}
 
 	return new TilesManager();
 })

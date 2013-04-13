@@ -3,6 +3,9 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 	var Renderer = function (args) {
 		this.type = args.type;
 		this.image = args.image;
+		if (this.type == "tileset"){
+			this.image = tilesManager.getTilesetNameFromTile(args.name);
+		}
 		this.name = args.name;
 		this.width = args.width;
 		this.height = args.height;
@@ -12,6 +15,7 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 		this.dir = args.dir;
 		this.layer = args.layer || "Background";
 		this.init();
+
 	};
 
 	Renderer.prototype.update = function (args) {

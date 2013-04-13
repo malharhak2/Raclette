@@ -31,7 +31,7 @@ require.config({
             'rMap'                : paths.engine + paths.Map + 'Map',
             'rMapCase'            : paths.engine + paths.Map + 'MapCase',
             'rMapLoader'          : paths.engine + paths.Map + 'MapLoader',
-        
+            'rJsonStorer'         : paths.engine + paths.Map + 'JsonStorer',
         // Physics
             'rCollider'           : paths.engine + paths.Physics + 'Collider',
 
