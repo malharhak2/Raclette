@@ -18,6 +18,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 		this.type = args.type;
 		this.gravity = false;
 		this.layer = args.layer;
+		this.goingThrough = false;
 	};
 
 
@@ -213,12 +214,13 @@ function (debug, utils, config, canvasManager, time, camera) {
 				if (statics[nextLine][i] != false && statics[nextLine][i] != undefined) {
 					var obj = statics[nextLine][i];
 
-					if (obj.collider.type == "block" 
+					if ((obj.collider.type == "block" 
 					|| obj.collider.type == "platform" 
 					|| obj.collider.type == "breakable" 
-					|| obj.collider.type == "onewayplatform") {
+					|| obj.collider.type == "onewayplatform")
+					&& (!this.goingThrough || obj.collider.type != "onewayplatform")) {
 						var distance = nextLine - 0.001 - (this.position.y + this.height);
-						if (Math.abs(distance) < Math.abs(closestObstacle)) {
+						if (Math.abs(distance) < Math.abs(closestObstacle) && this.position.y + this.height< nextLine) {
 							closestObstacle = distance;
 							return {
 								collision : true,
