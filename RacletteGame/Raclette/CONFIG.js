@@ -21,6 +21,7 @@ define(["game/config"], function (userConfig) {
 				parallax : 1
 			}
 		};
+		this.defaultDuration = userConfig.defaultDuration || 100;
 		this.gameTitle = userConfig.gameTitle || "UNTITLED";
 		this.containerID = userConfig.gameContainer || "#racletteGame";
 		this.guiID = userConfig.guiID || "#racletteGui";

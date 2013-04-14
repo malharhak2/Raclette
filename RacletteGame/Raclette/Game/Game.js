@@ -31,8 +31,8 @@ define(["rDebug", "rTime", "rAnimationManager", "rTilesManager", "rMapLoader", "
 			this.interfaceManager.renderBegin();
 			this.interfaceManager.renderEnd();
 			Main.render();
-
 		}
+		tilesManager.animate();
 	};
 
 	Game.prototype.logic = function() {

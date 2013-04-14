@@ -1,5 +1,5 @@
-define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "rimageManager", "rCanvasManager", "rCamera"], 
-	function (debug, utils, config, tilesManager, animationManager, imageManager, canvasManager, camera) {
+define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "rimageManager", "rCanvasManager", "rCamera", "rTime"], 
+	function (debug, utils, config, tilesManager, animationManager, imageManager, canvasManager, camera, time) {
 	var Renderer = function (args) {
 		this.type = args.type;
 		this.image = args.image;
@@ -38,6 +38,7 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 				sy : 0,
 				dw : 0,
 				dh : 0
+
 			};
 			animationManager.animate(this);
 		} else if (this.type == "tileset") {
@@ -101,6 +102,12 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 				dw : this.width,
 				dh : this.height
 			}
+			if (this.tileset.animated) {
+				var anim = this.tileset.anims[this.tileset.currentAnim];
+				coordinates.sx = anim.x;
+				coordinates.sy = anim.y;
+			}
+			
 		}
 		if (this.layer == undefined) {
 			debug.log("What");

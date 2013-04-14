@@ -22,6 +22,21 @@ function (debug, Tile, utils, jsonStorer) {
 			var t = tiles[i];
 			var firstGid = this.getJsonTileset(image).firstgid;
 			var pos = (t.x - 1) + (t.y - 1) * this.width + firstGid;
+			var anims;
+			if (t.anims){
+				anims = []
+				for (var e=0; e<t.anims.length; e++)
+				{
+					anims[e] = {
+						x : (t.anims[e].x -1) * this.caseWidth,
+						y : (t.anims[e].y -1) * this.caseHeight,
+						duration : t.anims[e].duration
+					}
+				}
+			}else{
+				anims = false;
+			}
+			
 			this.tiles[pos] = new Tile ({
 				x : t.x,
 				y : t.y,
@@ -33,7 +48,8 @@ function (debug, Tile, utils, jsonStorer) {
 				caseHeight : this.caseHeight,
 				nb : pos,
 				name : t.name,
-				type : t.type
+				type : t.type,
+				anims : anims
 			});
 			this.tileNames[t.name] = pos;
 		}

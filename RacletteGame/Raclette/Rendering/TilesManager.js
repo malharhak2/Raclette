@@ -23,7 +23,6 @@ define(["rDebug", "game/tilesets", "rTileset"], function (debug, tilesets, Tiles
 				return this.tilesets[i].hasTile(nb);
 			}
 		};
-		debug.error("getTile", nb, this.tilesets)
 		return false;
 	}
 	TilesManager.prototype.getTilesetNameFromTile = function (tileName) {
@@ -32,6 +31,14 @@ define(["rDebug", "game/tilesets", "rTileset"], function (debug, tilesets, Tiles
 				return i;
 			}
 		} 
+	}
+	TilesManager.prototype.animate = function (){
+		for (var i in this.tilesets) {
+			var tileset = this.tilesets[i]
+			for (var e in tileset.tiles){
+				tileset.tiles[e].addTime();
+			}
+		}
 	}
 
 	return new TilesManager();
