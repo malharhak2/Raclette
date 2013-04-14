@@ -24,6 +24,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 
 	Collider.prototype.Collision = function (axis, type) {
 		if (this.onCollision) {
+			debug.log("Physics", "Collision", axis, type);
 			this.onCollision(axis, type);
 		}
 	};
@@ -63,14 +64,14 @@ function (debug, utils, config, canvasManager, time, camera) {
 			if (check.collision) {
 				this.newPosition.x = this.position.x + check.distance;
 				this.velocity.x = 0;
-				this.Collision ("left");
+				this.Collision ("left", check.obstacle);
 			}
 		} else if (this.velocity.x > 0) {
 			var check = this.checkRightCollisions(this.newPosition, statics);
 			if (check.collision) {
 				this.newPosition.x = this.position.x + check.distance;
 				this.velocity.x = 0;
-				this.Collision ("right");
+				this.Collision ("right", check.obstacle);
 			}
 		}
 		this.newPosition.y += this.moveStep.y;
@@ -114,7 +115,9 @@ function (debug, utils, config, canvasManager, time, camera) {
 		var nextCol;
 		var closestObstacle = 1000;
 		nextCol = Math.floor (newPos.x);
-		for (var i = Math.floor (newPos.y); i < Math.floor (newPos.y + this.height ); i++) {
+		var checkStart = Math.floor (newPos.y);
+		var checkEnd = Math.floor (newPos.y + this.height);
+		for (var i = checkStart ; i <= checkEnd; i++) {
 			if (statics[i] != undefined) {
 				if (statics[i][nextCol] != false) {
 					var obj = statics[i][nextCol];
@@ -132,7 +135,8 @@ function (debug, utils, config, canvasManager, time, camera) {
 		if (closestObstacle != 1000) {
 			return {
 				collision : true,
-				distance : closestObstacle
+				distance : closestObstacle,
+				obstacle : obj.collider.type
 			};
 		} else {
 			return {
@@ -144,15 +148,17 @@ function (debug, utils, config, canvasManager, time, camera) {
 	Collider.prototype.checkRightCollisions = function (newPos, statics) {
 		var nextCol;
 		var closestObstacle = 1000;
-			nextCol = Math.floor (newPos.x + this.width);
-			for (var i = Math.floor (newPos.y); i < Math.floor (newPos.y + this.height); i++) {
+		var checkStart = Math.floor (newPos.y);
+		var checkEnd = Math.floor(newPos.y + this.height);
+			nextCol = Math.floor (newPos.x + this.width + 0.001);
+			for (var i = checkStart ; i <= checkEnd; i++) {
 				if (statics[i] != undefined) {
 					if (statics[i][nextCol] != false) {
 						var obj = statics[i][nextCol];
 						if (obj.collider.type == "block"
 						|| obj.collider.type == "platform"
 						|| obj.collider.type == "breakable") {
-							var distance = nextCol - 0.001 - (this.position.x + this.width);
+							var distance = nextCol - (this.position.x + this.width);
 							if (Math.abs(distance) < Math.abs(closestObstacle)) {
 								closestObstacle = distance;
 							}
@@ -163,7 +169,8 @@ function (debug, utils, config, canvasManager, time, camera) {
 			if (closestObstacle != 1000) {
 				return {
 					collision : true,
-					distance : closestObstacle
+					distance : closestObstacle,
+					obstacle : obj.collider.type
 				};
 			} else {
 				return {
@@ -176,7 +183,9 @@ function (debug, utils, config, canvasManager, time, camera) {
 		var nextLine;
 		var closestObstacle = 1000;
 		nextLine = Math.floor (newPos.y);
-		for (var i = Math.floor (newPos.x); i < Math.floor (newPos.x + this.width); i++) {
+		var checkStart = Math.floor (newPos.x);
+		var checkEnd = Math.floor (newPos.x + this.width + 1);
+		for (var i = checkStart; i < checkEnd; i++) {
 			if (statics[nextLine] != undefined) {
 				if (statics[nextLine][i] != false) {
 					var obj = statics[nextLine][i];
@@ -194,7 +203,8 @@ function (debug, utils, config, canvasManager, time, camera) {
 		if (closestObstacle != 1000) {
 			return {
 				collision : true,
-				distance : closestObstacle
+				distance : closestObstacle,
+				obstacle : obj.collider.type
 			};
 		} else {
 			return {
@@ -206,8 +216,8 @@ function (debug, utils, config, canvasManager, time, camera) {
 	Collider.prototype.checkBottomCollisions = function (newPos, statics) {
 		var nextLine;
 		var closestObstacle = 1000;
-		var checkEnd = Math.floor (newPos.x + this.width);
-		var checkStart = Math.floor (newPos.x + 1);
+		var checkEnd = Math.floor (newPos.x + (this.width + 1));
+		var checkStart = Math.floor (newPos.x);
 		nextLine = Math.floor (newPos.y + this.height);
 		for (var i = checkStart; i < checkEnd; i++) {
 			if (statics[nextLine] != undefined) {
