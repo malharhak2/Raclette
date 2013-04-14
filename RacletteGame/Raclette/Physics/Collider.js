@@ -117,7 +117,9 @@ function (debug, utils, config, canvasManager, time, camera) {
 			if (statics[i] != undefined) {
 				if (statics[i][nextCol] != false) {
 					var obj = statics[i][nextCol];
-					if (obj.collider.type == "block") {
+					if (obj.collider.type == "block"
+					|| obj.collider.type == "platform"
+					|| obj.collider.type == "breakable") {
 						var distance = nextCol + 1.001 - (this.position.x );
 						if (Math.abs(distance) < Math.abs(closestObstacle)) {
 							closestObstacle = distance;
@@ -146,7 +148,9 @@ function (debug, utils, config, canvasManager, time, camera) {
 				if (statics[i] != undefined) {
 					if (statics[i][nextCol] != false) {
 						var obj = statics[i][nextCol];
-						if (obj.collider.type == "block") {
+						if (obj.collider.type == "block"
+						|| obj.collider.type == "platform"
+						|| obj.collider.type == "breakable") {
 							var distance = nextCol - 0.001 - (this.position.x + this.width);
 							if (Math.abs(distance) < Math.abs(closestObstacle)) {
 								closestObstacle = distance;
@@ -175,7 +179,9 @@ function (debug, utils, config, canvasManager, time, camera) {
 			if (statics[nextLine] != undefined) {
 				if (statics[nextLine][i] != false) {
 					var obj = statics[nextLine][i];
-					if (obj.collider.type == "block") {
+					if (obj.collider.type == "block"
+					|| obj.collider.type == "platform"
+					|| obj.collider.type == "breakable") {
 						var distance = nextLine + 1.001 - this.position.y;
 						if (Math.abs(distance) < Math.abs(closestObstacle)) {
 							closestObstacle = distance;
@@ -199,14 +205,18 @@ function (debug, utils, config, canvasManager, time, camera) {
 	Collider.prototype.checkBottomCollisions = function (newPos, statics) {
 		var nextLine;
 		var closestObstacle = 1000;
-		var checkEnd = Math.floor (newPos.x + this.width + 1);
+		var checkEnd = Math.floor (newPos.x + this.width);
 		var checkStart = Math.floor (newPos.x);
 		nextLine = Math.floor (newPos.y + this.height);
 		for (var i = checkStart; i < checkEnd; i++) {
 			if (statics[nextLine] != undefined) {
 				if (statics[nextLine][i] != false && statics[nextLine][i] != undefined) {
 					var obj = statics[nextLine][i];
-					if (obj.collider.type == "block" || obj.collider.type == "platform") {
+
+					if (obj.collider.type == "block" 
+					|| obj.collider.type == "platform" 
+					|| obj.collider.type == "breakable" 
+					|| obj.collider.type == "onewayplatform") {
 						var distance = nextLine - 0.001 - (this.position.y + this.height);
 						if (Math.abs(distance) < Math.abs(closestObstacle)) {
 							closestObstacle = distance;
