@@ -2,7 +2,6 @@ define (["rutils", "rCONFIG", "rDebug", "rGamepad"],
 function (utils, CONFIG, debug, gamepadSupport) {
 	var Gamepads = function () {
 		this.gamepadSupport = gamepadSupport;
-		debug.log("Gamepads", gamepadSupport);
 		this.keys = {
 			"0" : 0,
 			"A" : 0,
