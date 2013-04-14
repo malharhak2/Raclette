@@ -36,6 +36,14 @@ function (debug, config, utils, gamepads) {
 		}
 	};
 
+	ControllerKey.prototype.isDetected = function () {
+		if (this.analog > config.detectThreshold || this.keyboard) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	ControllerKey.prototype.GetValue = function () {
 		if (this.analog > this.keyboard) return this.analog;
 		else return this.keyboard;

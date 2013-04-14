@@ -184,7 +184,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 		var closestObstacle = 1000;
 		nextLine = Math.floor (newPos.y);
 		var checkStart = Math.floor (newPos.x);
-		var checkEnd = Math.floor (newPos.x + this.width + 1);
+		var checkEnd = Math.floor (newPos.x + this.width + 1 - 0.001);
 		for (var i = checkStart; i < checkEnd; i++) {
 			if (statics[nextLine] != undefined) {
 				if (statics[nextLine][i] != false) {
