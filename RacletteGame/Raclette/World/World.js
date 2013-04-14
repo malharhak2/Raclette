@@ -1,5 +1,5 @@
-define(["rDebug", "rCONFIG", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "rWorldMapObject", "rCONFIG", "rAnimationManager", "rJsonStorer"], 
-function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMapObject, CONFIG, animationManager, jsonStorer){ 
+define(["rDebug", "rCONFIG", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "rWorldMapObject", "rCONFIG", "rAnimationManager", "rJsonStorer", "rCamera"], 
+function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMapObject, CONFIG, animationManager, jsonStorer, camera){ 
 	var World = function (args) {
 		this.objectTypes = {}; 
 		this.layers = {};
@@ -77,10 +77,20 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 	};
 
 	World.prototype.renderStatics = function (statics) {
-		for (var i = 0; i < statics.length; i++) {
-			for (var j = 0; j < statics[i].length; j++) {
-				if (statics[i][j].render) {
-					statics[i][j].render();
+		var cam = {
+			x : Math.floor (camera.x),
+			y : Math.floor (camera.y),
+			w : Math.floor (camera.width + 1),
+			h : Math.floor (camera.height + 2)
+		};
+		for (var i = cam.y; i < cam.y + cam.h; i++) {
+			if (statics[i] != undefined) {
+				for (var j = cam.x; j < cam.x + cam.w; j++) {
+					if (statics[i][j] != undefined) {
+						if (statics[i][j].render) {
+							statics[i][j].render();
+						}
+					}
 				}
 			}
 		}

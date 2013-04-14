@@ -57,6 +57,19 @@ function ($, debug, utils, config, gamepad, Controller, canvasManager) {
 		return false;
 	}
 
+	InputsManager.prototype.isDetected = function (id, button) {
+		var controller = this.controllers[id];
+		var touch = button;
+		if (arguments.length == 1) {
+			controller = this.controllers[0];
+			touch = [id];
+		}
+		if (controller.isDetected(touch)) {
+			return true;
+		}
+		return false;
+	}
+
 	InputsManager.prototype.update = function () {
 		for (var i = 0; i < this.controllers.length; i++) {
 			this.controllers[i].update();

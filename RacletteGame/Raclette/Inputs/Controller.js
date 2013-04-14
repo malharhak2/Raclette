@@ -26,6 +26,9 @@ function (debug, config, utils, ControllerKey) {
 	Controller.prototype.isPressed = function (key) {
 		return this.keys[key].isPressed();
 	}
+	Controller.prototype.isDetected = function (key) {
+		return this.keys[key].isDetected();
+	}
 
 	Controller.prototype.pressKey = function (key) {
 		this.keys[key].press();

@@ -32,7 +32,8 @@ define(["game/config"], function (userConfig) {
 			width : userConfig.screen.width || 1400,
 			height : userConfig.screen.height || 1000
 		};
-		this.pressedThreshold = userConfig.pressedThreshold || 0.5;
+		this.pressedThreshold = userConfig.pressedThreshold || 0.8;
+		this.detectThreshold = userConfig.detectThreshold || 0.1;
 		this.floor = 62;
 		this.specials = userConfig.specials || ["start", "end"]
 		this.canvasBackgroundColor = userConfig.canvasBackgroundColor || "#464F63";

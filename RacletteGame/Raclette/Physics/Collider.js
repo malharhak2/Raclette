@@ -184,7 +184,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 		var closestObstacle = 1000;
 		nextLine = Math.floor (newPos.y);
 		var checkStart = Math.floor (newPos.x);
-		var checkEnd = Math.floor (newPos.x + this.width + 1);
+		var checkEnd = Math.floor (newPos.x + this.width + 1 - 0.001);
 		for (var i = checkStart; i < checkEnd; i++) {
 			if (statics[nextLine] != undefined) {
 				if (statics[nextLine][i] != false) {
@@ -192,7 +192,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 					if (obj.collider.type == "block"
 					|| obj.collider.type == "platform"
 					|| obj.collider.type == "breakable") {
-						var distance = nextLine + 1.001 - this.position.y;
+						var distance = nextLine + 1.00001 - this.position.y;
 						if (Math.abs(distance) < Math.abs(closestObstacle)) {
 							closestObstacle = distance;
 						}
@@ -216,7 +216,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 	Collider.prototype.checkBottomCollisions = function (newPos, statics) {
 		var nextLine;
 		var closestObstacle = 1000;
-		var checkEnd = Math.floor (newPos.x + (this.width + 1));
+		var checkEnd = Math.floor (newPos.x + (this.width + 1) - 0.001);
 		var checkStart = Math.floor (newPos.x);
 		nextLine = Math.floor (newPos.y + this.height);
 		for (var i = checkStart; i < checkEnd; i++) {
@@ -229,7 +229,7 @@ function (debug, utils, config, canvasManager, time, camera) {
 					|| obj.collider.type == "breakable" 
 					|| obj.collider.type == "onewayplatform")
 					&& (!this.goingThrough || obj.collider.type != "onewayplatform")) {
-						var distance = nextLine - 0.001 - (this.position.y + this.height);
+						var distance = nextLine - 0.00001 - (this.position.y + this.height);
 						if (Math.abs(distance) < Math.abs(closestObstacle) && this.position.y + this.height< nextLine) {
 							closestObstacle = distance;
 							return {
