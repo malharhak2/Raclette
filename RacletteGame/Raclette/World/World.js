@@ -11,6 +11,7 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 		for (var i in this.layers) {
 			this.layers[i].GenerateStatics(args.map);
 		}
+		this.specials = {};
 		console.warn("ICI", args.json)
 		jsonStorer.storeJson(args.json);
 		debug.log("World", "World initialized !");
@@ -44,6 +45,10 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 	};
 
 	World.prototype.instanceStatic = function (args) {
+		if (args.layer == "Special"){
+			this.createSpecial(args);
+			return;
+		}
 		var obj = this.CreateObject (args);
 		this.layers[args.layer].statics[args.position.y][args.position.x] = new WorldObject(obj);
 		return this.layers[args.layer].statics[args.position.y][args.position.x];
@@ -86,6 +91,29 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 	}
 	World.prototype.getObject = function(layer, id) {
 		return this.layers[layer].objects[id];
+	}
+	World.prototype.isSpecial = function(name) {
+		for (var i=0; i<config.specials.length; i++)
+		{
+			if (name == config.specials[i])
+			{
+				return true;
+			}
+		}
+	}
+	World.prototype.createSpecial = function(args) {
+		if (this.specials[args.position.y] == undefined) this.specials[args.position.y] = {};
+		this.specials[args.position.y][args.position.x] = args.type;
+	}
+	World.prototype.findSpecial = function(name) {
+		for (var i in this.specials){
+			for (var e in this.specials[i]){
+				if (this.specials[i][e] == name){
+					return {x: parseInt(e), y: parseInt(i)}
+				}
+			}
+		}
+		debug.error("findSpecial", name, "not found")
 	}
 	return World;
 });

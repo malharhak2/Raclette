@@ -34,6 +34,7 @@ define(["game/config"], function (userConfig) {
 		};
 		this.pressedThreshold = userConfig.pressedThreshold || 0.5;
 		this.floor = 62;
+		this.specials = userConfig.specials || ["start", "end"]
 		this.canvasBackgroundColor = userConfig.canvasBackgroundColor || "#464F63";
 		this.showCredit = userConfig.showCredit || true;
 		this.showCustomFooter = userConfig.showCustomFooter || true;
