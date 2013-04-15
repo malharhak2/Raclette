@@ -139,11 +139,10 @@ function (debug, utils, config, canvasManager, time, camera) {
 				}
 			}
 		};
-		/*
-		var at = newPos.y;
-		var ab = newPos.y + this.height;
-		var al = this.position.x;
-		var ar = this.position.x + this.width;
+		var at = this.position.y;
+		var ab = this.position.y + this.height;
+		var al = newPos.x;
+		var ar = newPos.x + this.width;
 		for (var i in objects) {
 			if (objects[i].collider.type == this.type) {
 				continue;
@@ -162,10 +161,10 @@ function (debug, utils, config, canvasManager, time, camera) {
 						distance : closestObstacle,
 						obstacle : o.type
 					};
+					debug.log("Collider", "Left collision", result);
 				}
 			}
 		}
-		*/
 		return result;
 	};
 
@@ -199,10 +198,10 @@ function (debug, utils, config, canvasManager, time, camera) {
 			}
 		};
 
-		var at = newPos.y;
-		var ab = newPos.y + this.height;
-		var al = this.position.x;
-		var ar = this.position.x + this.width;
+		var at = this.position.y;
+		var ab = this.position.y + this.height;
+		var al = newPos.x;
+		var ar = newPos.x + this.width;
 		for (var i in objects) {
 			if (objects[i].collider.type == this.type) {
 				continue;
