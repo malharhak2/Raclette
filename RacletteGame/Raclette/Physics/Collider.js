@@ -1,5 +1,5 @@
-define (["rDebug", "rutils", "rCONFIG", "rCanvasManager", "rTime", "rCamera"], 
-function (debug, utils, config, canvasManager, time, camera) {
+define (["rDebug", "rutils", "rCONFIG", "rCanvasManager", "rTime", "rCamera", "rCurrentWorld"], 
+function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 	var Collider = function (args) {
 		this.position = {
 			x : args.position.x,
@@ -43,7 +43,8 @@ function (debug, utils, config, canvasManager, time, camera) {
 		}
 	};
 
-	Collider.prototype.update = function (statics) {
+	Collider.prototype.update = function () {
+		var statics = currentWorld.getWorld().layers["Midground"].statics
 		this.applyGravity();		
 		this.oldPosition = {
 			x : this.position.x,
@@ -111,7 +112,8 @@ function (debug, utils, config, canvasManager, time, camera) {
 		this.velocity.y += force.y || 0;
 	};
 
-	Collider.prototype.checkLeftCollisions = function (newPos, statics) {
+	Collider.prototype.checkLeftCollisions = function (newPos) {
+		var statics = currentWorld.getWorld().layers["Midground"].statics
 		var nextCol;
 		var closestObstacle = 1000;
 		nextCol = Math.floor (newPos.x);
@@ -145,7 +147,8 @@ function (debug, utils, config, canvasManager, time, camera) {
 		}
 	};
 
-	Collider.prototype.checkRightCollisions = function (newPos, statics) {
+	Collider.prototype.checkRightCollisions = function (newPos) {
+		var statics = currentWorld.getWorld().layers["Midground"].statics
 		var nextCol;
 		var closestObstacle = 1000;
 		var checkStart = Math.floor (newPos.y);
@@ -179,7 +182,8 @@ function (debug, utils, config, canvasManager, time, camera) {
 			}	
 	};
 
-	Collider.prototype.checkTopCollisions = function (newPos, statics) {
+	Collider.prototype.checkTopCollisions = function (newPos) {
+		var statics = currentWorld.getWorld().layers["Midground"].statics
 		var nextLine;
 		var closestObstacle = 1000;
 		nextLine = Math.floor (newPos.y);
@@ -213,7 +217,8 @@ function (debug, utils, config, canvasManager, time, camera) {
 		}
 	};
 
-	Collider.prototype.checkBottomCollisions = function (newPos, statics) {
+	Collider.prototype.checkBottomCollisions = function (newPos) {
+		var statics = currentWorld.getWorld().layers["Midground"].statics
 		var nextLine;
 		var closestObstacle = 1000;
 		var checkEnd = Math.floor (newPos.x + (this.width + 1) - 0.001);
@@ -246,7 +251,24 @@ function (debug, utils, config, canvasManager, time, camera) {
 			collision : false
 		}
 	};
+	Collider.prototype.getSpecial = function (){
+		var position = {
+			x: Math.floor(this.position.x),
+			y: Math.floor(this.position.y)
+		}
+		for (var i=position.y; i< position.y + this.height; i++){
+			for (var e=position.x; e< position.x + this.width; e++){
+				var pos = {
+					x: e,
+					y: i
+				}
+				var result = currentWorld.getWorld().isThereASpecial(pos);
+				if (result) return result;
+			}
+		}
 
+		return false; 
+	}
 	Collider.prototype.DrawDebug = function (cétéhixe) {
 		cétéhixe.fillStyle = "rgba(0, 250, 0, 0.3)";
 		cétéhixe.strokeStyle = "green";

@@ -1,5 +1,5 @@
-define (["rWorld", "rDebug", "rCONFIG", "rutils"], 
-function (World, debug, config, utils) {
+define (["rWorld", "rDebug", "rCONFIG", "rutils", "rCurrentWorld"], 
+function (World, debug, config, utils, currentWorld) {
 	
 	var WorldManager = function () {
 		this.worlds = {};
@@ -25,7 +25,7 @@ function (World, debug, config, utils) {
 	};
 
 	WorldManager.prototype.switchWorld = function (id) {
-		this.currentWorld = this.worlds[id];
+		this.currentWorld = currentWorld.currentWorld = this.worlds[id];
 	}
 
 	return new WorldManager();

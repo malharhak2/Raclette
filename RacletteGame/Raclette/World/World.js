@@ -61,7 +61,7 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 	World.prototype.update = function() { 
 		for (var i in this.layers) {
 			for (var j in this.layers[i].objects) {
-				this.layers[i].objects[j].collider.update (this.layers["Midground"].statics);
+				this.layers[i].objects[j].collider.update();
 				this.layers[i].objects[j].update();
 			}
 		};
@@ -124,6 +124,12 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 			}
 		}
 		debug.error("findSpecial", name, "not found")
+	}
+	World.prototype.isThereASpecial = function (vec2){
+		if (this.specials[vec2.y] && this.specials[vec2.y][vec2.x]) {
+			return this.specials[vec2.y][vec2.x];
+		}
+		return false;
 	}
 	return World;
 });

@@ -56,6 +56,7 @@ require.config({
             'rWorldObject'        : paths.engine + paths.World + 'WorldObject',
             'rWorldObjectType'    : paths.engine + paths.World + 'WorldObjectType',
             'rWorldManager'       : paths.engine + paths.World + 'WorldManager',
+            'rCurrentWorld'        : paths.engine + paths.World + 'CurrentWorld',
             
         'rsocket_io'          : '/socket.io/socket.io',
         'jquery'              : paths.engine + 'jquery',
