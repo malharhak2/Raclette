@@ -12,7 +12,6 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 			this.layers[i].GenerateStatics(args.map);
 		}
 		this.specials = {};
-		console.warn("ICI", args.json)
 		jsonStorer.storeJson(args.json);
 		debug.log("World", "World initialized !");
 	};
@@ -37,21 +36,21 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 		args.physics.onCollision = args.onCollision;
 		args.physics.layer = args.layer;
 		return args;
-	}
-	World.prototype.instanceObject = function (args) {
-		var obj = this.CreateObject (args);
-		this.layers[args.layer].objects[args.id] = new WorldObject(obj);
-		return this.layers[args.layer].objects[args.id];
 	};
-
-	World.prototype.instanceStatic = function (args) {
+	
+	World.prototype.instanceObject = function (args) {
 		if (args.layer == "Special"){
 			this.createSpecial(args);
 			return;
 		}
 		var obj = this.CreateObject (args);
-		this.layers[args.layer].statics[args.position.y][args.position.x] = new WorldObject(obj);
-		return this.layers[args.layer].statics[args.position.y][args.position.x];
+		if (obj.render.static) {
+			this.layers[args.layer].statics[args.position.y][args.position.x] = new WorldObject (obj);
+			return this.layers[args.layer].statics[args.position.y][args.position.x] = new WorldObject (obj);
+		} else {
+			this.layers[args.layer].objects[args.id] = new WorldObject (obj);
+			return this.layers[args.layer].objects[args.id];
+		}
 	}
 
 	World.prototype.removeObject = function(layer, id) {
@@ -61,7 +60,7 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 	World.prototype.update = function() { 
 		for (var i in this.layers) {
 			for (var j in this.layers[i].objects) {
-				this.layers[i].objects[j].collider.update (this.layers["Midground"].statics);
+				this.layers[i].objects[j].collider.update (this.layers["Midground"].statics, this.layers[i].objects);
 				this.layers[i].objects[j].update();
 			}
 		};
