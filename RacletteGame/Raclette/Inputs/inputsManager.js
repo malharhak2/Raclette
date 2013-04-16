@@ -15,7 +15,6 @@ function ($, debug, utils, config, gamepad, Controller, canvasManager) {
 		var that = this;
 		debug.log (canvasManager.canvas);
 		$('body').keydown( function (event) {
-			debug.log("Inputs manager", "keydown", event.keyCode);
 			that.keydown(event.keyCode);
 		});
 		$('body').keyup (function (event) {

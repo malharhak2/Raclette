@@ -26,6 +26,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 
 	Collider.prototype.Collision = function (direction, object) {
 		if (this.onCollision) {
+			debug.log("Physics", "Collision", direction, object.type, "and attached : ", this.attachedCollider);
 			this.onCollision({
 				direction : direction,
 				object : object
@@ -47,22 +48,6 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		}
 	};
 	Collider.prototype.update = function () {
-		if (this.attachedCollider != false ) {
-			if (!this.checkObjectCollision (this.attachedCollider)) {
-				this.detachCollider();
-			} else {
-				var deltaCollider = {
-					x : this.attachedCollider.position.x - this.lastAttachedCollision.x,
-					y : this.attachedCollider.position.y - this.lastAttachedCollision.y
-				};
-				this.position.x += deltaCollider.x;
-				this.position.y += deltaCollider.y;
-				this.lastAttachedCollision = {
-					x : this.attachedCollider.position.x,
-					y : this.attachedCollider.position.y
-				};
-			}
-		} 
 		var statics = currentWorld.getWorld().layers["Midground"].statics
 		var objects = currentWorld.getWorld().layers["Midground"].objects;
 
@@ -76,6 +61,18 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			x : this.velocity.x * time.deltaTime,
 			y : this.velocity.y * time.deltaTime
 		}
+		if (this.attachedCollider != false ) {
+			var deltaCollider = {
+				x : this.attachedCollider.position.x - this.lastAttachedCollision.x,
+				y : this.attachedCollider.position.y - this.lastAttachedCollision.y
+			};
+			this.position.x += deltaCollider.x;
+			this.position.y += deltaCollider.y;
+			this.lastAttachedCollision = {
+				x : this.attachedCollider.position.x,
+				y : this.attachedCollider.position.y
+			};
+		} 
 		this.newPosition = {
 			x : this.position.x +  this.moveStep.x,
 			y : this.position.y
@@ -87,14 +84,14 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			return;
 		}
 		if (this.velocity.x < 0) {
-			var check = this.checkLeftCollisions(this.newPosition, statics, objects);
+			var check = this.checkLeftCollisions(this.newPosition, "left");
 			if (check.collision) {
 				this.newPosition.x = this.position.x + check.distance;
 				this.velocity.x = 0;
 				this.Collision ("left", check.obstacle);
 			}
 		} else if (this.velocity.x > 0) {
-			var check = this.checkRightCollisions(this.newPosition, statics, objects);
+			var check = this.checkRightCollisions(this.newPosition, "right");
 			if (check.collision) {
 				this.newPosition.x = this.position.x + check.distance;
 				this.velocity.x = 0;
@@ -104,14 +101,14 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		this.newPosition.y += this.moveStep.y;
 
 		if (this.velocity.y < 0) {
-			var check = this.checkTopCollisions (this.newPosition, statics, objects) 
+			var check = this.checkTopCollisions (this.newPosition, "top") 
 			if (check.collision ) {
 				this.newPosition.y = this.position.y + check.distance;
 				this.velocity.y = 0;
 				this.Collision ("top", check.obstacle);
 			}
 		} else if (this.velocity.y > 0) {
-			var check = this.checkBottomCollisions(this.newPosition, statics, objects);
+			var check = this.checkBottomCollisions(this.newPosition, "bottom");
 			if (check.collision) {
 				this.newPosition.y = this.position.y + check.distance;
 				this.velocity.y = 0;
@@ -145,7 +142,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 	};
 
 
-	Collider.prototype.checkLeftCollisions = function (newPos) {
+	Collider.prototype.checkLeftCollisions = function (newPos, dir) {
 		var statics = currentWorld.getWorld().layers["Midground"].statics
 		var objects = currentWorld.getWorld().layers["Midground"].objects;
 
@@ -156,7 +153,8 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		var checkEnd = Math.floor (newPos.y + this.height);
 
 		var result = {
-			collision : false
+			collision : false,
+			distance : 1000
 		};
 
 		for (var i = checkStart ; i <= checkEnd; i++) {
@@ -178,36 +176,17 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 				}
 			}
 		};
-		var at = this.position.y;
-		var ab = this.position.y + this.height;
-		var al = newPos.x;
-		var ar = newPos.x + this.width;
-		for (var i in objects) {
-			if (objects[i].collider.type == this.type) {
-				continue;
-			} 
-			var o = objects[i].collider;
-			var bl = o.position.x;
-			var br = bl + o.width;
-			var bt = o.position.y;
-			var bb = bt + o.height;
-			if (utils.aabb (al, ar, at, ab, bl, br, bt, bb)) {
-				var distance = (o.position.x + o.width)  - (this.position.x);
-				if (Math.abs (distance) < Math.abs (closestObstacle)) {
-					closestObstacle = distance;
-					result = {
-						collision : true,
-						distance : closestObstacle,
-						obstacle : objects[i]
-					};
-					debug.log("Collider", "Left collision", result);
-				}
+		var checkHor = this.checkObjectsHorizontal(newPos, dir);
+
+		if (checkHor.collision) {
+			if (Math.abs(checkHor.distance) < Math.abs(result.distance)) {
+				result = checkHor;
 			}
 		}
 		return result;
 	};
 
-	Collider.prototype.checkRightCollisions = function (newPos) {
+	Collider.prototype.checkRightCollisions = function (newPos, dir) {
 		var statics = currentWorld.getWorld().layers["Midground"].statics
 		var objects = currentWorld.getWorld().layers["Midground"].objects;
 
@@ -218,7 +197,8 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			nextCol = Math.floor (newPos.x + this.width + 0.001);
 
 		var result = {
-			collision : false
+			collision : false,
+			distance : 1000
 		}
 		for (var i = checkStart ; i <= checkEnd; i++) {
 			if (statics[i] != undefined) {
@@ -240,35 +220,17 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			}
 		};
 
-		var at = this.position.y;
-		var ab = this.position.y + this.height;
-		var al = newPos.x;
-		var ar = newPos.x + this.width;
-		for (var i in objects) {
-			if (objects[i].collider.type == this.type) {
-				continue;
-			} 
-			var o = objects[i].collider;
-			var bl = o.position.x;
-			var br = bl + o.width;
-			var bt = o.position.y;
-			var bb = bt + o.height;
-			if (utils.aabb (al, ar, at, ab, bl, br, bt, bb)) {
-				var distance = (o.position.x)  - (this.position.x + this.width);
-				if (Math.abs (distance) < Math.abs (closestObstacle)) {
-					closestObstacle = distance;
-					result = {
-						collision : true,
-						distance : closestObstacle,
-						obstacle : objects[i]
-					};
-				}
+		var checkHor = this.checkObjectsHorizontal(newPos, dir);
+
+		if (checkHor.collision) {
+			if (Math.abs(checkHor.distance) < Math.abs(result.distance)) {
+				result = checkHor;
 			}
 		}
 		return result;	
 	};
 
-	Collider.prototype.checkTopCollisions = function (newPos) {
+	Collider.prototype.checkTopCollisions = function (newPos, dir) {
 		var statics = currentWorld.getWorld().layers["Midground"].statics;
 		var objects = currentWorld.getWorld().layers["Midground"].objects;
 
@@ -279,7 +241,8 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		var checkEnd = Math.floor (newPos.x + this.width + 1 - 0.001);
 
 		var result = {
-			collision : false
+			collision : false,
+			distance : 1000
 		};
 
 		for (var i = checkStart; i < checkEnd; i++) {
@@ -302,35 +265,16 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			}
 		};
 
-		var at = newPos.y;
-		var ab = newPos.y + this.height;
-		var al = this.position.x;
-		var ar = this.position.x + this.width;
-		for (var i in objects) {
-			if (objects[i].collider.type == this.type) {
-				continue;
-			} 
-			var o = objects[i].collider;
-			var bl = o.position.x;
-			var br = bl + o.width;
-			var bt = o.position.y;
-			var bb = bt + o.height;
-			if (utils.aabb (al, ar, at, ab, bl, br, bt, bb)) {
-				var distance = (o.position.y + o.height)  - (this.position.y);
-				if (Math.abs (distance) < Math.abs (closestObstacle)) {
-					closestObstacle = distance;
-					result = {
-						collision : true,
-						distance : closestObstacle,
-						obstacle : objects[i]
-					};
-				}
+		var checkVer = this.checkObjectsVertical(newPos, dir);
+		if (checkVer.collision) {
+			if (Math.abs(checkVer.distance) < Math.abs(result.distance)) {
+				result = checkVer;
 			}
 		}
 		return result;
 	};
 
-	Collider.prototype.checkBottomCollisions = function (newPos) {
+	Collider.prototype.checkBottomCollisions = function (newPos, dir) {
 		var statics = currentWorld.getWorld().layers["Midground"].statics
 		var objects = currentWorld.getWorld().layers["Midground"].objects;
 		var nextLine;
@@ -340,7 +284,8 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		nextLine = Math.floor (newPos.y + this.height);
 
 		var result = {
-			collision : false
+			collision : false,
+			distance : 1000
 		};
 		for (var i = checkStart; i < checkEnd; i++) {
 			if (statics[nextLine] != undefined) {
@@ -365,10 +310,124 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 				}
 			}
 		};
+		
+		var checkVer = this.checkObjectsVertical(newPos, dir);
+		if (checkVer.collision) {
+			if (checkVer.distance < result.distance) {
+				result = checkVer;
+			}
+		}
+
+
+		return result;
+	};
+
+	Collider.prototype.checkObjectsHorizontal = function (newPos, dir) {
+		var objects = currentWorld.getWorld().layers["Midground"].objects;
+		var al = newPos.x,
+			ar = newPos.x + this.width,
+			at = newPos.y,
+			ab = newPos.y + this.height,
+			result = {
+				collision : false,
+				distance : 100
+			},
+			distance = 100;
+
+		for (var i in objects) {
+			if (objects[i].collider.type == this.type) {
+				continue;
+			}
+			var o = objects[i].collider;
+			var bl = o.position.x;
+			var br = bl + o.width;
+			var bt = o.position.y;
+			var bb = bt + o.height;
+			if (utils.aabb (al, ar, at, ab, bl, br, bt, bb)) {
+				if (newPos.x < o.position.x) {
+					if (dir == "right") {
+						distance = o.position.x - (this.position.x + this.width);
+					} else {
+						distance = this.position.x - (o.position.x + o.width);
+					}
+				} else if (newPos.x < o.position.x + o.width) {
+					if (dir == "right") {
+						distance =  o.position.x - (this.position.x + this.width);
+					} else {
+						distance = (o.position.x + o.width) - this.position.x;
+					}
+				}
+			}
+			if (Math.abs (distance) < result.distance) {
+				result = {
+					collision : true,
+					distance : distance,
+					obstacle : objects[i]
+				};
+			}
+		};
+		return result;		
+
+	};
+
+	Collider.prototype.checkObjectsVertical = function (newPos, dir) {
+		var objects = currentWorld.getWorld().layers["Midground"].objects;
+		var al = newPos.x,
+			ar = newPos.x + this.width,
+			at = newPos.y,
+			ab = newPos.y + this.height,
+			result = {
+				collision : false,
+				distance : 100
+			},
+			distance = 100;
+
+		for (var i in objects) {
+			if (objects[i].collider.type == this.type) {
+				continue;
+			}
+			var o = objects[i].collider;
+			var bl = o.position.x;
+			var br = bl + o.width;
+			var bt = o.position.y;
+			var bb = bt + o.height;
+			if (utils.aabb (al, ar, at, ab, bl, br, bt, bb)) {
+				if (newPos.y < o.position.y) {
+					if (dir == "bottom") {
+						distance = o.position.y - (this.position.y + this.height);
+					} else {
+						distance = this.position.y - (o.position.y + o.height);
+					}
+				} else {
+					if (dir == "bottom") {
+						distance =  o.position.y - (this.position.y + this.height);
+					} else {
+						distance = (o.position.y + o.height) - this.position.y;
+					}
+				}
+			}
+			if (Math.abs (distance) < result.distance) {
+				result = {
+					collision : true,
+					distance : distance,
+					obstacle : objects[i]
+				};
+			}
+		};
+		return result;
+	};
+
+ 	Collider.prototype.checkBottomObjects = function (newPos, dir) {
+		var objects = currentWorld.getWorld().layers["Midground"].objects;
 		var at = newPos.y;
 		var ab = newPos.y + this.height;
 		var al = this.position.x;
 		var ar = this.position.x + this.width;
+
+		var result = {
+			colllision : false
+		};
+
 		for (var i in objects) {
 			if (objects[i].collider.type == this.type) {
 				continue;
@@ -379,8 +438,8 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			var bt = o.position.y;
 			var bb = bt + o.height;
 			if (utils.aabb (al, ar, at, ab, bl, br, bt, bb)) {
-				var distance = o.position.y  - (this.position.y + this.height);
-				if (Math.abs (distance) < Math.abs (closestObstacle)) {
+				var distance = (o.position.y + o.height)  - (this.position.y);
+				if (Math.abs (distance) < 10) {
 					closestObstacle = distance;
 					result = {
 						collision : true,
@@ -389,28 +448,11 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 					};
 				}
 			}
-		}
-
+		};
 
 		return result;
+
 	};
-
-	Collider.prototype.checkObjectCollision = function (collider) {
-		var al = this.position.x,
-			ar = this.position.x + this.width,
-			at = this.position.y,
-			ab = this.position.y + this.height + 0.001,
-			bl = collider.position.x,
-			br = collider.position.x + collider.width,
-			bt = collider.position.y,
-			bb = collider.position.y + collider.height;
-
-		if (utils.aabb (al, ar, at, ab, bl, br, bt, bb) ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 	Collider.prototype.getSpecial = function (){
 		var position = {
 			x: Math.floor(this.position.x),
@@ -431,7 +473,9 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 	};
 
 	Collider.prototype.attachCollider = function (collider) {
-		debug.log("Player", "Attach collider");
+		if (!this.attachedCollider) {
+			debug.log("Player", "Attach collider");
+		}
 		this.lastAttachedCollision = {
 			x : collider.position.x,
 			y : collider.position.y
@@ -440,13 +484,15 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 	};
 
 	Collider.prototype.detachCollider = function () {
-		debug.log("Player", "Detach collider");
-		this.attachedCollider = false;
+		if (this.attachedCollider) {
+			debug.log("Player", "Detach collider");
+			this.attachedCollider = false;
+		}
 	}
 	Collider.prototype.DrawDebug = function (cétéhixe) {
-		cétéhixe.fillStyle = "rgba(0, 250, 0, 0.3)";
+		cétéhixe.fillStyle = "rgba(0, 250, 0, 0.6)";
 		cétéhixe.strokeStyle = "green";
-		cétéhixe.strokeWidth = 3;
+		cétéhixe.strokeWidth = 1;
 
 		var cameraInfos = camera.isObjectVisible ({
 			x : this.position.x,
@@ -456,6 +502,30 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			layer : this.layer
 		});
 		if (cameraInfos) {
+			cétéhixe.fillRect (
+				cameraInfos.x * config.unitSize,
+				cameraInfos.y * config.unitSize,
+				cameraInfos.w * config.unitSize,
+				cameraInfos.h * config.unitSize
+			);		
+			cétéhixe.strokeRect (
+				cameraInfos.x * config.unitSize,
+				cameraInfos.y * config.unitSize,
+				cameraInfos.w * config.unitSize,
+				cameraInfos.h * config.unitSize
+			);
+		}
+		if (this.newPosition != undefined) {
+			cameraInfos = camera.isObjectVisible ({
+				x : this.oldPosition.x,
+				y : this.oldPosition.y,
+				w : this.width,
+				h : this.height,
+				layer : this.layer
+			});
+			cétéhixe.fillStyle = "rgba(0, 0, 250, 0.2)";
+			cétéhixe.strokeStyle = "blue";
+			cétéhixe.strokeWidth = 1;
 			cétéhixe.fillRect (
 				cameraInfos.x * config.unitSize,
 				cameraInfos.y * config.unitSize,

@@ -22,7 +22,6 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 
 	World.prototype.createObjectType = function (args) {
 		this.objectTypes[args.id] = new WorldObjectType(args);
-		debug.log("World", "World class created !");
 	};
 
 	World.prototype.CreateObject = function (args) {

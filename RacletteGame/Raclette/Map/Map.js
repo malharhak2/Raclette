@@ -83,6 +83,9 @@ define (["rutils", "rDebug", "rMapCase", "rTilesManager"], function (utils, debu
 								y : parseInt(j, 10)
 							}
 						});
+						if (i == "Parallax") {
+							console.log("Parallax layer", this.objectsList[kaseID]);
+						}
 					};
 				};
 			}

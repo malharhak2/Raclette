@@ -40,7 +40,7 @@ function (utils, CONFIG, debug, gamepadSupport) {
 		};
 
 	};
-
+	
 	Gamepads.prototype.getKey = function (id, touch) {
 		if (gamepadSupport.gamepads[id] != undefined) {
 			var gamepad = gamepadSupport.gamepads[id];
