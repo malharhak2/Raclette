@@ -19,13 +19,17 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		this.gravity = false;
 		this.layer = args.layer;
 		this.goingThrough = false;
+		this.attachedCollider = false;
+		this.useCollisions = true;
 	};
 
 
-	Collider.prototype.Collision = function (axis, type) {
+	Collider.prototype.Collision = function (direction, object) {
 		if (this.onCollision) {
-			debug.log("Physics", "Collision", axis, type);
-			this.onCollision(axis, type);
+			this.onCollision({
+				direction : direction,
+				object : object
+			});
 		}
 	};
 
@@ -42,9 +46,23 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			this.DrawDebug (canvasManager.ctx);
 		}
 	};
-
-
 	Collider.prototype.update = function () {
+		if (this.attachedCollider != false ) {
+			if (!this.checkObjectCollision (this.attachedCollider)) {
+				this.detachCollider();
+			} else {
+				var deltaCollider = {
+					x : this.attachedCollider.position.x - this.lastAttachedCollision.x,
+					y : this.attachedCollider.position.y - this.lastAttachedCollision.y
+				};
+				this.position.x += deltaCollider.x;
+				this.position.y += deltaCollider.y;
+				this.lastAttachedCollision = {
+					x : this.attachedCollider.position.x,
+					y : this.attachedCollider.position.y
+				};
+			}
+		} 
 		var statics = currentWorld.getWorld().layers["Midground"].statics
 		var objects = currentWorld.getWorld().layers["Midground"].objects;
 
@@ -63,6 +81,11 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			y : this.position.y
 		};
 
+		if (!this.useCollisions) {
+			this.position.x += this.moveStep.x;
+			this.position.y += this.moveStep.y;
+			return;
+		}
 		if (this.velocity.x < 0) {
 			var check = this.checkLeftCollisions(this.newPosition, statics, objects);
 			if (check.collision) {
@@ -104,6 +127,14 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			this.velocity.y = this.velocity.y + config.gravity.y * this.mass * time.deltaTime;
 		} 
 	};
+	Collider.prototype.SetVelocity = function (velocity) {
+		if (velocity.x != undefined) {
+			this.velocity.x = velocity.x;
+		}
+		if (velocity.y != undefined) {
+			this.velocity.y = velocity.y;
+		}
+	};
 
 	Collider.prototype.SetGravity = function (gravity) {
 		this.gravity = gravity;
@@ -140,7 +171,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 							result = {
 								collision : true,
 								distance : distance,
-								obstacle : obj.collider.type
+								obstacle : obj
 							};
 						}
 					}	
@@ -167,7 +198,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 					result = {
 						collision : true,
 						distance : closestObstacle,
-						obstacle : o.type
+						obstacle : objects[i]
 					};
 					debug.log("Collider", "Left collision", result);
 				}
@@ -201,7 +232,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 							result = {
 								collision : true,
 								distance : distance,
-								obstacle : obj.collider.type
+								obstacle : obj
 							};
 						}
 					}	
@@ -229,7 +260,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 					result = {
 						collision : true,
 						distance : closestObstacle,
-						obstacle : o.type
+						obstacle : objects[i]
 					};
 				}
 			}
@@ -263,7 +294,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 							result = {
 								collision : true,
 								distance : distance,
-								obstacle : obj.collider.type
+								obstacle : obj
 							}
 						}
 					}	
@@ -291,7 +322,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 					result = {
 						collision : true,
 						distance : closestObstacle,
-						obstacle : o.type
+						obstacle : objects[i]
 					};
 				}
 			}
@@ -327,7 +358,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 							result = {
 								collision : true,
 								distance : closestObstacle,
-								obstacle : obj.collider.type
+								obstacle : obj
 							};
 						}
 					}
@@ -354,7 +385,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 					result = {
 						collision : true,
 						distance : closestObstacle,
-						obstacle : o.type
+						obstacle : objects[i]
 					};
 				}
 			}
@@ -363,6 +394,23 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 
 		return result;
 	};
+
+	Collider.prototype.checkObjectCollision = function (collider) {
+		var al = this.position.x,
+			ar = this.position.x + this.width,
+			at = this.position.y,
+			ab = this.position.y + this.height + 0.001,
+			bl = collider.position.x,
+			br = collider.position.x + collider.width,
+			bt = collider.position.y,
+			bb = collider.position.y + collider.height;
+
+		if (utils.aabb (al, ar, at, ab, bl, br, bt, bb) ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	Collider.prototype.getSpecial = function (){
 		var position = {
 			x: Math.floor(this.position.x),
@@ -380,6 +428,20 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		}
 
 		return false; 
+	};
+
+	Collider.prototype.attachCollider = function (collider) {
+		debug.log("Player", "Attach collider");
+		this.lastAttachedCollision = {
+			x : collider.position.x,
+			y : collider.position.y
+		};
+		this.attachedCollider = collider;
+	};
+
+	Collider.prototype.detachCollider = function () {
+		debug.log("Player", "Detach collider");
+		this.attachedCollider = false;
 	}
 	Collider.prototype.DrawDebug = function (cétéhixe) {
 		cétéhixe.fillStyle = "rgba(0, 250, 0, 0.3)";

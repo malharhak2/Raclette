@@ -41,7 +41,7 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 	World.prototype.instanceObject = function (args) {
 		if (args.layer == "Special"){
 			this.createSpecial(args);
-			return;
+			return false;
 		}
 		var obj = this.CreateObject (args);
 		if (obj.render.static) {
