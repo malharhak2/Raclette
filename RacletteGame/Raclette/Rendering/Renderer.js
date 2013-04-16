@@ -39,7 +39,7 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 				dw : 0,
 				dh : 0
 
-			};
+		 	};
 			animationManager.animate(this);
 		} else if (this.type == "tileset") {
 			this.tileset = tilesManager.getTile(this.name);
@@ -129,6 +129,10 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 			return false;
 		}
 	};
+
+	Renderer.prototype.onAnimEnd = function(callback){
+		this.onEnd = callback;
+	}
 
 	return Renderer;
 });
