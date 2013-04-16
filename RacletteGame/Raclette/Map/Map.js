@@ -100,6 +100,10 @@ define (["rutils", "rDebug", "rMapCase", "rTilesManager"], function (utils, debu
 
 	Map.prototype.TransformObject = function (args) {
 		var tile = tilesManager.getTile(args.kase);
+		if (!tile){
+			debug.error("Tile n°", args.kase, "not found", "args",args, tilesManager.tilesets);
+			debugger;
+		}
 		var objekt = {
 			type : tile.type,
 			name : tile.name,
