@@ -88,7 +88,7 @@ define(["rDebug", "rutils", "game/images","game/animsData", "rimageManager", "rA
 				if (renderer.onEnd != undefined) {
 					animInstance.onEnd = renderer.onEnd;
 				}
-				if (Date.now() - animInstance.lastStep > (animModel.states[animInstance.state].options.pace)) {
+				if (Date.now() - animInstance.lastStep > (animModel.states[animInstance.state].options.pace / renderer.animCoeff)) {
 					window.FULLSTOP;
 					animInstance.lastStep = Date.now();
 					animInstance.step++;

@@ -14,12 +14,14 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 		this.state = args.state;
 		this.dir = args.dir;
 		this.layer = args.layer || "Background";
+		this.animating = true;
+		this.animCoeff = 1;
 		this.init();
 
 	};
 
 	Renderer.prototype.update = function (args) {
-		if (this.type == "spritesheet") {
+		if (this.type == "spritesheet" && this.animating) {
 			animationManager.animate(this);
 		} else if (this.type == "tileset") {
 
@@ -27,6 +29,17 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 		this.position = args.position;
 		this.state = args.state;
 		this.dir = args.dir;
+	};
+
+	Renderer.prototype.getAnimKey = function () {
+		return this.animation.step;
+	}
+
+	Renderer.prototype.pauseAnim = function () {
+		this.animating = false;
+	};
+	Renderer.prototype.resumeAnim = function () {
+		this.animating = true;
 	}
 	Renderer.prototype.init = function () {
 		if (this.type == "spritesheet") {
