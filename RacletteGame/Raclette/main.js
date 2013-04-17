@@ -58,6 +58,8 @@ require.config({
             'rWorldManager'       : paths.engine + paths.World + 'WorldManager',
             'rCurrentWorld'        : paths.engine + paths.World + 'CurrentWorld',
             
+        'rCharacter'          : paths.engine + 'Character',
+        'rPageVisibility'     : paths.engine + 'PageVisibility',
         'rsockets'            : paths.engine + 'sockets',
         'rGlobalVariables'    : paths.engine + 'GlobalVariables',
         'rsocket_io'          : '/socket.io/socket.io',
@@ -69,7 +71,8 @@ require.config({
         'rmain'               : paths.engine + 'main',
         'rutils'              : paths.engine + 'utils',
         'rTime'               : paths.engine + 'Time',
-        'rUser'               : paths.engine + "User"
+        'rUser'               : paths.engine + "User",
+        'rMessager'           : paths.engine + 'Messager'
     },
     shim: {
         'socket_io' : {

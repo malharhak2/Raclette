@@ -21,6 +21,7 @@ define(["rDebug", "rCONFIG", "game/config"], function (debug, config, userConfig
 				parallax : 1
 			}
 		};
+		this.timeScale = userConfig.timeScale || 1;
 		this.defaultDuration = userConfig.defaultDuration || 100;
 		this.gameTitle = userConfig.gameTitle || "UNTITLED";
 		this.containerID = userConfig.gameContainer || "#racletteGame";

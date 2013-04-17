@@ -26,7 +26,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 
 	Collider.prototype.Collision = function (direction, object) {
 		if (this.onCollision) {
-			debug.log("Physics", "Collision", direction, object.type, "and attached : ", this.attachedCollider);
+			//debug.log("Physics", "Collision", direction, object.type, "and attached : ", this.attachedCollider);
 			this.onCollision({
 				direction : direction,
 				object : object
