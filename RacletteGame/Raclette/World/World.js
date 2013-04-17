@@ -26,8 +26,8 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 
 	World.prototype.CreateObject = function (args) {
 		try{
-		var klass = this.objectTypes[args.type];
-		args.render = klass.render;
+			var klass = this.objectTypes[args.type];
+			args.render = klass.render;
 		}
 		catch(err){
 			debug.error("objects", args, this.objectTypes, this.objectTypes[args.type])

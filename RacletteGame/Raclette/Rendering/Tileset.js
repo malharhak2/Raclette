@@ -22,9 +22,7 @@ function (debug, Tile, utils, jsonStorer) {
 		for (var i in tiles) {
 			var t = tiles[i];
 			var firstGid = this.getJsonTileset(image).firstgid;
-			debug.log("this.width", this.width)
 			var pos = (t.x - 1) + (t.y - 1) * this.width + firstGid;
-			debug.log(pos)
 			var anims;
 			if (t.anims){
 				anims = []

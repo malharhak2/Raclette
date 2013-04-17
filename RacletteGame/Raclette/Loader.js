@@ -1,4 +1,4 @@
-define([], function(){
+define(["rUser"], function(user){
 	function Loader() {
 		this.ressourceSize = 100; // indicate the part of the ressource in the loading, in pourcent.
 		this.ressource = {
@@ -11,10 +11,15 @@ define([], function(){
 			loaded: 0,
 			objects: []
 		}
+		this.userInitialised = false;
+		var that = this;
+		user.init (function () {
+			that.userInitialised = true;
+		})
 	}
 
 	Loader.prototype.update = function() {
-		if (this.getPercent() == 100) {
+		if (this.getPercent() == 100 && this.userInitialised) {
 			return "loaded";
 		}
 	};

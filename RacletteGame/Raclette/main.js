@@ -58,7 +58,10 @@ require.config({
             'rWorldManager'       : paths.engine + paths.World + 'WorldManager',
             'rCurrentWorld'        : paths.engine + paths.World + 'CurrentWorld',
             
+        'rsockets'            : paths.engine + 'sockets',
+        'rGlobalVariables'    : paths.engine + 'GlobalVariables',
         'rsocket_io'          : '/socket.io/socket.io',
+        'rfacebook'           : paths.engine + 'facebook',
         'jquery'              : paths.engine + 'jquery',
         'rCONFIG'             : paths.engine + 'CONFIG',
         'rDebug'              : paths.engine + 'Debug',

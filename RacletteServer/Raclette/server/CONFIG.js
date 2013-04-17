@@ -1,7 +1,9 @@
-define(["../../game_server/config/server"], function (userConfig) {
+define(["game_server/config/server"], function (userConfig) {
 	var CONFIG = function () {
 		this.environments = userConfig.environments;
 		this.logLevel = userConfig.logLevel;
+		this.environment = userConfig.environment;
+
 		this.environments.default = {
 			port : "9595",
 			host : "localhost",
@@ -23,7 +25,7 @@ define(["../../game_server/config/server"], function (userConfig) {
 		this.host = this.environments[this.environment].host;
 		this.protocol = this.environments[this.environment].protocol;
 		this.mongo = this.environments[this.environment].mongo;
-		this.mongo = this.environments[this.environment].fb;
+		this.facebook = this.environments[this.environment].fb;
 	}
 	
 	return new CONFIG();

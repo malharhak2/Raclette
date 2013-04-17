@@ -1,4 +1,4 @@
-define(["CONFIG", "sockets", "mongo/base", "Gameloop", "EventsManager"], function (CONFIG, sockets, mongoUtils, gameloop, eventsManager) {
+define(["rCONFIG", "rsockets", "rMongo", "rGameloop"], function (CONFIG, sockets, mongoUtils, gameloop) {
 	
 	var App = function () {
 
@@ -14,8 +14,8 @@ define(["CONFIG", "sockets", "mongo/base", "Gameloop", "EventsManager"], functio
 		if (CONFIG.protocol == "https") {
 
 			var fs = require('fs');
-			this.hskey = fs.readFileSync(dirname + '/myserver.key');
-			this.hscert = fs.readFileSync(dirname + '/certificate.crt');
+			this.hskey = fs.readFileSync(dirname + '/../game_server/certificates/myserver.key');
+			this.hscert = fs.readFileSync(dirname + '/../game_server/certificates/certificate.crt');
 			var options = {
 				key : this.hskey,
 				cert : this.hscert
@@ -46,10 +46,10 @@ define(["CONFIG", "sockets", "mongo/base", "Gameloop", "EventsManager"], functio
     	}
     	*/
 		this.app.post('/game?', function(req, res) {
-			res.render(view);
+			res.redirect("/");
 		});		
 		this.app.get('/game', function(req, res) {
-			res.render(view);
+			res.redirect("/");
 		});
 		this.app.get('/', function(req, res) {
 			res.render(view);
@@ -57,11 +57,6 @@ define(["CONFIG", "sockets", "mongo/base", "Gameloop", "EventsManager"], functio
 
 
 		sockets.init(this);
-		
-		mongoUtils.getEvents(function (events) {
-			console.log(events[0]);
-			eventsManager.fill(events);
-		});
 
 		gameloop.run();
 	};

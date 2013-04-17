@@ -1,8 +1,7 @@
-define(["CONFIG", "timezoneConnections"], function (CONFIG, timezoneConnections) {
+define(["rCONFIG"], function (CONFIG) {
 	
 	var SocketConnection = function (data) {
 		this.socket = data.socket;
-		this.timezone = data.timezone;
 		this.lastHeartbeat = Date.now();
 		this.fid = data.fid;
 		this.master = data.master;
@@ -11,7 +10,6 @@ define(["CONFIG", "timezoneConnections"], function (CONFIG, timezoneConnections)
 	};
 
 	SocketConnection.prototype.init = function () {	
-		timezoneConnections[this.timezone][this.fid] = 1;
 		var that = this;
 		this.socket.on('playerping', function () {
 			that.lastHeartbeat = Date.now();
@@ -25,10 +23,9 @@ define(["CONFIG", "timezoneConnections"], function (CONFIG, timezoneConnections)
 	};
 
 	SocketConnection.prototype.suicide = function () {
-		delete timezoneConnections[this.timezone][this.fid];
 		delete this.master[this.fid];
 		return;
 	}
 
 	return SocketConnection;
-})
+});
