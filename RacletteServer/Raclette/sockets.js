@@ -51,6 +51,7 @@ define(['app', 'CONFIG', 'mongo/base', 'facebook', 'SocketConnection'], function
 			answer.env = app.app.settings.env;
 			answer.fb = fb;
 			socket.on('handshake', function (data) {
+				console.log("handshake received");
 				that.connections[data.fid] = new SocketConnection({
 					socket : socket,
 					timezone : 1,

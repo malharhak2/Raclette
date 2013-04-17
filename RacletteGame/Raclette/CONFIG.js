@@ -1,4 +1,4 @@
-define(["game/config"], function (userConfig) {
+define(["rDebug", "rCONFIG", "game/config"], function (debug, config, userConfig) {
 	var CONFIG = function () {
 		this.userConfig = userConfig
 		this.controllers = userConfig.controllers;
@@ -40,6 +40,24 @@ define(["game/config"], function (userConfig) {
 		this.showCredit = userConfig.showCredit || true;
 		this.showCustomFooter = userConfig.showCustomFooter || true;
 		this.customFooter = userConfig.customFooter || "Raclette engine inside";
+
+		this.domain = window.location.hostname;
+		this.envs = {
+			"fbdev" : {
+				appId : "363526327091238"
+			},
+			"production" : {
+				appId : "503005056431764"
+			},
+			"development" : {
+				appId : false
+			}
+		}
 	};
+
+	CONFIG.prototype.initFacebook = function (env) {
+		debug.log("Config", env, this.envs);
+		this.appId = this.envs[env].appId;
+	}
 	return new CONFIG();
 })

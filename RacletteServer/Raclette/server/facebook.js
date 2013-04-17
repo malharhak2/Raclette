@@ -1,4 +1,4 @@
-define(["CONFIG"], function (CONFIG) {
+define(["rCONFIG"], function (CONFIG) {
 	
 	var Facebook = function () {
 

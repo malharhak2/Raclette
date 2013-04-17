@@ -83,15 +83,11 @@ define (["rutils", "rDebug", "rMapCase", "rTilesManager"], function (utils, debu
 								y : parseInt(j, 10)
 							}
 						});
-						if (i == "Parallax") {
-							console.log("Parallax layer", this.objectsList[kaseID]);
-						}
 					};
 				};
 			}
 		};
 		debug.log("Map", "Object created !", this.objectsList);
-		// TODO : Ajouter le support des objets définis dans tiled ?
 
 		return this.objectsList;
 	};

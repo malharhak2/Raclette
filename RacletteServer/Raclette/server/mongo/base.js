@@ -1,4 +1,4 @@
-define (['CONFIG', 'mongoose', 'mongo/User/User', 'mongo/Feedback', 'mongo/Event', 'sockets'], function (CONFIG, mongoose, User, Feedback, Event, sockets) {
+define (['rCONFIG', 'mongoose', 'rMongoUser', 'rsockets'], function (CONFIG, mongoose, User, sockets) {
 
 
 	var mongoUtils = {};
@@ -7,7 +7,7 @@ define (['CONFIG', 'mongoose', 'mongo/User/User', 'mongo/Feedback', 'mongo/Event
 		if (CONFIG.mongo) {
 			var p = CONFIG.mongo;
 			mongoose.connect('mongodb://' + p.user + ":" + p.pass + "@" + p.host + ":" + p.port + "/" + p.db, function (err) {
-
+				console.log("Mongo connected");
 				if (err) {
 					throw err;
 				}
@@ -16,36 +16,19 @@ define (['CONFIG', 'mongoose', 'mongo/User/User', 'mongo/Feedback', 'mongo/Event
 			});
 		}
 	};
-	mongoUtils.addUser = function(fid, callback) {
+	mongoUtils.addUser = function(id, callback) {
 		var kevin = new User.User({
 			auth : {
 				facebook : {
-					fid :fid
+					id :id
 				}
 			}
 		});
 		kevin.init(function (infos) {
-			infos.cocorico({currentTime : Date.now()});
 			infos.save (function (err) {
 				if (err) throw err;
-
 				callback (infos);
 			});
-		});
-	};
-
-	mongoUtils.addEvent = function (data, callback) {
-		var e = new Event.Event(data);
-		e.init(function () {
-			callback({message : "Event saved :)"});
-		});
-	};
-
-	mongoUtils.getEvents = function (callback) {
-		var query = Event.Model.find({});
-		query.exec (function (err, events) {
-			if (err) {throw err;}
-			callback(events);
 		});
 	};
 
@@ -63,39 +46,7 @@ define (['CONFIG', 'mongoose', 'mongo/User/User', 'mongo/Feedback', 'mongo/Event
 				if (err) throw err;
 			});
 		});
-	};
-
-	
-	mongoUtils.updateMapCase = function (data) {
-		console.log(data);
-		var query = User.Model.findOne({'auth.facebook.fid' : data.fid});
-		query.exec (function (err, user) {
-
-			if (err) throw err;
-
-			if (user) {
-
-				var map = user.map[0];
-				//console.log("Map : " + map);
-				var parcelle = user.map[0].parcelles[data.parcelle];
-				var cell = parcelle.objects[data.y].objects[data.x];
-				for (var i in data.cell.caseContent) {
-					user.map[0].parcelles[data.parcelle].objects[data.y].objects[data.x].caseContent[i] = data.cell.caseContent[i];
-				}
-				user.map[0].parcelles[data.parcelle].objects[data.y].objects[data.x].collision = data.cell.collision;
-				user.map[0].parcelles[data.parcelle].objects[data.y].objects[data.x].object = data.cell.object;
-
-				user.map[0].parcelles[data.parcelle].objects[data.y].objects[data.x].markModified('caseContent');
-
-
-				user.save (function (err) {
-					if (err) throw err;
-				});
-			} else {
-			}
-		})
-	}
-	
+	};	
 
 	mongoUtils.getPlayersIn = function (friendsList, callback) {
 
@@ -123,34 +74,7 @@ define (['CONFIG', 'mongoose', 'mongo/User/User', 'mongo/Feedback', 'mongo/Event
 		query.exec( function (err, users) {
 			callback (users);
 		})
-	}
-
-	mongoUtils.getPlayerMap = function (fid, callback) {
-		User.Model.findOne({'auth.facebook.fid' : fid}, function (err, copain) {
-			callback(copain);
-		})
-	}
-
-	mongoUtils.addPlayerFeedback = function (datas, callback) {
-		console.log("New player feedback");
-		var feed = new Feedback.Feedback(datas);
-		feed.init(function (infos) {
-			console.log("FEedback saved");
-			callback(infos);
-		});
 	};
-
-	mongoUtils.getPlayerFeedbacks = function (player, callback) {
-		if (player == "all") {
-			var query = Feedback.Model.find({});
-		} else {
-			var query = Feedback.Model.find({'sender.facebook.fid' : player.fid});
-		}
-		query.sort({'sendDate' : -1});
-		query.exec(function (err, feedbacks) {
-			callback(feedbacks);
-		});
-	}
 
 	mongoUtils.getPlayerProfile = function (data, callback) {
 		var fid = data.fid;
@@ -164,8 +88,8 @@ define (['CONFIG', 'mongoose', 'mongo/User/User', 'mongo/Feedback', 'mongo/Event
 			} else {
 				callback("No user found with :" + fid);
 			}
-		})
-	}
+		});
+	};
 
 	return mongoUtils;
 });

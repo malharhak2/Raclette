@@ -1,11 +1,11 @@
-define(['mongoose', 'mongo/User/House/House', 'mongo/User/Map/Map'], function (mongoose, House, Map) {
+define(['mongoose'], function (mongoose) {
 	
 	var UserSchema = new mongoose.Schema ({
 
 		auth : {
 			name : {type : String, default : "Anonymous"},
 			facebook : {
-				fid : {type: String, default: "None"},
+				id : {type: String, default: "None"},
 				gender : {type:String, default : "male"},
 				locale : {type:String, default : "fr_FR"},
 				name : {type:String, default : "None"},
@@ -18,21 +18,9 @@ define(['mongoose', 'mongo/User/House/House', 'mongo/User/Map/Map'], function (m
 		},
 		stats : {
 			money : {type : Number, default : 10}
-		},
-		map : [Map.schema],
-		house : [House.schema]
+		}
 	});
 
-	UserSchema.methods.cocorico = function (datas) {
-		var data = {
-			lastConnection : this.auth.lastConnection,
-			currentConnection : datas.currentTime
-		};
-		data.deltaTime = data.currentConnection - data.lastConnection;
-		this.map[0].cocorico(data);
-		this.auth.lastConnection = Date.now();
-		this.save();
-	}
 	var UserModel = mongoose.model('users', UserSchema);
 
 	var User = function (datas) {
@@ -47,19 +35,25 @@ define(['mongoose', 'mongo/User/House/House', 'mongo/User/Map/Map'], function (m
 		var that = this;
 		this.UserModel = UserModel;
 		this.UserSchema = UserSchema;
-		var query = UserModel.findOne({'auth.facebook.fid' : this.datas.auth.facebook.fid}, function (err, user) {
+		var query = UserModel.findOne({'auth.facebook.id' : this.datas.auth.facebook.id});
+		console.log(query);
+		console.log(this.datas);
+		query.exec (function (err, user) {
 			if (user != undefined) {
+				console.log("coucou3");
 				that.getInfos(user, callback);
 			} else {
-				that.add(callback);
+				console.log("coucou4");
 			}
 		});
+		that.add(callback);
+		console.log("coucou2");
 	}
 
 	User.prototype.doesExist = function (callback) {
 
 		var that = this;
-		var query = UserModel.findOne({'auth.facebook.fid' : this.datas.auth.facebook.fid}, function (err, user) {
+		var query = UserModel.findOne({'auth.facebook.id' : this.datas.auth.facebook.id}, function (err, user) {
 			if (user != undefined) {
 				callback (true);
 			} else {
@@ -76,23 +70,24 @@ define(['mongoose', 'mongo/User/House/House', 'mongo/User/Map/Map'], function (m
 
 	User.prototype.add = function (callback) {
 
-
+		console.log("coucou5");
 		this.model = new this.UserModel({
 			auth : {
 				facebook : {
-					fid : this.datas.auth.facebook.fid
+					id : this.datas.auth.facebook.id
 				}
 			}		
 		});
-		this.model.map.push(new Map.Map().model);
-		this.model.house.push(new House.House().model);
 		this.saveNew(callback);
 	};
 	User.prototype.saveNew = function (callback) {
-
+		console.log("coucou6");
 		var that = this;
 		this.errors = [];
+		console.log(this.model);
 		this.model.save(function (err) {
+			console.log(err);
+			console.log("coucou7");
 			if (err) {
 				this.errors.push(err);
 				throw err;

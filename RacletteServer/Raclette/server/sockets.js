@@ -1,27 +1,5 @@
-define(['app', 'CONFIG', 'mongo/base', 'facebook', 'SocketConnection'], function (app, CONFIG, mongoUtils, facebook, SocketConnection) {
+define(['rapp', 'rCONFIG', 'rMongo', 'rfacebook', 'rSocketConnection'], function (app, CONFIG, mongoUtils, facebook, SocketConnection) {
 
-
-	/*
-	var cookie = require('cookie');
-	var parseSignedCookies = require('connect').utils.parseSignedCookies;
-	io.set('authorization', function (data, accept) {
-	    // check if there's a cookie header
-	    if (data.headers.cookie) {
-	        // if there is, parse the cookie
-	        data.cookie = parseSignedCookies(cookie.parse(decodeURIComponent(data.headers.cookie)));
-	        // note that you will need to use the same key to grad the
-	        // session id, as you specified in the Express setup.
-	        data.sessionID = data.cookie['express.sid'];
-	    } else {
-	       // if there isn't, turn down the connection with a message
-	       // and leave the function.
-	       return accept('No cookie transmitted.', false);
-	    }
-	    // accept the incoming connection
-	    accept(null, true);
-	});
-
-	*/
 	var Sockets = function () {
 
 
@@ -38,6 +16,7 @@ define(['app', 'CONFIG', 'mongo/base', 'facebook', 'SocketConnection'], function
 		};
 		var that = this;
 		this.io.sockets.on('connection', function (socket) {
+			console.log("connection");
 			var answer = {};
 			var env = app.app.settings.env;
 			var fb = true;
@@ -51,13 +30,14 @@ define(['app', 'CONFIG', 'mongo/base', 'facebook', 'SocketConnection'], function
 			answer.env = app.app.settings.env;
 			answer.fb = fb;
 			socket.on('handshake', function (data) {
+				console.log("handshake", data);
 				that.connections[data.fid] = new SocketConnection({
 					socket : socket,
 					timezone : 1,
 					fid : data.fid,
 					master : that.connections
 				});
-				mongoUtils.addUser(data.fid, function (answer) {
+				mongoUtils.addUser(data.id, function (answer) {
 					if (app.app.settings.env == "production" || app.app.settings.env == "fbdev" || app.app.settings.env == "staging") {
 						answer.facebook = true;
 					} else {

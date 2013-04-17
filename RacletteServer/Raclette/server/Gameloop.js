@@ -1,9 +1,6 @@
-define(["CONFIG", "EventsManager"], function (CONFIG, eventsManager) {
+define(["rCONFIG"], function (CONFIG) {
 	
 	var run = function () {
-		eventsManager.update({
-			date : Date.now()
-		});
 		setTimeout(run, 1000);
 	};
 

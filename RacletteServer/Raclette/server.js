@@ -1,14 +1,31 @@
 var requirejs = require('requirejs');
 
+var paths = {
+	"engine" : "Raclette/server/",
+	"mongo" : "mongo/"
+}
 requirejs.config({
-    //Pass the top-level main.js/index.js require
-    //function to requirejs so that node modules
-    //are loaded relative to the top-level JS file.
-    baseUrl : __dirname + "/server",
-    nodeRequire: require
-});
+    baseUrl : __dirname + "/../",
+    nodeRequire: require,
+    paths : {
 
-requirejs(['main', 'CONFIG', 'app', 'sockets'], function (main, CONFIG, app, sockets) {
+    	"rapp" : paths.engine + "app",
+    	"rCONFIG" : paths.engine + "CONFIG",
+    	"rDebug" : paths.engine + "Debug",
+    	"rfacebook" : paths.engine + "facebook",
+    	"rGameloop" : paths.engine + "Gameloop",
+    	"rSocketConnection" : paths.engine + "SocketConnection",
+    	"rsockets" : paths.engine + "sockets",
+    	"rutils" : paths.engine + "utils",
+    	"rmain" : paths.engine + "main",
+
+    	// Mongo
+    	"rMongo" : paths.engine + paths.mongo + "base",
+    	"rMongoUser" : paths.engine + paths.mongo + "User/User",
+    	"rMongoAuth" : paths.engine + paths.mongo + "User/Auth/Auth"
+    }
+});
+requirejs(["rCONFIG", 'rapp', 'rsockets'], function (CONFIG, app, sockets) {
 	console.log("Dirname : " + __dirname);
 	app.init(__dirname);
 });
