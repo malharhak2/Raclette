@@ -75,5 +75,11 @@ function ($, debug, utils, config, gamepad, Controller, canvasManager) {
 		}
 	}
 
+	InputsManager.prototype.reset = function () {
+		for (var i = 0; i < this.controllers.length; i++) {
+			this.controllers[i].reset();
+		}
+	}
+
 	return new InputsManager();
 });

@@ -52,5 +52,11 @@ function (debug, config, utils, ControllerKey) {
 		}
 	}
 
+	Controller.prototype.reset = function () {
+		for (var i in this.keys) {
+			this.keys[i].reset();
+		}
+	}
+
 	return Controller;
 });

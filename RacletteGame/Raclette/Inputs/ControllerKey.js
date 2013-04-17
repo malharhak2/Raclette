@@ -70,5 +70,11 @@ function (debug, config, utils, gamepads) {
 		}
 	}
 
+	ControllerKey.prototype.reset = function () {
+		this.pressed = 0;
+		this.keyboard = 0;
+		this.analog = 0;
+	}
+
 	return ControllerKey;
 });
