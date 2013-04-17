@@ -1,6 +1,7 @@
 define(["rDebug", "rCONFIG", "rutils", "rWorldLayer", "rWorldObjectType", "rWorldObject", "rWorldMapObject", "rCONFIG", "rAnimationManager", "rJsonStorer", "rCamera"], 
 function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMapObject, CONFIG, animationManager, jsonStorer, camera){ 
 	var World = function (args) {
+		this.id = args.id;
 		this.objectTypes = {}; 
 		this.layers = {};
 		for (var i in config.layers) {
@@ -18,10 +19,6 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 
 	World.prototype.init = function() {
 		
-	};
-
-	World.prototype.createObjectType = function (args) {
-		this.objectTypes[args.id] = new WorldObjectType(args);
 	};
 
 	World.prototype.CreateObject = function (args) {
