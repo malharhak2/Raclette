@@ -123,7 +123,7 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 				}
 			}
 		}
-		debug.error("findSpecial", name, "not found")
+		debug.error("findSpecial", name, "not found", this)
 	}
 	World.prototype.isThereASpecial = function (vec2){
 		if (this.specials[vec2.y] && this.specials[vec2.y][vec2.x]) {
