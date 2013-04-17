@@ -41,6 +41,7 @@ define(["rDebug", "rTime", "rAnimationManager", "rTilesManager", "rMapLoader", "
 		inputsManager.update();
 		if (!this.loaded) {
 			if (loader.update() == "loaded") {
+				this.loaded = true;
 				var that = this;
 				this.loaded = true;
 				Main.init(function () {
