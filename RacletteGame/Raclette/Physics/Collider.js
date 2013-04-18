@@ -91,7 +91,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		if (this.moveStep.x < 0) {
 			var check = this.checkLeftCollisions(this.newPosition, "left");
 			if (check.collision) {
-				if (check.obstacle.type != "coin") {
+				if (check.obstacle.type != "coin" && check.obstacle.type != "lapin") {
 					this.newPosition.x = this.position.x + check.distance;
 					this.velocity.x = 0;
 				}
@@ -101,7 +101,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		} else if (this.moveStep.x > 0) {
 			var check = this.checkRightCollisions(this.newPosition, "right");
 			if (check.collision) {
-				if (check.obstacle.type != "coin") {
+				if (check.obstacle.type != "coin" && check.obstacle.type != "lapin") {
 					this.newPosition.x = this.position.x + check.distance;
 					this.velocity.x = 0;
 				}
@@ -113,7 +113,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		if (this.moveStep.y < 0) {
 			var check = this.checkTopCollisions (this.newPosition, "top") 
 			if (check.collision ) {
-				if (check.obstacle.type != "coin") {
+				if (check.obstacle.type != "coin" && check.obstacle.type != "lapin") {
 					this.newPosition.y = this.position.y + check.distance;
 					this.velocity.y = 0;
 				}
@@ -122,7 +122,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		} else if (this.moveStep.y > 0) {
 			var check = this.checkBottomCollisions(this.newPosition, "bottom");
 			if (check.collision) {
-				if (check.obstacle.type != "coin") {
+				if (check.obstacle.type != "coin" && check.obstacle.type != "lapin") {
 					this.newPosition.y = this.position.y + check.distance;
 					this.velocity.y = 0;
 				}
