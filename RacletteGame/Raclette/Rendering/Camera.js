@@ -61,9 +61,7 @@ define(["rCONFIG", "rDebug", "rutils", "rJsonStorer"], function(config, debug, u
 	};
 
 	Camera.prototype.scroll = function (attached) {
-		if (utils.chances(50)) {
-			debug.log("Camera", "")
-		}
+
 		var map = jsonStorer.getJson();
 		if (attached.position.y < (map.height - this.skyHeight)) {
 			this.scrollPosition ({
