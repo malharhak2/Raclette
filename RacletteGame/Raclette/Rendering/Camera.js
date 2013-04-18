@@ -43,7 +43,6 @@ define(["rCONFIG", "rDebug", "rutils", "rJsonStorer"], function(config, debug, u
 	};
 
 	Camera.prototype.reset = function () {
-		debug.log("Camera", "reset");
 		this.x = 0;
 		this.y = 0;
 	}
@@ -61,7 +60,6 @@ define(["rCONFIG", "rDebug", "rutils", "rJsonStorer"], function(config, debug, u
 	};
 
 	Camera.prototype.scroll = function (attached) {
-
 		var map = jsonStorer.getJson();
 		if (attached.position.y < (map.height - this.skyHeight)) {
 			this.scrollPosition ({
