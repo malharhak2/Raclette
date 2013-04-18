@@ -1,10 +1,11 @@
-define(["rDebug", "rutils", "game/images","game/animsData", "rimageManager", "rAnimationInstance"], function(debug, utils, images, externalData, imageManager, AnimationInstance) {
+define(["rDebug", "rutils", "game/images","game/animsData", "rimageManager", "rAnimationInstance", "game/sounds", "rSoundManager"], function(debug, utils, images, externalData, imageManager, AnimationInstance, sounds, soundManager) {
 
 	var AnimationManager = function() {
 		this.externalData = externalData;
 		this.imageManager = imageManager;
 		imageManager.init("game/images/");
 		imageManager.pushImages(images);
+		soundManager.pushSounds(sounds);
 		this.animsDatas = {};
 		this.anims = [];
 	};
