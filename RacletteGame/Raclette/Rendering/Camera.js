@@ -113,7 +113,7 @@ define(["rCONFIG", "rDebug", "rutils", "rJsonStorer"], function(config, debug, u
 		args.x + args.w > x &&
 		args.x < x + this.w &&
 		args.y + args.h > y &&
-		args.y < y + this.h) {
+		args.y < y + this.h ) {
 			newArgs.x = args.x - x;
 			newArgs.y = args.y - y;
 			newArgs.w = args.w;

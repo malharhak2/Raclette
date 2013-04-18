@@ -62,27 +62,27 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 	Renderer.prototype.render = function () {
 		var co = this.getRenderCoordinates ();
 		if (co) {
-			var renderInfos = {
-				image : this.image,
-				sx : co.sx,
-				sy : co.sy,
-				sw : co.sw,
-				sh : co.sh,
+			this.renderInfos = {
+				image : imageManager.get(this.image),
+				sx : Math.floor(co.sx),
+				sy : Math.floor(co.sy),
+				sw : Math.floor(co.sw),
+				sh : Math.floor(co.sh),
 				dx : Math.floor((co.dx - this.offset.x) * config.unitSize),
 				dy : Math.floor((co.dy - this.offset.y) * config.unitSize),
 				dw : Math.floor(co.dw * config.unitSize),
 				dh : Math.floor(co.dh * config.unitSize)
 			};
 			canvasManager.ctx.drawImage(
-				imageManager.get(renderInfos.image), 
-				renderInfos.sx,
-				renderInfos.sy,
-				renderInfos.sw,
-				renderInfos.sh,
-				renderInfos.dx,
-				renderInfos.dy,
-				renderInfos.dw,
-				renderInfos.dh
+				this.renderInfos.image, 
+				this.renderInfos.sx,
+				this.renderInfos.sy,
+				this.renderInfos.sw,
+				this.renderInfos.sh,
+				this.renderInfos.dx,
+				this.renderInfos.dy,
+				this.renderInfos.dw,
+				this.renderInfos.dh
 			);
 		} else {
 			return;
