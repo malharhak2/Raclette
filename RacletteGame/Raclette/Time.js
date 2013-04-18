@@ -7,6 +7,7 @@ function (config, debug, utils, pageVisibility, inputsManager) {
 		this.lastFrame = Date.now();
 		this.currentFrame = Date.now();
 		this.deltaTime = this.currentFrame - this.lastFrame;
+		this.maxTime = config.maxTime || 30;
 
 		var that = this;
 		pageVisibility.onVisible = function () {
@@ -29,6 +30,7 @@ function (config, debug, utils, pageVisibility, inputsManager) {
 
 	Time.prototype.update = function () {
 		this.deltaTime = (this.currentFrame - this.lastFrame) * this.timeScale;
+		if (this.deltaTime >= this.maxTime) this.deltaTime = this.maxTime;
 	};
 
 	return new Time();
