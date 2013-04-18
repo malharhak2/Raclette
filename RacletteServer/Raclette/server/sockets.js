@@ -47,33 +47,13 @@ define(['rapp', 'rCONFIG', 'rMongo', 'rfacebook', 'rSocketConnection'], function
 				});
 			});
 
-			socket.on('getFriends', function (players) {
-				mongoUtils.getPlayersIn(players, function (friends) {
-					socket.emit('friendsList', friends);
-				});
-			});
-
-			socket.on('getFriendMap', function (data) {
-				mongoUtils.getPlayerMap(data.fid, function (data) {
-					socket.emit('friendMap', data);
-				});
-			});
-
 
 			socket.on('updatePlayerInfos', function (data) {
 				mongoUtils.updatePlayerInfos(data);
 			});
 
-			socket.on('playerFeedback', function (data) {
-				console.log("Player feedback received");
-				mongoUtils.addPlayerFeedback(data, function () {});
-			});
-
-			socket.on('updateMapCase', function (data) {
-				console.log('Updating case');
-				mongoUtils.updateMapCase(data, function (answer) {
-					console.log('Case updated');
-				});
+			socket.on('test' , function () {
+				console.log("couccou");
 			})
 
 			socket.emit('connected', answer);

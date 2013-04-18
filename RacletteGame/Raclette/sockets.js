@@ -1,4 +1,4 @@
-define(["rsocket_io", "rCONFIG", "rutils", "rfacebook"], function (io, CONFIG, utils, facebook) {
+define(["rsocket_io", "rDebug", "rCONFIG", "rutils", "rfacebook", "rGlobalVariables"], function (io, debug, CONFIG, utils, facebook, user, globalVariables) {
     var Sockets = function () {
 
     	this.io = io;
@@ -15,14 +15,14 @@ define(["rsocket_io", "rCONFIG", "rutils", "rfacebook"], function (io, CONFIG, u
     };
 
     Sockets.prototype.emit = function (name, params) {
-
         var newParams = {
-            fid : this.fid
+            id : params.id
         };
         for (var i in params) {
             newParams[i] = params[i];
         };
-
+        debug.log("Sockets", name, params, newParams);
+        this.socket.emit("test", "bonjour");
         this.socket.emit(name, newParams);
     };
 

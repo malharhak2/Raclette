@@ -22,7 +22,8 @@ requirejs.config({
     	// Mongo
     	"rMongo" : paths.engine + paths.mongo + "base",
     	"rMongoUser" : paths.engine + paths.mongo + "User/User",
-    	"rMongoAuth" : paths.engine + paths.mongo + "User/Auth/Auth"
+    	"rMongoAuth" : paths.engine + paths.mongo + "User/Auth/Auth",
+        "rMapSave" : paths.engine + paths.mongo + "User/MapSave"
     }
 });
 requirejs(["rCONFIG", 'rapp', 'rsockets'], function (CONFIG, app, sockets) {

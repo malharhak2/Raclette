@@ -91,7 +91,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		if (this.moveStep.x < 0) {
 			var check = this.checkLeftCollisions(this.newPosition, "left");
 			if (check.collision) {
-				if (check.obstacle.type != "coin" && check.obstacle.type != "lapin") {
+				if (check.obstacle.type != "coin" && check.obstacle.type != "lapin" && check.obstacle.type != "bird" && check.obstacle.type != "punch" && check.obstacle.type != "ghost" && check.obstacle.type != "armor" && check.obstacle.type != "cloud") {
 					this.newPosition.x = this.position.x + check.distance;
 					this.velocity.x = 0;
 				}
@@ -101,7 +101,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		} else if (this.moveStep.x > 0) {
 			var check = this.checkRightCollisions(this.newPosition, "right");
 			if (check.collision) {
-				if (check.obstacle.type != "coin" && check.obstacle.type != "lapin") {
+				if (check.obstacle.type != "coin" && check.obstacle.type != "lapin" && check.obstacle.type != "bird" && check.obstacle.type != "punch" && check.obstacle.type != "ghost" && check.obstacle.type != "armor" && check.obstacle.type != "cloud") {
 					this.newPosition.x = this.position.x + check.distance;
 					this.velocity.x = 0;
 				}
@@ -113,7 +113,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		if (this.moveStep.y < 0) {
 			var check = this.checkTopCollisions (this.newPosition, "top") 
 			if (check.collision ) {
-				if (check.obstacle.type != "coin" && check.obstacle.type != "lapin") {
+				if (check.obstacle.type != "coin" && check.obstacle.type != "lapin" && check.obstacle.type != "bird" && check.obstacle.type != "punch" && check.obstacle.type != "ghost" && check.obstacle.type != "armor" && check.obstacle.type != "cloud") {
 					this.newPosition.y = this.position.y + check.distance;
 					this.velocity.y = 0;
 				}
@@ -122,7 +122,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		} else if (this.moveStep.y > 0) {
 			var check = this.checkBottomCollisions(this.newPosition, "bottom");
 			if (check.collision) {
-				if (check.obstacle.type != "coin" && check.obstacle.type != "lapin") {
+				if (check.obstacle.type != "coin" && check.obstacle.type != "lapin" && check.obstacle.type != "bird" && check.obstacle.type != "punch" && check.obstacle.type != "ghost" && check.obstacle.type != "armor" && check.obstacle.type != "cloud") {
 					this.newPosition.y = this.position.y + check.distance;
 					this.velocity.y = 0;
 				}
@@ -358,7 +358,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			var br = bl + o.width;
 			var bt = o.position.y;
 			var bb = bt + o.height;
-			if (utils.aabb (al, ar, at, ab, bl, br, bt, bb)) {
+			if (o.collidable && utils.aabb (al, ar, at, ab, bl, br, bt, bb)) {
 				if (newPos.x < o.position.x) {
 					if (dir == "right") {
 						distance = o.position.x - (this.position.x + this.width);
@@ -406,7 +406,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			var br = bl + o.width;
 			var bt = o.position.y;
 			var bb = bt + o.height;
-			if (utils.aabb (al, ar, at, ab, bl, br, bt, bb)) {
+			if (o.collidable && utils.aabb (al, ar, at, ab, bl, br, bt, bb)) {
 				if (newPos.y < o.position.y) {
 					if (dir == "bottom") {
 						distance = o.position.y - (this.position.y + this.height);
@@ -455,7 +455,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		var objects = currentWorld.getWorld().layers["Midground"].objects;
 		for (var i in objects) {
 			var o = objects[i].collider;
-			if (utils.aabb(box.l, box.r, box.t, box.b, o.position.x, o.position.x + o.width, o.position.y, o.position.y + o.height)) {
+			if (o.collidable && utils.aabb(box.l, box.r, box.t, box.b, o.position.x, o.position.x + o.width, o.position.y, o.position.y + o.height)) {
 				return {
 					collision : true,
 					object : objects[i]

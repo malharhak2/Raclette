@@ -12,6 +12,11 @@ function (debug, config, utils, time, soundManager, jsonStorer) {
 			x : 0.015,
 			y : 0.01
 		};
+
+		this.multiJump = 1;
+		this.nbJump = 0;
+		this.canRejump = false;
+
 		this.stopMultiplicator = 1;
 		this.turnbackMultiplicator = 1;
 		this.defaultAnimSpeed = 1;
@@ -134,7 +139,9 @@ function (debug, config, utils, time, soundManager, jsonStorer) {
 
 	Character.prototype.jump = function (){
 		if (this.entring) return;
-		if (this.canJump && (this.descending || this.onPlatform)) {
+		if (this.canJump && (this.descending || this.onPlatform) || (this.jumping && this.nbJump < this.multiJump && time.currentFrame - this.lastJump > 400 && this.canRejump)) {
+			this.nbJump++;
+			this.canRejump = false;
 			this.startJumping();
 			this.descending = false;
 			this.gameObject.state = "jumpMiddle";
@@ -234,9 +241,11 @@ function (debug, config, utils, time, soundManager, jsonStorer) {
 		this.canJump = true;
 		this.lastJumpEnd = Date.now();
 		this.flying = false;
+		this.nbJump = 0;
 	};
 
 	Character.prototype.midJump = function () {
+		this.canRejump = true;
 		this.canFall = true;
 		this.descending = true;
 		this.gameObject.renderer.resumeAnim();
