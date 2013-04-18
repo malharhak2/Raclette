@@ -82,7 +82,7 @@ function (debug, config, utils, time, soundManager, jsonStorer) {
 	Character.prototype.moveRight = function (force){
 		if (this.entring) return;
 		var mul = 1;
-		if (this.GetVelocity().x == 0) {
+		if (this.GetVelocity().x < this.initSpeed && this.GetVelocity().x > 0) {
 			this.ApplyForce ({
 				x : this.initSpeed
 			});
@@ -108,7 +108,7 @@ function (debug, config, utils, time, soundManager, jsonStorer) {
 	Character.prototype.moveLeft = function (force){
 		if (this.entring) return;
 		var mul = 1;
-		if (this.GetVelocity().x == 0) {
+		if (this.GetVelocity().x > -this.initSpeed && this.GetVelocity().x < 0) {
 			this.ApplyForce ({
 				x : -this.initSpeed
 			})

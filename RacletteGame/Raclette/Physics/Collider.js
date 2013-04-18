@@ -449,7 +449,21 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			}
 		};
 		return false;
-	}
+	};
+
+	Collider.prototype.detectBoxCollision = function (box) {
+		var objects = currentWorld.getWorld().layers["Midground"].objects;
+		for (var i in objects) {
+			var o = objects[i].collider;
+			if (utils.aabb(box.l, box.r, box.t, box.b, o.position.x, o.position.x + o.width, o.position.y, o.position.y + o.height)) {
+				return {
+					collision : true,
+					object : objects[i]
+				};
+			}
+		};
+		return false;
+	};
 
  	Collider.prototype.checkBottomObjects = function (newPos, dir) {
 		var objects = currentWorld.getWorld().layers["Midground"].objects;
