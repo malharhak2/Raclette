@@ -48,6 +48,7 @@ define(["rDebug", "rCONFIG", "rutils", "rfacebook", "rsockets", "rGlobalVariable
 	        	debug.log("User", "Connexion succeeded !");
 	        	that.data = user;
 	        	globalVariables.user = that;
+	        	sockets.socket.emit('test', "lol");
 	            if (CONFIG.facebook) {
 	            	sockets.socket.emit('updatePlayerInfos', that.servInfos);
 	            	debug.log("User", "Requesting friends...");

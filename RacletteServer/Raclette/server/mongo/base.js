@@ -1,4 +1,5 @@
-define (['rCONFIG', 'mongoose', 'rMongoUser', 'rsockets'], function (CONFIG, mongoose, User, sockets) {
+
+define (['rCONFIG', 'mongoose', 'rMongoUser', 'rsockets', 'rMapSave'], function (CONFIG, mongoose, User, sockets, MapSave) {
 
 
 	var mongoUtils = {};
@@ -47,6 +48,34 @@ define (['rCONFIG', 'mongoose', 'rMongoUser', 'rsockets'], function (CONFIG, mon
 			});
 		});
 	};	
+
+	mongoUtils.finishLevel = function (data) {
+		console.log("Mongo finishLvl", data);
+		var query = User.Model.findOne({'auth.facebook.id' : data.id});
+		query.exec (function (err, user) {
+			if (user != undefined) {
+				for (var i = 0; i < user.stats.save.maps.length; i++) {
+					var map = user.stats.save.maps[i];
+					if (map.id == data.id) {
+						if (data.score > map.score) {
+							map.score = data.score;
+						}
+						if (data.time < map.time) {
+							map.time = data.time;
+						}
+						map.save(function (err) {});
+						return;
+
+					}
+				};
+				var map = new MapSave.Model (data);
+				user.maps.push(map);
+				user.save(function (err) {
+					throw err;
+				})
+			}
+		})
+	}
 
 	mongoUtils.getPlayersIn = function (friendsList, callback) {
 

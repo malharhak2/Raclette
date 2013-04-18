@@ -1,27 +1,5 @@
 define(['app', 'CONFIG', 'mongo/base', 'facebook', 'SocketConnection'], function (app, CONFIG, mongoUtils, facebook, SocketConnection) {
 
-
-	/*
-	var cookie = require('cookie');
-	var parseSignedCookies = require('connect').utils.parseSignedCookies;
-	io.set('authorization', function (data, accept) {
-	    // check if there's a cookie header
-	    if (data.headers.cookie) {
-	        // if there is, parse the cookie
-	        data.cookie = parseSignedCookies(cookie.parse(decodeURIComponent(data.headers.cookie)));
-	        // note that you will need to use the same key to grad the
-	        // session id, as you specified in the Express setup.
-	        data.sessionID = data.cookie['express.sid'];
-	    } else {
-	       // if there isn't, turn down the connection with a message
-	       // and leave the function.
-	       return accept('No cookie transmitted.', false);
-	    }
-	    // accept the incoming connection
-	    accept(null, true);
-	});
-
-	*/
 	var Sockets = function () {
 
 
@@ -44,7 +22,6 @@ define(['app', 'CONFIG', 'mongo/base', 'facebook', 'SocketConnection'], function
 			if (app.app.settings.env == "production" || app.app.settings.env == "fbdev" || app.app.settings.env == "staging") {
 				fb = true;
 				facebook.init(app.app.settings.env);
-
 			} else {
 				fb = false;
 			}
@@ -74,28 +51,14 @@ define(['app', 'CONFIG', 'mongo/base', 'facebook', 'SocketConnection'], function
 				});
 			});
 
-			socket.on('getFriendMap', function (data) {
-				mongoUtils.getPlayerMap(data.fid, function (data) {
-					socket.emit('friendMap', data);
-				});
-			});
-
-
-			socket.on('updatePlayerInfos', function (data) {
-				mongoUtils.updatePlayerInfos(data);
-			});
-
-			socket.on('playerFeedback', function (data) {
-				console.log("Player feedback received");
-				mongoUtils.addPlayerFeedback(data, function () {});
-			});
-
-			socket.on('updateMapCase', function (data) {
-				console.log('Updating case');
-				mongoUtils.updateMapCase(data, function (answer) {
-					console.log('Case updated');
-				});
+			socket.on('test', function () {
+				console.log("test");
 			})
+
+			socket.on('finishLevel', function (data) {
+				console.log("Level finished : ", data);
+				mongoUtils.finishLevel (data);
+			});
 
 			socket.emit('connected', answer);
 		});

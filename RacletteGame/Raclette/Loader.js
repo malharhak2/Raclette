@@ -11,11 +11,8 @@ define(["rUser"], function(user){
 			loaded: 0,
 			objects: []
 		}
-		this.userInitialised = false;
+		this.userInitialised = true;
 		var that = this;
-		user.init (function () {
-			that.userInitialised = true;
-		})
 	}
 
 	Loader.prototype.update = function() {

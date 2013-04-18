@@ -1,4 +1,4 @@
-define(['mongoose'], function (mongoose) {
+define(['mongoose', 'rMapSave'], function (mongoose, mapSave) {
 	
 	var UserSchema = new mongoose.Schema ({
 
@@ -17,7 +17,10 @@ define(['mongoose'], function (mongoose) {
 			lastConnection : {type : Date, default : Date.now()}
 		},
 		stats : {
-			money : {type : Number, default : 10}
+			money : {type : Number, default : 10},
+			save : {
+				maps : [mapSave.Model]
+			}
 		}
 	});
 
@@ -36,18 +39,13 @@ define(['mongoose'], function (mongoose) {
 		this.UserModel = UserModel;
 		this.UserSchema = UserSchema;
 		var query = UserModel.findOne({'auth.facebook.id' : this.datas.auth.facebook.id});
-		console.log(query);
-		console.log(this.datas);
 		query.exec (function (err, user) {
 			if (user != undefined) {
-				console.log("coucou3");
 				that.getInfos(user, callback);
 			} else {
-				console.log("coucou4");
 			}
 		});
 		that.add(callback);
-		console.log("coucou2");
 	}
 
 	User.prototype.doesExist = function (callback) {
@@ -70,7 +68,6 @@ define(['mongoose'], function (mongoose) {
 
 	User.prototype.add = function (callback) {
 
-		console.log("coucou5");
 		this.model = new this.UserModel({
 			auth : {
 				facebook : {
@@ -81,13 +78,10 @@ define(['mongoose'], function (mongoose) {
 		this.saveNew(callback);
 	};
 	User.prototype.saveNew = function (callback) {
-		console.log("coucou6");
 		var that = this;
 		this.errors = [];
-		console.log(this.model);
 		this.model.save(function (err) {
 			console.log(err);
-			console.log("coucou7");
 			if (err) {
 				this.errors.push(err);
 				throw err;
