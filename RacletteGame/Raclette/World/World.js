@@ -15,11 +15,15 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 		this.specials = {};
 		jsonStorer.storeJson(args.json);
 		debug.log("World", "World initialized !");
+		this.start = false;
 	};
 
 	World.prototype.init = function() {
 		
 	};
+	World.prototype.Start = function() {
+		this.start = true;
+	}
 
 	World.prototype.CreateObject = function (args) {
 		try{
@@ -58,7 +62,8 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 		delete this.layers[layer].objects[id];
 	};
 
-	World.prototype.update = function() { 
+	World.prototype.update = function() {
+		if (this.start == false) return;
 		for (var i in this.layers) {
 			for (var j in this.layers[i].objects) {
 				this.layers[i].objects[j].collider.update();
