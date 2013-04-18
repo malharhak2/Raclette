@@ -28,6 +28,9 @@ function (debug, config, utils, time, soundManager) {
 		this.goingThrough = false;
 		this.goingThroughTimer = 100;
 		this.lastGoThrough = Date.now();
+		this.entring = false;
+		this.gravity = false;
+		this.ignoreGravity = false;
 	};
 
 	Character.prototype.init = function (args) {
@@ -179,6 +182,12 @@ function (debug, config, utils, time, soundManager) {
 		if (time.currentFrame - this.lastGoThrough > this.goingThroughTimer) {
 			this.endGoingThrough();
 		}
+		if (this.gravity && this.ignoreGravity){
+			this.gameObject.collider.gravity = false;
+		}
+		if (!this.gameObject.collider.gravity && this.gravity && !this.ignoreGravity){
+			this.gameObject.collider.gravity = true;
+		}
 	};
 
 	Character.prototype.onCollision = function (args) {
@@ -227,6 +236,7 @@ function (debug, config, utils, time, soundManager) {
 		this.canFall = true;
 		this.descending = true;
 		this.onPlatform = false;
+		this.gravity = true;
 	};
 
 	Character.prototype.endFalling = function () {
@@ -236,6 +246,7 @@ function (debug, config, utils, time, soundManager) {
 		this.canFall = true;
 		this.onPlatform = true;
 		this.descending = true;
+		this.gravity = false;
 	};
 
 	Character.prototype.GetPosition = function () {

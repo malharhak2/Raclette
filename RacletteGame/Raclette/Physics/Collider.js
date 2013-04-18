@@ -129,6 +129,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 	};
 
 	Collider.prototype.applyGravity = function () {
+		if (this.ignoreGravity) return;
 		if (this.gravity) {
 			this.velocity.x = this.velocity.x + config.gravity.x * this.mass * time.deltaTime;
 			this.velocity.y = this.velocity.y + config.gravity.y * this.mass * time.deltaTime;
