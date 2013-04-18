@@ -185,7 +185,7 @@ function (debug, config, utils, time) {
 			this.gameObject.collider.gravity = false;
 		}
 		if (!this.gameObject.collider.gravity && this.gravity && !this.ignoreGravity){
-			this.gameObject.collider.gravity = true;
+			this.gameObject.collider.gravity = true; 
 		}
 	};
 
