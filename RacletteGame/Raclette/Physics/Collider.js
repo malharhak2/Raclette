@@ -432,8 +432,10 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		debug.log("Coucou", point);
 		var objects = currentWorld.getWorld().layers["Midground"].objects;
 		for (var i in objects) {
+
 			var o = objects[i].collider;
-			if (point.x > o.position.x &&
+			if (o.collidable &&
+				point.x > o.position.x &&
 				point.x < o.position.x + o.width &&
 				point.y > o.position.y &&
 				point.y < o.position.y + o.height) {

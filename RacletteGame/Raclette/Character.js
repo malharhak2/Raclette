@@ -133,7 +133,6 @@ function (debug, config, utils, time, soundManager) {
 			debug.log("Jump", "sequence end")
 			this.jumpSequence = 1;
 		}
-		soundManager.play("jump");
 		this.ApplyForce ({
 			y : this.jumpForce
 		});
