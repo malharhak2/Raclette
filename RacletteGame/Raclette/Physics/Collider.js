@@ -5,6 +5,10 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			x : args.position.x,
 			y : args.position.y
 		};
+		if (args.offset) {
+			this.position.x += args.offset.x;
+			this.position.y += args.offset.y;
+		}
 		this.oldPosition = {
 			x : this.position.x,
 			y : this.position.y
