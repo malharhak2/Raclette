@@ -1,14 +1,52 @@
-define(["rCONFIG", "rDebug", "rutils"], function(config, debug, utils) {
+define(["rCONFIG", "rDebug", "rutils", "rJsonStorer"], function(config, debug, utils, jsonStorer) {
 	function Camera() {
 		this.x = 0;
 		this.y = 0;
 		this.width = config.screen.width / config.unitSize;
 		this.height = config.screen.height / config.unitSize;
+		this.flying = true;
+		this.skyHeight = 13;
+		this.floorHeight = 7;
+		this.standardHeight = 11;
 	};
-	Camera.prototype.setPosition= function(args) {
-		this.x = args.x;
-		this.y = args.y;
+	Camera.prototype.SetPosition= function(args) {
+		if (args.x != undefined) {
+			this.x = args.x - this.width / 2;
+		}
+		if (args.y != undefined) {
+			this.y = args.y - this.height / 2;
+		}
+		this.checkPosition();
 	};
+
+	Camera.prototype.checkPosition = function () {
+		
+		var map = jsonStorer.getJson();
+		this.maxPosition = {
+			x : map.width - this.width + 5,
+			y : map.height - this.height + 5,
+
+		};
+		this.minPosition = {
+			x : 0,
+			y : 0
+		};
+		if (this.x > this.maxPosition.x) {
+			this.x = this.maxPosition.x;
+		}
+		if (this.x < this.minPosition.x) {
+			this.x = this.minPosition.x;
+		}
+		if (this.y > this.maxPosition.y) {
+			this.y = this.maxPosition.y;
+		}
+	};
+
+	Camera.prototype.reset = function () {
+		debug.log("Camera", "reset");
+		this.x = 0;
+		this.y = 0;
+	}
 
 	Camera.prototype.zoom = function(args) {
 		if (args.size) {
@@ -21,6 +59,39 @@ define(["rCONFIG", "rDebug", "rutils"], function(config, debug, utils) {
 		}
 		console.error("INVALID Camera.zoom, args:", args);
 	};
+
+	Camera.prototype.scroll = function (attached) {
+		if (utils.chances(50)) {
+			debug.log("Camera", "")
+		}
+		var map = jsonStorer.getJson();
+		if (attached.position.y < (map.height - this.skyHeight)) {
+			this.scrollPosition ({
+				y : attached.position.y - attached.oldPosition.y
+			});
+		} else if (attached.position.y > (map.height - this.floorHeight)) {
+			this.scrollPosition ({
+				y : attached.position.y - attached.oldPosition.y
+			});
+		} else {
+			this.SetPosition ({
+				y : map.height - this.standardHeight
+			})
+		}
+		this.SetPosition ({
+			x : attached.position.x
+		});
+	};
+
+	Camera.prototype.scrollPosition = function (args){
+		if (args.y != undefined) {
+			this.y += args.y;
+		}
+		if (args.x != undefined) {
+			this.x += args.x;
+		}
+		this.checkPosition();
+	}
 
 	Camera.prototype.zoomSize = function(size) {
 		this.width *= size;
@@ -40,13 +111,13 @@ define(["rCONFIG", "rDebug", "rutils"], function(config, debug, utils) {
 		var offset = config.layers[args.layer].offset || {x : 0, y : 0};
 		args.x += offset.x;
 		args.y += offset.y;
-		var x = this.x * parallax.x;
-		var y = this.y * parallax.y;
+		var x = (this.x ) * parallax.x;
+		var y = (this.y ) * parallax.y;
 		if (
-		args.x * parallax.x + args.w > x &&
-		args.x * parallax.x < x + this.w &&
-		args.y * parallax.y + args.h > y &&
-		args.y * parallax.y < y + this.h) {
+		args.x + args.w > x &&
+		args.x < x + this.w &&
+		args.y + args.h > y &&
+		args.y < y + this.h) {
 			newArgs.x = args.x - x;
 			newArgs.y = args.y - y;
 			newArgs.w = args.w;

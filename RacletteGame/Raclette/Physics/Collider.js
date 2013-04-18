@@ -5,6 +5,10 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			x : args.position.x,
 			y : args.position.y
 		};
+		this.oldPosition = {
+			x : this.position.x,
+			y : this.position.y
+		};
 		this.width = args.width;
 		this.height = args.height;
 		this.static = args.static || true;
@@ -429,7 +433,6 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 	};
 
 	Collider.prototype.detectPointCollision = function (point) {
-		debug.log("Coucou", point);
 		var objects = currentWorld.getWorld().layers["Midground"].objects;
 		for (var i in objects) {
 

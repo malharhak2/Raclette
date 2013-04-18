@@ -1,7 +1,9 @@
-define (["rDebug", "rCONFIG", "rutils", "rTime", "rSoundManager"],
-function (debug, config, utils, time, soundManager) {
+define (["rDebug", "rCONFIG", "rutils", "rTime", "rSoundManager", "rJsonStorer"],
+function (debug, config, utils, time, soundManager, jsonStorer) {
 	var Character = function (parent) {
 		this.parent = parent;
+
+		this.initSpeed = 0.005;
 		this.acceleration = {
 			x : 0.00015,
 			y : 0.00026
@@ -31,11 +33,12 @@ function (debug, config, utils, time, soundManager) {
 		this.entring = false;
 		this.gravity = false;
 		this.ignoreGravity = false;
+		this.flying = true;
 	};
 
 	Character.prototype.init = function (args) {
 		this.gameObject = args.gameObject;
-
+		this.initSpeed = args.initSpeed || 0.005;
 		this.acceleration = args.acceleration || {
 			x : 0.00015,
 			y : 0.00026
@@ -50,6 +53,10 @@ function (debug, config, utils, time, soundManager) {
 		this.jumpForce = args.jumpForce || -0.009;
 
 		this.position = this.GetPosition();
+		this.lastPosition = {
+			x : this.position.x,
+			y : this.position.y
+		};
 		this.startFalling();
 		debug.log("Character init", this.gameObject);
 	};
@@ -75,6 +82,11 @@ function (debug, config, utils, time, soundManager) {
 	Character.prototype.moveRight = function (force){
 		if (this.entring) return;
 		var mul = 1;
+		if (this.GetVelocity().x == 0) {
+			this.ApplyForce ({
+				x : this.initSpeed
+			});
+		}
 		if (this.GetVelocity().x < 0) {
 			mul = this.turnbackMultiplicator;
 		}
@@ -85,6 +97,7 @@ function (debug, config, utils, time, soundManager) {
 			this.gameObject.state = "move";
 			this.gameObject.dir = "right";
 		} else {
+			this.flying = true;
 			this.gameObject.state = "maxspeed";
 			this.gameObject.dir = "right";
 		}
@@ -95,6 +108,11 @@ function (debug, config, utils, time, soundManager) {
 	Character.prototype.moveLeft = function (force){
 		if (this.entring) return;
 		var mul = 1;
+		if (this.GetVelocity().x == 0) {
+			this.ApplyForce ({
+				x : -this.initSpeed
+			})
+		}
 		if (this.GetVelocity().x > 0) {
 			mul = this.turnbackMultiplicator;
 		}
@@ -105,6 +123,7 @@ function (debug, config, utils, time, soundManager) {
 			this.gameObject.state = "move";
 			this.gameObject.dir = "left";
 		} else {
+			this.flying = true;
 			this.gameObject.state = "maxspeed";
 			this.gameObject.dir = "left";
 		}
@@ -148,7 +167,7 @@ function (debug, config, utils, time, soundManager) {
 	Character.prototype.preUpdate = function () {
 		var bottomObject = this.gameObject.collider.checkObjectsVertical({
 			x : this.gameObject.collider.position.x,
-			y : this.gameObject.collider.position.y + 0.1
+			y : this.gameObject.collider.position.y + 0.01
 		}, "bottom");
 		if (bottomObject.collision && bottomObject.obstacle.type == "movingplatform") {
 			this.gameObject.collider.attachCollider(bottomObject.obstacle.collider);
@@ -158,6 +177,10 @@ function (debug, config, utils, time, soundManager) {
 	};
 
 	Character.prototype.update = function () {
+		var map = jsonStorer.getJson();
+		if (this.position.y < map.height - 20) {
+			this.flying = true;
+		}
 		this.lastPosition = {
 			x : this.position.x,
 			y : this.position.y
@@ -210,6 +233,7 @@ function (debug, config, utils, time, soundManager) {
 		this.jumping = false;
 		this.canJump = true;
 		this.lastJumpEnd = Date.now();
+		this.flying = false;
 	};
 
 	Character.prototype.midJump = function () {
@@ -246,6 +270,7 @@ function (debug, config, utils, time, soundManager) {
 		this.onPlatform = true;
 		this.descending = true;
 		this.gravity = false;
+		this.flying = false;
 	};
 
 	Character.prototype.GetPosition = function () {

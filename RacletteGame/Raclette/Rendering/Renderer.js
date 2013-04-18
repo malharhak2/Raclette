@@ -122,9 +122,6 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 			}
 			
 		}
-		if (this.layer == undefined) {
-			debug.log("What");
-		}
 		var cameraInfos = camera.isObjectVisible ({
 			x : coordinates.dx,
 			y : coordinates.dy,
