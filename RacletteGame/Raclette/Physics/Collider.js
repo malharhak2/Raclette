@@ -71,8 +71,8 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 				x : this.attachedCollider.position.x - this.lastAttachedCollision.x,
 				y : this.attachedCollider.position.y - this.lastAttachedCollision.y
 			};
-			this.position.x += deltaCollider.x;
-			this.position.y += deltaCollider.y;
+			this.moveStep.x += deltaCollider.x;
+			this.moveStep.y += deltaCollider.y;
 			this.lastAttachedCollision = {
 				x : this.attachedCollider.position.x,
 				y : this.attachedCollider.position.y
@@ -88,7 +88,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			this.position.y += this.moveStep.y;
 			return;
 		}
-		if (this.velocity.x < 0) {
+		if (this.moveStep.x < 0) {
 			var check = this.checkLeftCollisions(this.newPosition, "left");
 			if (check.collision) {
 				if (check.obstacle.type != "coin") {
@@ -98,7 +98,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 					
 				this.Collision ("left", check.obstacle);
 			}
-		} else if (this.velocity.x > 0) {
+		} else if (this.moveStep.x > 0) {
 			var check = this.checkRightCollisions(this.newPosition, "right");
 			if (check.collision) {
 				if (check.obstacle.type != "coin") {
@@ -110,7 +110,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		}
 		this.newPosition.y += this.moveStep.y;
 
-		if (this.velocity.y < 0) {
+		if (this.moveStep.y < 0) {
 			var check = this.checkTopCollisions (this.newPosition, "top") 
 			if (check.collision ) {
 				if (check.obstacle.type != "coin") {
@@ -119,7 +119,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 				}
 				this.Collision ("top", check.obstacle);
 			}
-		} else if (this.velocity.y > 0) {
+		} else if (this.moveStep.y > 0) {
 			var check = this.checkBottomCollisions(this.newPosition, "bottom");
 			if (check.collision) {
 				if (check.obstacle.type != "coin") {

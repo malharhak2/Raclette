@@ -46,6 +46,16 @@ define(["rCONFIG"], function(config) {
 		}
 		return token;
 	};
+
+	Utils.prototype.toChar = function(nombre){
+		var retour = "";
+		if (nombre <= 9){
+			retour = "0"+nombre;
+		}else{
+			retour += nombre;
+		}
+		return retour;
+	}
 	
 	return new Utils();
 });

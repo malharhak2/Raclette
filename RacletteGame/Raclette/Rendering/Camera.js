@@ -23,8 +23,8 @@ define(["rCONFIG", "rDebug", "rutils", "rJsonStorer"], function(config, debug, u
 		
 		var map = jsonStorer.getJson();
 		this.maxPosition = {
-			x : map.width - this.width + 5,
-			y : map.height - this.height + 5,
+			x : map.width - this.width,
+			y : map.height - this.height,
 
 		};
 		this.minPosition = {
