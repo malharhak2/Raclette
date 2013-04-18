@@ -21,6 +21,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		this.goingThrough = false;
 		this.attachedCollider = false;
 		this.useCollisions = true;
+		this.collidable = true;
 	};
 
 
@@ -86,15 +87,20 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		if (this.velocity.x < 0) {
 			var check = this.checkLeftCollisions(this.newPosition, "left");
 			if (check.collision) {
-				this.newPosition.x = this.position.x + check.distance;
-				this.velocity.x = 0;
+				if (check.obstacle.type != "coin") {
+					this.newPosition.x = this.position.x + check.distance;
+					this.velocity.x = 0;
+				}
+					
 				this.Collision ("left", check.obstacle);
 			}
 		} else if (this.velocity.x > 0) {
 			var check = this.checkRightCollisions(this.newPosition, "right");
 			if (check.collision) {
-				this.newPosition.x = this.position.x + check.distance;
-				this.velocity.x = 0;
+				if (check.obstacle.type != "coin") {
+					this.newPosition.x = this.position.x + check.distance;
+					this.velocity.x = 0;
+				}
 				this.Collision ("right", check.obstacle);
 			}
 		}
@@ -103,15 +109,19 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		if (this.velocity.y < 0) {
 			var check = this.checkTopCollisions (this.newPosition, "top") 
 			if (check.collision ) {
-				this.newPosition.y = this.position.y + check.distance;
-				this.velocity.y = 0;
+				if (check.obstacle.type != "coin") {
+					this.newPosition.y = this.position.y + check.distance;
+					this.velocity.y = 0;
+				}
 				this.Collision ("top", check.obstacle);
 			}
 		} else if (this.velocity.y > 0) {
 			var check = this.checkBottomCollisions(this.newPosition, "bottom");
 			if (check.collision) {
-				this.newPosition.y = this.position.y + check.distance;
-				this.velocity.y = 0;
+				if (check.obstacle.type != "coin") {
+					this.newPosition.y = this.position.y + check.distance;
+					this.velocity.y = 0;
+				}
 				this.Collision ("bottom", check.obstacle);
 			}
 		}
@@ -384,7 +394,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 			distance = 100;
 
 		for (var i in objects) {
-			if (objects[i].collider.type == this.type) {
+			if (objects[i].collider.type == this.type || !objects[i].collider.collidable) {
 				continue;
 			}
 			var o = objects[i].collider;
@@ -418,6 +428,25 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		return result;
 	};
 
+	Collider.prototype.detectPointCollision = function (point) {
+		var objects = currentWorld.getWorld().layers["Midground"].objects;
+		for (var i in objects) {
+
+			var o = objects[i].collider;
+			if (o.collidable &&
+				point.x > o.position.x &&
+				point.x < o.position.x + o.width &&
+				point.y > o.position.y &&
+				point.y < o.position.y + o.height) {
+				return {
+					collision : true,
+					object : objects[i]
+				};
+			}
+		};
+		return false;
+	}
+
  	Collider.prototype.checkBottomObjects = function (newPos, dir) {
 		var objects = currentWorld.getWorld().layers["Midground"].objects;
 		var at = newPos.y;
@@ -430,7 +459,7 @@ function (debug, utils, config, canvasManager, time, camera, currentWorld) {
 		};
 
 		for (var i in objects) {
-			if (objects[i].collider.type == this.type) {
+			if (objects[i].collider.type == this.type || !objects[i].collider.collidable) {
 				continue;
 			} 
 			var o = objects[i].collider;

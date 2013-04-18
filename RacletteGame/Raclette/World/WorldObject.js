@@ -1,5 +1,5 @@
-define (["rDebug", "rCONFIG", "rutils", "rCollider", "rRenderer"], 
-	function (debug, config, utils, Collider, Renderer) {
+define (["rDebug", "rCONFIG", "rutils", "rCollider", "rRenderer", "rMessager"], 
+	function (debug, config, utils, Collider, Renderer, messager) {
 	var WorldObject = function (args) {
 		this.type        = args.type;
 		this.name        = args.name || args.type;
@@ -42,7 +42,17 @@ define (["rDebug", "rCONFIG", "rutils", "rCollider", "rRenderer"],
 	WorldObject.prototype.render = function () {
 		this.renderer.render();
 		this.collider.render();
-	}
+	};
+
+	WorldObject.prototype.destroy = function () {
+		messager.sendMessage("currentWorld", {
+			inst : "destroyObject",
+			args : {
+				layer : this.layer,
+				id : this.id,
+			}
+		});
+	};
 
 	return WorldObject;
 })

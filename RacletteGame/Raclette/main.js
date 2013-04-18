@@ -48,6 +48,7 @@ require.config({
             'rAnimationInstance'  : paths.engine + paths.Resources + 'AnimationInstance',
             'rAnimationManager'   : paths.engine + paths.Resources + 'AnimationManager',
             'rimageManager'       : paths.engine + paths.Resources + 'imageManager',
+            'rSoundManager'       : paths.engine + paths.Resources + 'SoundManager',
 
         // World
             'rWorld'              : paths.engine + paths.World + 'World',

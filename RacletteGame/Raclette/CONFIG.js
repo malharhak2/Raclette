@@ -38,10 +38,11 @@ define(["rDebug", "rCONFIG", "game/config"], function (debug, config, userConfig
 		this.floor = 62;
 		this.specials = userConfig.specials || ["start", "end"]
 		this.canvasBackgroundColor = userConfig.canvasBackgroundColor || "#464F63";
+		this.canvasBackgroundImage = userConfig.canvasBackgroundImage;
 		this.showCredit = userConfig.showCredit || true;
 		this.showCustomFooter = userConfig.showCustomFooter || true;
 		this.customFooter = userConfig.customFooter || "Raclette engine inside";
-
+		this.soundsPath = "game/sounds/";
 		this.domain = window.location.hostname;
 		this.envs = {
 			"fbdev" : {

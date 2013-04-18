@@ -71,7 +71,7 @@ define(["rDebug", "rCONFIG", "jquery"], function (debug, config, $) {
 		this.canvas.css ({
 			'width' : this.cssWidth + 'px',
 			'height' : this.cssHeight + 'px',
-			'backgroundColor' : config.canvasBackgroundColor,
+			'backgroundImage' : config.canvasBackgroundImage,
 			'position' : 'relative'
 		});
 		this.gui.css ({

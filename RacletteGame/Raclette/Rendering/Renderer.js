@@ -68,10 +68,10 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 				sy : co.sy,
 				sw : co.sw,
 				sh : co.sh,
-				dx : (co.dx - this.offset.x) * config.unitSize,
-				dy : (co.dy - this.offset.y) * config.unitSize,
-				dw : co.dw * config.unitSize,
-				dh : co.dh * config.unitSize
+				dx : Math.floor((co.dx - this.offset.x) * config.unitSize),
+				dy : Math.floor((co.dy - this.offset.y) * config.unitSize),
+				dw : Math.floor(co.dw * config.unitSize),
+				dh : Math.floor(co.dh * config.unitSize)
 			};
 			canvasManager.ctx.drawImage(
 				imageManager.get(renderInfos.image), 
@@ -144,7 +144,11 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 	};
 
 	Renderer.prototype.onAnimEnd = function(callback){
-		this.onEnd = callback;
+		var that = this;
+		this.onEnd = function () {
+			that.animation.step = 0;
+			callback();
+		};
 	}
 
 	return Renderer;

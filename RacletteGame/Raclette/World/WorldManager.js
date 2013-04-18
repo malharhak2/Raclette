@@ -1,5 +1,5 @@
-define (["rWorld", "rDebug", "rCONFIG", "rutils", "rCurrentWorld", "rWorldObjectType"], 
-function (World, debug, config, utils, currentWorld, WorldObjectType) {
+define (["rWorld", "rDebug", "rCONFIG", "rutils", "rCurrentWorld", "rWorldObjectType", "rMessager"], 
+function (World, debug, config, utils, currentWorld, WorldObjectType, messager) {
 	
 	var WorldManager = function () {
 		this.worlds = {};
@@ -16,7 +16,6 @@ function (World, debug, config, utils, currentWorld, WorldObjectType) {
 		this.worlds[args.id] = new World(args);
 		return this.worlds[args.id];
 	};
-
 	WorldManager.prototype.GetWorld = function (id) {
 		return this.worlds[id];
 	};
@@ -27,6 +26,7 @@ function (World, debug, config, utils, currentWorld, WorldObjectType) {
 
 	WorldManager.prototype.switchWorld = function (id) {
 		this.currentWorld = currentWorld.currentWorld = this.worlds[id];
+		messager.currentWorld = this.currentWorld;
 	}
 
 	WorldManager.prototype.createObjectType = function (args) {

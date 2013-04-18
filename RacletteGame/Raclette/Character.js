@@ -1,5 +1,5 @@
-define (["rDebug", "rCONFIG", "rutils", "rTime"],
-function (debug, config, utils, time) {
+define (["rDebug", "rCONFIG", "rutils", "rTime", "rSoundManager"],
+function (debug, config, utils, time, soundManager) {
 	var Character = function (parent) {
 		this.parent = parent;
 		this.acceleration = {
@@ -150,7 +150,7 @@ function (debug, config, utils, time) {
 			x : this.gameObject.collider.position.x,
 			y : this.gameObject.collider.position.y + 0.1
 		}, "bottom");
-		if (bottomObject.collision) {
+		if (bottomObject.collision && bottomObject.obstacle.type == "movingplatform") {
 			this.gameObject.collider.attachCollider(bottomObject.obstacle.collider);
 		} else {
 			this.gameObject.collider.detachCollider();

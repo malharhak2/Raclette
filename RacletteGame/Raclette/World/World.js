@@ -96,6 +96,14 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 		}
 	};
 
+	World.prototype.onMessage = function (message) {
+		debug.log("World", "?", message);
+		if (message.inst == "destroyObject") {
+			debug.log("World", "Destroy", message);
+			delete this.layers[message.args.layer].objects[message.args.id];
+		}
+	};
+
 	World.prototype.getAllObjects = function() {
 		return this.layers;
 	}
