@@ -3,6 +3,7 @@ define([], function(){
 		this.logs = true;
 		this.warns = true;
 		this.errors = true;
+		this.production = true;
 	}
 
 	Debug.prototype.processTag = function (tag) {
@@ -26,6 +27,7 @@ define([], function(){
 	}
 
 	Debug.prototype.log = function(){
+		if (this.production) return;
 		if (this.logs) {
 			console.log.apply(console, this.processLog.apply(this, arguments));
 		}
