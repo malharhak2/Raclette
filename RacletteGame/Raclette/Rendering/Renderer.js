@@ -142,8 +142,10 @@ define (["rDebug", "rutils", "rCONFIG", "rTilesManager", "rAnimationManager", "r
 
 	Renderer.prototype.onAnimEnd = function(callback){
 		var that = this;
+		that.animation.step = 0;
+		debug.log("assignation", "onAnimEnd")
 		this.onEnd = function () {
-			that.animation.step = 0;
+			debug.log("this.name", "onEnd", "appel callback", callback, that.name)
 			callback();
 		};
 	}
