@@ -65,18 +65,26 @@ function(debug, config, utils, WorldLayer, WorldObjectType, WorldObject, WorldMa
 	World.prototype.update = function() {
 		if (this.start == false) return;
 		for (var i in this.layers) {
-			for (var j in this.layers[i].objects) {
-				this.layers[i].objects[j].collider.update();
-				this.layers[i].objects[j].update();
+			var l = this.layers[i];
+			for (var j in l.objects) {
+				var o = l.objects[j];
+				if (o.activated) {
+					o.collider.update();
+					o.update();
+				}
 			}
 		};
 	};
 
 	World.prototype.render = function  () {
 		for (var i in this.layers) {
-			this.renderStatics(this.layers[i].statics);
-			for (var j in this.layers[i].objects) {
-				this.layers[i].objects[j].render();
+			var l = this.layers[i];
+			this.renderStatics(l.statics);
+			for (var j in l.objects) {
+				if (l.objects[j].activated) {
+					l.objects[j].render();
+					
+				}
 			}
 		};
 	};
