@@ -11,6 +11,7 @@ define (["rDebug", "rCONFIG", "rutils", "rCollider", "rRenderer", "rMessager"],
 		this.customProps = args.customProps;
 		this.AttachCollider (args.physics);
 		this.AttachRenderer (args.render);
+		this.activated = true;
 	};
 
 	WorldObject.prototype.AttachCollider = function (args) {
